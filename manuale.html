@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABISSO — Manuale del Giocatore</title>
+<style>
+  :root{
+    --bg:#0e0b07; --bg2:#14100a; --panel:#1a150e;
+    --amber:#e8a13d; --amber-deep:#a06b1d; --gold:#ffd27a;
+    --parchment:#e8dcc5; --ink:#c9bda4; --dim:#8f8570;
+    --red:#c1443a; --green:#7fae63; --blue:#8fd1ff; --violet:#b06bf2;
+    --border:#3a2d1a;
+    --font-disp:"Georgia","Times New Roman",serif;
+    --font-body:"Georgia","Palatino","Book Antiqua",serif;
+    --font-ui:"Segoe UI",Verdana,sans-serif;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:
+      radial-gradient(1200px 500px at 50% -100px, rgba(232,161,61,.07), transparent 60%),
+      repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,.006) 2px 4px),
+      var(--bg);
+    color:var(--parchment);
+    font-family:var(--font-body);
+    line-height:1.65;
+    font-size:16px;
+  }
+  /* ============ COPERTINA ============ */
+  .cover{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:40px 20px;
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(700px 300px at 50% 110%, rgba(232,161,61,.13), transparent 65%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    border-bottom:2px solid var(--border);
+  }
+  .cover::before, .cover::after{
+    content:""; position:absolute; left:8%; right:8%; height:2px;
+    background:linear-gradient(90deg, transparent, var(--amber-deep), var(--amber), var(--amber-deep), transparent);
+  }
+  .cover::before{ top:28px; } .cover::after{ bottom:28px; }
+  .cover h1{
+    font-family:var(--font-disp);
+    font-size:clamp(56px, 12vw, 120px);
+    letter-spacing:.18em; text-indent:.18em;
+    color:var(--amber);
+    text-shadow:0 0 24px rgba(232,161,61,.35), 0 3px 0 rgba(0,0,0,.6);
+    font-weight:700;
+  }
+  .cover .sub{
+    font-family:var(--font-disp); font-style:italic;
+    font-size:clamp(15px, 2.6vw, 22px);
+    color:var(--gold); margin:14px 0 6px;
+  }
+  .cover .tagline{ color:var(--dim); font-size:14px; font-style:italic; max-width:520px; margin:10px auto 0; }
+  .cover .edition{
+    margin-top:34px; font-family:var(--font-ui); font-size:12px; letter-spacing:.3em; text-indent:.3em;
+    color:var(--amber-deep); text-transform:uppercase;
+    border:1px solid var(--border); padding:8px 22px; border-radius:4px; background:rgba(232,161,61,.05);
+  }
+  .cover .portraits{
+    display:flex; gap:6px; margin-top:26px; flex-wrap:wrap; justify-content:center;
+  }
+  .cover .portraits img{
+    width:42px; height:42px; image-rendering:pixelated;
+    filter:drop-shadow(0 0 6px rgba(232,161,61,.35));
+  }
+  .cover .scroll-hint{
+    position:absolute; bottom:44px; left:0; right:0;
+    font-family:var(--font-ui); font-size:11px; letter-spacing:.25em; text-indent:.25em;
+    color:var(--dim); text-transform:uppercase;
+  }
+  /* ============ LAYOUT ============ */
+  .wrap{ max-width:980px; margin:0 auto; padding:30px 20px 80px; }
+  .chapter{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:34px 36px 38px;
+    margin:44px 0;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  .chapter::before{
+    content:"❖"; color:var(--amber-deep);
+    position:absolute; top:-14px; left:36px;
+    background:var(--bg); padding:0 10px;
+    font-size:15px;
+  }
+  .chap-num{
+    font-family:var(--font-ui); font-size:11px; letter-spacing:.35em; text-indent:.35em;
+    color:var(--amber-deep); text-transform:uppercase; margin-bottom:6px;
+  }
+  .chapter h2{
+    font-family:var(--font-disp);
+    font-size:clamp(24px, 4vw, 32px);
+    color:var(--gold);
+    margin-bottom:16px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:12px;
+    letter-spacing:.02em;
+  }
+  .chapter p{ margin:10px 0; color:var(--ink); }
+  .chapter p.drop::first-letter{
+    font-family:var(--font-disp); font-size:2.9em; line-height:.85;
+    color:var(--amber); float:left; padding:4px 8px 0 0; font-weight:700;
+  }
+  .chapter ul, .chapter ol{ margin:10px 0 10px 22px; color:var(--ink); }
+  .chapter li{ margin:6px 0; }
+  b{ color:var(--parchment); }
+  em{ color:var(--gold); }
+  .gold{ color:var(--gold); } .red{ color:var(--red); } .green{ color:var(--green); }
+  .blue{ color:var(--blue); } .dim{ color:var(--dim); }
+  /* ============ INDICE ============ */
+  #toc{ margin:44px 0; }
+  #toc h2{ text-align:center; font-family:var(--font-disp); color:var(--amber); font-size:26px; letter-spacing:.12em; text-indent:.12em; margin-bottom:22px; }
+  #toc .toc-row{
+    display:flex; align-items:center; gap:14px;
+    text-decoration:none; color:var(--ink);
+    padding:11px 16px; border:1px solid var(--border); border-radius:5px;
+    margin:8px 0; background:var(--panel);
+    transition:border-color .2s, color .2s, transform .2s;
+  }
+  #toc .toc-row:hover{ border-color:var(--amber); color:var(--gold); transform:translateX(4px); }
+  #toc .toc-n{ font-family:var(--font-ui); font-size:12px; color:var(--amber); width:30px; text-align:right; }
+  #toc .toc-t{ font-family:var(--font-disp); font-size:17px; }
+  #toc .toc-d{ font-size:12.5px; color:var(--dim); margin-left:auto; text-align:right; font-family:var(--font-ui); }
+  /* ============ TABELLE ============ */
+  table{ width:100%; border-collapse:collapse; margin:16px 0; font-size:14.5px; }
+  th{
+    font-family:var(--font-ui); font-size:11px; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--amber); text-align:left;
+    border-bottom:1px solid var(--amber-deep); padding:8px 10px; background:rgba(232,161,61,.05);
+  }
+  td{ border-bottom:1px solid var(--border); padding:9px 10px; vertical-align:middle; color:var(--ink); }
+  tr:hover td{ background:rgba(232,161,61,.04); }
+  td img{ width:36px; height:36px; object-fit:contain; image-rendering:pixelated; vertical-align:middle; }
+  .kbd{
+    font-family:var(--font-ui); font-size:12.5px;
+    background:#211a10; border:1px solid var(--border); border-bottom-width:3px;
+    border-radius:4px; padding:2px 8px; color:var(--gold); white-space:nowrap;
+  }
+  /* ============ BOX ============ */
+  .note, .warn, .tip{
+    border-left:3px solid var(--amber-deep);
+    background:rgba(232,161,61,.06);
+    padding:12px 16px; margin:16px 0; border-radius:0 5px 5px 0;
+    font-size:14.5px; color:var(--ink);
+  }
+  .warn{ border-left-color:var(--red); background:rgba(193,68,58,.08); }
+  .tip{ border-left-color:var(--green); background:rgba(127,174,99,.08); }
+  .note b, .warn b, .tip b{ color:var(--parchment); }
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:0 30px; }
+  @media (max-width:760px){ .two-col{ grid-template-columns:1fr; } .chapter{ padding:26px 20px; } }
+  /* ============ BOSS / MOSTRI ============ */
+  .beast{
+    display:flex; align-items:center; gap:14px;
+    border:1px solid var(--border); border-radius:5px;
+    padding:10px 14px; margin:10px 0; background:rgba(0,0,0,.18);
+  }
+  .beast img{ width:52px; height:52px; object-fit:contain; image-rendering:pixelated; flex:none; }
+  .beast .b-name{ color:var(--gold); font-family:var(--font-disp); font-size:17px; }
+  .beast .b-info{ font-size:13.5px; color:var(--dim); font-family:var(--font-ui); }
+  .beast .b-desc{ font-size:14px; color:var(--ink); }
+  .beast.boss{ border-color:rgba(232,161,61,.45); background:linear-gradient(180deg, rgba(232,161,61,.09), rgba(0,0,0,.2)); }
+  .beast.boss .b-name{ color:var(--amber); }
+  /* ============ FOOTER ============ */
+  .footer{
+    text-align:center; padding:34px 20px 60px; color:var(--dim);
+    font-family:var(--font-ui); font-size:12.5px; line-height:2;
+    border-top:1px solid var(--border);
+  }
+  .footer a{ color:var(--amber); text-decoration:none; }
+  .footer a:hover{ text-decoration:underline; }
+  .orn{ text-align:center; color:var(--amber-deep); letter-spacing:1.5em; text-indent:1.5em; margin:26px 0 10px; font-size:14px; }
+  .backtop{ display:inline-block; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<!-- ================= COPERTINA ================= -->
+<div class="cover">
+  <h1>ABISSO</h1>
+  <div class="sub">Manuale del Giocatore</div>
+  <div class="tagline">Roguelike multiplayer in tempo reale, senza server, in un unico file.
+  Scendi nei piani sempre più bui, saccheggia i forzieri, sconfiggi i sei Signori delle tane
+  — e non morire mai. Perché qui la morte è per sempre.</div>
+  <div class="portraits">
+    <img src="assets/sprites/hero_guerriero.png" alt="Guerriero">
+    <img src="assets/sprites/hero_ladro.png" alt="Ladro">
+    <img src="assets/sprites/hero_mago.png" alt="Mago">
+    <img src="assets/sprites/hero_ranger.png" alt="Ranger">
+    <img src="assets/sprites/hero_paladino.png" alt="Paladino">
+    <img src="assets/sprites/hero_negromante.png" alt="Negromante">
+    <img src="assets/sprites/hero_bardo.png" alt="Bardo">
+    <img src="assets/sprites/hero_monaco.png" alt="Monaco">
+    <img src="assets/speciali/prof.png" alt="Prof">
+  </div>
+  <div class="edition">Edizione del Giocatore · v2.0</div>
+  <div class="scroll-hint">— scorri per leggere —</div>
+</div>
+
+<div class="wrap">
+
+<!-- ================= INDICE ================= -->
+<div id="toc">
+  <h2>✦ Indice ✦</h2>
+  <a class="toc-row" href="#c1"><span class="toc-n">I</span><span class="toc-t">L'Abisso ti chiama</span><span class="toc-d">Introduzione</span></a>
+  <a class="toc-row" href="#c2"><span class="toc-n">II</span><span class="toc-t">La Discesa</span><span class="toc-d">Primi passi e stanza</span></a>
+  <a class="toc-row" href="#c3"><span class="toc-n">III</span><span class="toc-t">Comandi</span><span class="toc-d">Tavola dei tasti</span></a>
+  <a class="toc-row" href="#c4"><span class="toc-n">IV</span><span class="toc-t">Le Nove Classi</span><span class="toc-d">Eroi e abilità</span></a>
+  <a class="toc-row" href="#c5"><span class="toc-n">V</span><span class="toc-t">Le Creature dell'Abisso</span><span class="toc-d">Bestiario</span></a>
+  <a class="toc-row" href="#c6"><span class="toc-n">VI</span><span class="toc-t">I Sei Boss</span><span class="toc-d">Signori delle tane</span></a>
+  <a class="toc-row" href="#c7"><span class="toc-n">VII</span><span class="toc-t">L'Arte del Combattimento</span><span class="toc-d">Mira, mana, telegrafi</span></a>
+  <a class="toc-row" href="#c8"><span class="toc-n">VIII</span><span class="toc-t">Esplorazione</span><span class="toc-d">Nebbia, torce, forzieri</span></a>
+  <a class="toc-row" href="#c9"><span class="toc-n">IX</span><span class="toc-t">Equipaggiamento</span><span class="toc-d">Rarità e statistiche</span></a>
+  <a class="toc-row" href="#c10"><span class="toc-n">X</span><span class="toc-t">Potenziamenti</span><span class="toc-d">Benedizioni temporanee</span></a>
+  <a class="toc-row" href="#c11"><span class="toc-n">XI</span><span class="toc-t">Il Mercante</span><span class="toc-d">Spendi prima che sia tardi</span></a>
+  <a class="toc-row" href="#c12"><span class="toc-n">XII</span><span class="toc-t">La Morte è per Sempre</span><span class="toc-d">Permadeath e rianimazione</span></a>
+  <a class="toc-row" href="#c13"><span class="toc-n">XIII</span><span class="toc-t">Compagnia nell'Ombra</span><span class="toc-d">Multiplayer, chat, vocale</span></a>
+  <a class="toc-row" href="#c14"><span class="toc-n">XIV</span><span class="toc-t">Segreti e Consigli</span><span class="toc-d">Della sopravvivenza</span></a>
+</div>
+
+<!-- ================= I ================= -->
+<div class="chapter" id="c1">
+  <div class="chap-num">Capitolo I</div>
+  <h2>L'Abisso ti chiama</h2>
+  <p class="drop">Sotto il villaggio di pietra esiste un vuoto senza fondo. Le cronache lo chiamano
+  <b>l'Abisso</b>: piani di labirinti scolpiti nella roccia, pieni di oro, armi perdute e creature
+  che non hanno mai visto la luce del sole. Ogni discesa è una spedizione. Ogni spedizione è
+  l'ultima — perché chi muore laggiù non torna.</p>
+  <p>Questo manuale è la tua unica mappa. Studialo, memorizza la tavola dei tasti e le mosse dei
+  boss: l'Abisso non perdona l'improvvisazione.</p>
+  <ul>
+    <li><b>Genere:</b> roguelike multiplayer in tempo reale, condiviso, senza server.</li>
+    <li><b>Come funziona:</b> tutto il gioco vive in un unico file <em>index.html</em>. Apri il link,
+    scegli un nome ed entra: la stanza che scegli è un mondo persistente.</li>
+    <li><b>Persistenza:</b> finché almeno un giocatore resta collegato, lo stato del mondo — mostri,
+    forzieri aperti, oggetti, profondità — resta vivo. Chi arriva dopo si sincronizza con la situazione corrente.</li>
+    <li><b>Zona sicura:</b> l'ingresso, tinta d'azzurro, è un santuario. I mostri non possono entrarci.
+    Lì trovi il mercante.</li>
+  </ul>
+  <div class="note"><b>Nota di rete:</b> il gioco usa la rete peer-to-peer (Trystero) attraverso relay
+  pubblici. In condizioni di rete particolari (VPN, firewall) i giocatori possono non vedersi subito:
+  il gioco cerca di ricongiungere i mondi da solo. Un po' di pazienza, a volte basta attendere.</div>
+</div>
+
+<!-- ================= II ================= -->
+<div class="chapter" id="c2">
+  <div class="chap-num">Capitolo II</div>
+  <h2>La Discesa</h2>
+  <p class="drop">Al primo avvio vedi la schermata della discesa. I campi sono pochi e contano tutti:</p>
+  <ul>
+    <li><b>Nome</b> — il nome che i compagni leggeranno sopra la tua testa (max 18 caratteri).</li>
+    <li><b>Stanza</b> — il codice del mondo condiviso. Chiunque usi lo <b>stesso codice</b> entra nello
+    stesso abisso. Premi il dado <b>🎲</b> per un codice casuale.</li>
+    <li><b>Giocatori max</b> — usato solo se sei tu a creare la stanza (se è vuota); tetto consigliato:
+    8 avventurieri. Oltre il limite, chi entra dopo può unirsi come osservatore.</li>
+  </ul>
+  <p>Prima del login scegli il tuo <b>eroe</b> tra le 9 classi (capitolo IV). Poi premi
+  <b>«Entra nell'Abisso»</b> e vieni lanciato subito nel mondo: niente schermate di attesa, si parte.</p>
+  <div class="tip"><b>Consiglio:</b> quando la stanza è nuova e vuota sei tu l'ospite del mondo (l'host).
+  Se crei tu la stanza, decidi il numero massimo di giocatori: oltre, chi entra diventa osservatore.</div>
+  <p>Se la stanza è piena puoi entrare in <b>modalità spettatore</b>: vedi il mondo e i giocatori ma non
+  interagisci. Utile per osservare gli amici — o i boss — senza rischiare la pelle.</p>
+</div>
+
+<!-- ================= III ================= -->
+<div class="chapter" id="c3">
+  <div class="chap-num">Capitolo III</div>
+  <h2>Comandi</h2>
+  <p class="drop">Il combattimento è in tempo reale: una mano sulla tastiera, l'occhio sulla barra
+  della salute. Memorizza la tavola:</p>
+  <table>
+    <tr><th>Tasto</th><th>Azione</th></tr>
+    <tr><td><span class="kbd">WASD</span> / <span class="kbd">Frecce</span></td><td>Movimento</td></tr>
+    <tr><td><span class="kbd">Spazio</span> / click sinistro / <span class="kbd">⚔</span></td><td>Attacco — mira in automatico il nemico più vicino</td></tr>
+    <tr><td><span class="kbd">E</span></td><td>Interagisci: forziere, scale, mercante, rianimazione</td></tr>
+    <tr><td><span class="kbd">Q</span> / <span class="kbd">🧪</span></td><td>Bevi pozione di salute</td></tr>
+    <tr><td><span class="kbd">R</span> / <span class="kbd">🔮</span></td><td>Bevi pozione di mana (per chi usa mana)</td></tr>
+    <tr><td><span class="kbd">F</span> / <span class="kbd">⚡</span></td><td>Abilità speciale della classe (lungo tempo di recupero)</td></tr>
+    <tr><td><span class="kbd">M</span></td><td>Mostra/nascondi la minimappa (scale, forzieri, mercante, compagni)</td></tr>
+    <tr><td><span class="kbd">V</span></td><td>Attiva/disattiva la visuale in prima persona</td></tr>
+    <tr><td><span class="kbd">Invio</span></td><td>Apre la chat</td></tr>
+    <tr><td><span class="kbd">Esc</span></td><td>Chiude chat e pannelli</td></tr>
+  </table>
+  <p><b>Interfaccia:</b> l'orbita della salute (con flash al danno), l'orbita del mana, il conteggio
+  dell'oro, pozioni e il pulsante dell'abilità. Il pulsante <b>🔊</b> in basso a destra silenzia i suoni
+  generati al volo. Un click sullo zoom lo azzera. Su schermi touch appaiono i controlli: D-pad,
+  bottone attacco ⚔, pozioni 🧪/🔮 e abilità ⚡.</p>
+  <div class="note"><b>Raccolta automatica:</b> oro, pozioni e potenziamenti si raccolgono da soli
+  camminandoci sopra. Non serve premere nulla.</div>
+</div>
+
+<!-- ================= IV ================= -->
+<div class="chapter" id="c4">
+  <div class="chap-num">Capitolo IV</div>
+  <h2>Le Nove Classi</h2>
+  <p class="drop">Nove eroi, nove destini. Chi colpisce da vicino, chi scaglia energia da lontano,
+  chi ispira i compagni. Ogni classe ha la propria arma, velocità e <b>abilità speciale</b> (tasto F).</p>
+  <table>
+    <tr><th>Classe</th><th>Salute</th><th>Velocità</th><th>Danno</th><th>Ruolo</th><th>Abilità (F)</th></tr>
+    <tr><td><img src="assets/sprites/hero_guerriero.png" alt=""> Guerriero</td><td>16</td><td>3.6</td><td>3–6</td><td>Corpo a corpo</td><td><b>Carica</b> — scatta avanti travolgendo i nemici</td></tr>
+    <tr><td><img src="assets/sprites/hero_ladro.png" alt=""> Ladro</td><td>10</td><td>4.6</td><td>2–4</td><td>Schermitore veloce (28% critico)</td><td><b>Passo Furtivo</b> — balza sul nemico con colpo critico garantito</td></tr>
+    <tr><td><img src="assets/sprites/hero_mago.png" alt=""> Mago</td><td>9</td><td>3.2</td><td>4–8</td><td>Attacchi a distanza (mana)</td><td><b>Onda d'Urto</b> — esplosione arcana intorno a te</td></tr>
+    <tr><td><img src="assets/sprites/hero_ranger.png" alt=""> Ranger</td><td>11</td><td>3.9</td><td>2–5</td><td>Arciere a lunga gittata</td><td><b>Raffica</b> — ventaglio di frecce</td></tr>
+    <tr><td><img src="assets/sprites/hero_paladino.png" alt=""> Paladino</td><td>18</td><td>3.3</td><td>3–5</td><td>Tank sacro</td><td><b>Muro Sacro</b> — scudo divino: −50% danno per 5s</td></tr>
+    <tr><td><img src="assets/sprites/hero_negromante.png" alt=""> Negromante</td><td>10</td><td>3.2</td><td>4–7</td><td>Scintille d'anima (mana)</td><td><b>Drenaggio d'Anima</b> — danneggia i vicini e ti cura</td></tr>
+    <tr><td><img src="assets/sprites/hero_bardo.png" alt=""> Bardo</td><td>12</td><td>4.0</td><td>2–4</td><td>Rapier veloce (15% critico)</td><td><b>Canto d'Ispirazione</b> — +40% danno per 8s</td></tr>
+    <tr><td><img src="assets/sprites/hero_monaco.png" alt=""> Monaco</td><td>14</td><td>4.4</td><td>3–5</td><td>Pugni fulminei (20% critico)</td><td><b>Onda di Chi</b> — energia che perfora i nemici</td></tr>
+    <tr><td><img src="assets/speciali/prof.png" alt=""> Prof</td><td>22</td><td>3.6</td><td>5–9</td><td>Fucile al plasma a distanza</td><td><b>Colpo Caricato</b> — 0.8s di carica, danno ~doppio</td></tr>
+  </table>
+  <p>I <b>maghi</b> e i <b>negromanti</b> consumano mana a ogni colpo (2 di mana per attacco):
+  tienilo d'occhio, le pozioni di mana (<span class="kbd">R</span>) esistono per questo.</p>
+  <div class="tip"><b>Consiglio da veterano:</b> il Guerriero sopravvive agli errori, il Monaco li
+  evita, il Prof li paga tutti e tre i tipi di errore — ma quando colpisce, colpisce.</div>
+</div>
+
+<!-- ================= V ================= -->
+<div class="chapter" id="c5">
+  <div class="chap-num">Capitolo V</div>
+  <h2>Le Creature dell'Abisso</h2>
+  <p class="drop">Diciassette famiglie di nemici popolano i piani. Quelle più grandi e maligne
+  hanno un <b>atteggiamento</b> (aggro) più ampio: ti notano da più lontano. Le statistiche qui sotto
+  sono quelle di base: con la profondità le creature diventano più forti.</p>
+  <div class="two-col">
+    <div>
+      <div class="beast"><img src="assets/sprites/mon_ratto.png" alt=""><div><div class="b-name">Ratto</div><div class="b-info">Salute 7 · Danno 2 · Lento e timido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_pipistrello.png" alt=""><div><div class="b-name">Pipistrello</div><div class="b-info">Salute 8 · Danno 2 · Volteggia rapido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_goblin.png" alt=""><div><div class="b-name">Goblin</div><div class="b-info">Salute 14 · Danno 3 · Sporadico</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_melma.png" alt=""><div><div class="b-name">Melma</div><div class="b-info">Salute 9 · Danno 2 · Lenta, si divide</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_gelatina.png" alt=""><div><div class="b-name">Gelatina</div><div class="b-info">Salute 22 · Danno 3 · La melma grande</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_scheletro.png" alt=""><div><div class="b-name">Scheletro</div><div class="b-info">Salute 20 · Danno 4 · Il ritorno dei caduti</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_orco.png" alt=""><div><div class="b-name">Orco</div><div class="b-info">Salute 32 · Danno 6 · Massiccio e lento</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_zombie.png" alt=""><div><div class="b-name">Zombie</div><div class="b-info">Salute 26 · Danno 5 · Lento, inarrestabile</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_ragno.png" alt=""><div><div class="b-name">Ragno Gigante</div><div class="b-info">Salute 24 · Danno 5 · Veloce</div></div></div>
+    </div>
+    <div>
+      <div class="beast"><img src="assets/sprites/mon_spettro.png" alt=""><div><div class="b-name">Spettro</div><div class="b-info">Salute 28 · Danno 6 · Passa attraverso tutto</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_serpente.png" alt=""><div><div class="b-name">Serpente</div><div class="b-info">Salute 10 · Danno 2 · Striscia rapido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_arpia.png" alt=""><div><div class="b-name">Arpia</div><div class="b-info">Salute 9 · Danno 2 · Sfiora e fugge</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_cavaliere.png" alt=""><div><div class="b-name">Cavaliere Caduto</div><div class="b-info">Salute 26 · Danno 5 · Armatura antica</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_cultista.png" alt=""><div><div class="b-name">Cultista</div><div class="b-info">Salute 18 · Danno 4 · Mistico, pericoloso</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_mantide.png" alt=""><div><div class="b-name">Mantide Abissale</div><div class="b-info">Salute 22 · Danno 4 · Balzi rapidi</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_sciamano.png" alt=""><div><div class="b-name">Sciamano Goblin</div><div class="b-info">Salute 20 · Danno 4 · Lancia maledizioni</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_golem.png" alt=""><div><div class="b-name">Golem di Roccia</div><div class="b-info">Salute 40 · Danno 7 · Pestone devastante</div></div></div>
+    </div>
+  </div>
+  <div class="note"><b>Meglio evitare le trappole della fretta:</b> i nemici più veloci (mantide,
+  ragno, serpente, pipistrello) raggiungono chi scappa in rettilineo. Sfrutta i corridoi e i muri
+  per tagliare la distanza e colpire per primi.</div>
+</div>
+
+<!-- ================= VI ================= -->
+<div class="chapter" id="c6">
+  <div class="chap-num">Capitolo VI</div>
+  <h2>I Sei Boss</h2>
+  <p class="drop">Ogni cinque piani, l'Abisso custodisce un <b>Signore della tana</b>. La sua arena è
+  un'unica stanza isolata in fondo al labirinto: quando metti piede nella tana i <b>cancelli si chiudono</b>
+  e il combattimento comincia. Non si scappa. Se vinci, il <b>forziere leggendario</b> della tana si apre:
+  contiene solo equipaggiamento epico o leggendario.</p>
+  <table>
+    <tr><th>Piano</th><th>Boss</th><th>Salute</th><th>Firme della tana</th></tr>
+    <tr><td>5</td><td><img src="assets/sprites/mon_drago.png" alt=""> <b>Drago Minore</b></td><td>120</td><td>L'unico che vola: soffio di fuoco a cono, palle di fuoco, picchiata dal cielo con telegrafo</td></tr>
+    <tr><td>10</td><td><img src="assets/sprites/boss_golem.png" alt=""> <b>Golem di Pietra</b></td><td>150</td><td>Non vola: pestone con onda d'urto radiale e clava di roccia lanciata</td></tr>
+    <tr><td>15</td><td><img src="assets/sprites/boss_lich.png" alt=""> <b>Lich Signore dei Nonmorti</b></td><td>135</td><td>Evoca servitori scheletrici, proiettili di energia arcana</td></tr>
+    <tr><td>20</td><td><img src="assets/sprites/boss_melme.png" alt=""> <b>Regina delle Melme</b></td><td>130</td><td>Sputa melma acida, evoca melme, rigenera</td></tr>
+    <tr><td>25</td><td><img src="assets/sprites/boss_ragno.png" alt=""> <b>Re Ragno</b></td><td>140</td><td>Tela velenosa, morso che avvelena</td></tr>
+    <tr><td>30</td><td><img src="assets/sprites/boss_ratti.png" alt=""> <b>Re dei Ratti</b></td><td>120</td><td>Evoca orde di ratti, carica, ondata di ratti dal soffio</td></tr>
+  </table>
+  <p>Oltre il piano 30 la ruota gira di nuovo: il piano 35 ospita un altro Drago Minore, il 40 un
+  altro Golem di Pietra, e così via — sempre più affamati.</p>
+  <div class="warn"><b>Attenzione:</b> il boss si attiva appena <b>qualcuno</b> dei giocatori vivi
+  mette piede nella tana. Se entri da solo mentre i compagni sono dall'altra parte del piano,
+  la porta si chiude e la lotta è tua.</div>
+  <div class="tip"><b>Consiglio:</b> i boss telegrafano gli attacchi di area (anelli che si
+  contraggono, bagliori). Impara a leggere i telegrafi e a uscire dalla zona prima dell'impatto:
+  nel combattimento coi boss la difesa vince.</div>
+</div>
+
+<!-- ================= VII ================= -->
+<div class="chapter" id="c7">
+  <div class="chap-num">Capitolo VII</div>
+  <h2>L'Arte del Combattimento</h2>
+  <p class="drop">L'attacco di base mira <b>automaticamente</b> al nemico più vicino dentro la tua
+  gittata: tu ti occupi di posizione e ritmo. Ogni classe ha la propria animazione di fendente
+  (spada, pugnali, bastone, arco, martello, bacchetta, mandolino, pugni, fucile al plasma).</p>
+  <ul>
+    <li><b>Critico:</b> Ladro (28%), Monaco (20%) e Bardo (15%) possono infliggere colpi critici.</li>
+    <li><b>Mana:</b> Mago e Negromante consumano 2 di mana per attacco e più mana per l'abilità.
+    Senza mana l'attacco a distanza si fa più debole: tieni pozioni di mana.</li>
+    <li><b>Telegrafi:</b> le mosse pericolose (soffio, carica, pestone, picchiata) vengono
+    annunciate da anelli che si contraggono e bagliori colorati sul terreno.</li>
+    <li><b>Aggro:</b> ogni creatura ha un raggio d'attenzione. I nemici ignorati dopo un po'
+    smettono di inseguirti.</li>
+    <li><b>Schermo rosso:</b> quando subisci un colpo lo schermo si tinge di rosso dal lato
+    da cui arriva il danno: la direzione dell'attacco è scritta nel dolore.</li>
+  </ul>
+  <div class="note"><b>Flash di danno:</b> i nemici lampeggiano quando li colpisci; i loro
+  attacchi in preparazione hanno un'aura colorata. Leggi i colori, sopravvivi ai piani.</div>
+</div>
+
+<!-- ================= VIII ================= -->
+<div class="chapter" id="c8">
+  <div class="chap-num">Capitolo VIII</div>
+  <h2>Esplorazione</h2>
+  <p class="drop">L'Abisso è avvolto dalla <b>nebbia di guerra</b>: vedi solo le zone che hai già
+  esplorato. Le stanze sono illuminate da <b>torce tremolanti</b> — la luce non mente, il buio sì.</p>
+  <ul>
+    <li><b>Forzieri:</b> tante casse di legno sparse per i piani. Avvicinati e premi <span class="kbd">E</span>:
+    oro, pozioni, potenziamenti o equipaggiamento a sorte.</li>
+    <li><b>Scale:</b> la via verso il basso, un gradino luminoso su una pedana. Premi <span class="kbd">E</span>
+    per scendere al piano successivo. Ogni piano viene rigenerato: nuovi labirinti, nuove prede,
+    stessi pericoli.</li>
+    <li><b>Minimappa:</b> premendo <span class="kbd">M</span> vedi le zone esplorate, le scale, i
+    forzieri rimasti, il mercante e la posizione dei compagni.</li>
+    <li><b>Frecce ai bordi:</b> quando un compagno è fuori schermo, una freccia al bordo indica la
+    sua direzione.</li>
+    <li><b>Prima persona:</b> con <span class="kbd">V</span> passi alla visuale in prima persona
+    (stile Doom): l'arma della tua classe appare in mano. Ottima per l'immersione, richiede il
+    doppio dell'attenzione.</li>
+  </ul>
+  <div class="tip"><b>Consiglio:</b> i forzieri non si rigenerano scendendo di piano: ogni piano è
+  una scelta tra avanzare velocemente e saccheggiare fino all'ultima stanza. I boss premiano i
+  completisti: il loro forziere è solo per chi ha battuto la tana.</div>
+</div>
+
+<!-- ================= IX ================= -->
+<div class="chapter" id="c9">
+  <div class="chap-num">Capitolo IX</div>
+  <h2>Equipaggiamento</h2>
+  <p class="drop">Sotto l'Abisso si trovano cinque tipi di equipaggiamento. A differenza dei
+  potenziamenti, restano <b>permanenti</b> finché non trovi qualcosa di meglio nello stesso slot.
+  Si equipaggiano da soli camminandoci sopra.</p>
+  <table>
+    <tr><th>Slot</th><th>Oggetto</th><th>Cosa migliora</th></tr>
+    <tr><td><img src="assets/sprites/equip_helm.png" alt=""> Elmo</td><td>🪖</td><td rowspan="5">Statistiche casuali tra: salute extra, % danno, % velocità, % danno subito in meno</td></tr>
+    <tr><td><img src="assets/sprites/equip_necklace.png" alt=""> Collana</td><td>📿</td></tr>
+    <tr><td><img src="assets/sprites/equip_armor.png" alt=""> Armatura</td><td>🛡️</td></tr>
+    <tr><td><img src="assets/sprites/equip_ring.png" alt=""> Anello</td><td>💍</td></tr>
+    <tr><td><img src="assets/sprites/equip_greaves.png" alt=""> Gambali</td><td>👢</td></tr>
+  </table>
+  <p>Quattro <b>rarità</b>, più rara = più statistiche e più forti:</p>
+  <table>
+    <tr><th>Rarità</th><th>Statistiche</th><th>Potenza</th></tr>
+    <tr><td><b style="color:#b8b8b8">Comune</b></td><td>1</td><td>×1.0</td></tr>
+    <tr><td><b style="color:#5fa0c9">Raro</b></td><td>1</td><td>×1.35</td></tr>
+    <tr><td><b style="color:#b06bf2">Epico</b></td><td>2</td><td>×1.6</td></tr>
+    <tr><td><b style="color:#ff9d2e">Leggendario</b></td><td>3</td><td>×2.2</td></tr>
+  </table>
+  <p>Più scendi in profondità, più le rarità alte diventano comuni. Il forziere dei boss rilascia
+  solo pezzi <b>epici o leggendari</b>.</p>
+  <div class="warn"><b>Morte = perdita:</b> l'equipaggiamento è il bottino più prezioso e il
+  permadeath te lo porta via come tutto il resto. Spendilo… anzi, indossalo finché puoi.</div>
+</div>
+
+<!-- ================= X ================= -->
+<div class="chapter" id="c10">
+  <div class="chap-num">Capitolo X</div>
+  <h2>Potenziamenti</h2>
+  <p class="drop">Benedizioni temporanee che si raccolgono da terra o si comprano dal mercante.
+  Durano pochi secondi: il momento in cui le usi conta quanto il momento in cui le trovi.</p>
+  <div class="beast"><img src="assets/sprites/furia.png" alt=""><div><div class="b-name">💪 Furia</div><div class="b-desc">+40% danno per 12 secondi. Da attivare prima dell'assalto, non dopo.</div></div></div>
+  <div class="beast"><img src="assets/sprites/icon_shield_buff.png" alt=""><div><div class="b-name">🛡️ Scudo</div><div class="b-desc">−50% danno subito per 10 secondi. La salvezza nelle tane dei boss.</div></div></div>
+  <div class="beast"><img src="assets/sprites/potenziamento_fretta.png" alt=""><div><div class="b-name">👟 Fretta</div><div class="b-desc">+40% velocità per 12 secondi. Per chiudere le distanze o fuggire.</div></div></div>
+  <div class="beast"><img src="assets/sprites/powerupfocus.png" alt=""><div><div class="b-name">🔷 Concentrazione</div><div class="b-desc">−50% tempo di recupero dell'attacco per 10 secondi. La raffica di danno.</div></div></div>
+</div>
+
+<!-- ================= XI ================= -->
+<div class="chapter" id="c11">
+  <div class="chap-num">Capitolo XI</div>
+  <h2>Il Mercante</h2>
+  <p class="drop">Nel santuario della zona d'ingresso, il <b>mercante</b> 🏪 attende chi ha oro in
+  tasca — e sa bene che non lo terrà a lungo. Avvicinati e premi <span class="kbd">E</span> (o
+  clicca sulla scritta) per aprire il banco. Si chiude con <span class="kbd">E</span> o <span class="kbd">Esc</span>.</p>
+  <table>
+    <tr><th>Merce</th><th>Prezzo</th></tr>
+    <tr><td>🧪 Pozione di salute</td><td>12 + 2 × piano</td></tr>
+    <tr><td>🔮 Pozione di mana</td><td>12 + 2 × piano</td></tr>
+    <tr><td>💪 Potenziamento casuale</td><td>20 + 4 × piano</td></tr>
+    <tr><td>🎲 Equipaggiamento a sorte</td><td>45 + 8 × piano</td></tr>
+  </table>
+  <p>I prezzi crescono con la profondità: l'oro è abbondante nei piani bassi, ma le cose belle
+  costano care. L'equipaggiamento comprato è casuale: può essere un comune… o un leggendario.</p>
+  <div class="warn"><b>La regola del mercante:</b> spendi prima di morire. Il permadeath non fa
+  sconti e l'oro non ha valore nella tomba.</div>
+</div>
+
+<!-- ================= XII ================= -->
+<div class="chapter" id="c12">
+  <div class="chap-num">Capitolo XII</div>
+  <h2>La Morte è per Sempre</h2>
+  <p class="drop">Quando la tua salute tocca lo zero non muori subito: <b>cadi a terra</b>. Per
+  ventidue secondi giaci al suolo, in balia dell'oscurità — e dei compagni.</p>
+  <ul>
+    <li><b>Rianimazione:</b> un compagno può salvarti premendo e tenendo <span class="kbd">E</span>
+    vicino al tuo corpo. Un alleato vale più di qualsiasi pozione.</li>
+    <li><b>La fine:</b> se nessuno ti rianima entro il tempo limite — o se vieni colpito di nuovo
+    mentre sei a terra — è la fine.</li>
+    <li><b>Permadeath:</b> perdi <b>tutto</b>: oro, pozioni, potenziamenti ed equipaggiamento.
+    Resta solo il <b>record</b> (il miglior oro e il piano raggiunto in questo mondo).</li>
+  </ul>
+  <div class="warn"><b>La legge dell'Abisso:</b> nessuna resurrezione, nessun caricamento. Quando
+  rientri, riparti da zero nello stesso mondo condiviso — che nel frattempo è andato avanti
+  senza di te.</div>
+  <div class="tip"><b>Consiglio:</b> la rianimazione è il gesto più importante del gioco. Se vedi
+  un compagno cadere, lascia perdere il bottino: corri da lui. L'oro si ritrova, gli amici no.</div>
+</div>
+
+<!-- ================= XIII ================= -->
+<div class="chapter" id="c13">
+  <div class="chap-num">Capitolo XIII</div>
+  <h2>Compagnia nell'Ombra</h2>
+  <p class="drop">L'Abisso è un mondo <b>condiviso e persistente</b>: stesso codice stanza, stesso
+  mondo. Fino a 8 avventurieri (oltre il limite si entra da osservatori) si muovono nello stesso
+  labirinto, si vedono, si aiutano — e si dividono il bottino delle tane.</p>
+  <ul>
+    <li><b>Chat:</b> <span class="kbd">Invio</span> apre la chat; i messaggi appaiono come bolle
+    sopra i personaggi.</li>
+    <li><b>Vocale:</b> il pulsante 🎤 accanto a «Nel mondo» attiva il microfono: parla con i compagni.</li>
+    <li><b>Host del mondo:</b> il primo che crea la stanza ne è il custode; se se ne va, il custode
+    passa a un altro. Se due mondi si dividono per un attimo (VPN, relay), il gioco li ricongiunge
+    da solo scegliendo il mondo «vissuto».</li>
+    <li><b>Copia link:</b> nel pannello di aiuto c'è il pulsante «Copia link»: chiunque lo riceva
+    entra nello stesso abisso.</li>
+    <li><b>Frecce ai bordi e minimappa:</b> non perdere mai di vista i compagni.</li>
+  </ul>
+  <div class="note"><b>Nota di rete:</b> il multiplayer dipende dalla rete (VPN, relay, firewall).
+  In condizioni particolari i giocatori possono non vedersi subito: il gioco cerca comunque di
+  ricongiungere i mondi da solo. Se trovi un problema, segnalalo aprendo un'issue sul repository.</div>
+</div>
+
+<!-- ================= XIV ================= -->
+<div class="chapter" id="c14">
+  <div class="chap-num">Capitolo XIV</div>
+  <h2>Segreti e Consigli</h2>
+  <ul>
+    <li><b>Il santuario è casa tua:</b> i mostri non entrano nella zona d'ingresso. Usala per
+    riordinare, comprare e organizzare la discesa.</li>
+    <li><b>Il record non mente:</b> tienilo d'occhio; è la misura della tua discesa più profonda.</li>
+    <li><b>I telegrafi dei boss:</b> anello che si contrae = esplosione in arrivo. Uscire dalla
+    zona prima dell'impatto è sempre possibile.</li>
+    <li><b>Potenzia prima, affronta dopo:</b> Furia e Concentrazione trasformano un combattimento
+    equilibrato in una vittoria netta. Scudo e Fretta salvano la vita.</li>
+    <li><b>Il forziere del boss:</b> solo dopo la vittoria sulla tana. Epico o leggendario,
+    garantito: vale ogni passo della discesa.</li>
+    <li><b>La prima persona (V)</b> non è solo estetica: nei corridoi stretti la precisione
+    visiva aiuta a incassare meno colpi.</li>
+    <li><b>Il suono avvisa:</b> il gioco genera suoni ed effetti al volo. Attivati, il ruggito
+    di un boss ti salva la vita prima ancora che lo vedi.</li>
+  </ul>
+  <div class="orn">❖ ❖ ❖</div>
+  <p class="drop">L'Abisso non finisce mai. I suoi piani scendono oltre il trentesimo, i suoi
+  tesori non si esauriscono, e i suoi mostri si fanno ogni volta più affamati. Questo manuale
+  finisce qui — ma la discesa, avventuriero, è appena cominciata.</p>
+</div>
+
+</div><!-- /wrap -->
+
+<div class="footer">
+  ❦ Manuale del Giocatore di ABISSO ❦<br>
+  Roguelike multiplayer in tempo reale, senza server, in un unico file.<br>
+  <a href="index.html">🎮 Torna al gioco</a> · <a href="https://github.com/SancioPanza88/Abisso-2.0">Repository</a> ·
+  <a href="https://github.com/SancioPanza88/Abisso-2.0/issues">Segnala un bug</a><br>
+  Buona discesa.
+</div>
+
+</body>
+</html>
