@@ -31,7 +31,6 @@ Roguelike multiplayer in tempo reale, senza server, in un unico file.
 - **Flash di danno**: lo schermo si tinge di rosso dal lato da cui arriva il colpo.
 - **Multiplayer più affidabile**: connessioni più stabili, e se due mondi si dividono si ricongiungono da soli.
 - **Qualità della vita**: barra HP nuova con flash, toast di benvenuto, abilità di classe, pozioni di mana, clic sullo zoom per azzerarlo, pulsanti d'interazione per il touch.
-- **Modalità Ondata**: arena senza nebbia dove controlli un mostro (17 nemici o 6 boss) e combatti contro ondate di eroi IA — vedi sezione dedicata.
 
 ## Eroi giocabili
 
@@ -73,16 +72,6 @@ I 6 boss delle tane:
 | Re dei Ratti | ![ratti](assets/sprites/boss_ratti.png) |
 | Lich Signore dei Nonmorti | ![lich](assets/sprites/boss_lich.png) |
 
-## Modalità Ondata
-
-Dalla schermata di login scegli **Modalità**: *Abisso* (dungeon classico) oppure *Ondata*, e poi la creatura con cui combattere (i 17 nemici o i 6 boss).
-
-- Arena 34×24 senza nebbia, illuminata a torci; gli eroi IA (le stesse 9 classi) attaccano in ondate sempre più forti.
-- Ogni 5ª ondata arriva una squadra **élite** più dura; se tutta la squadra cade si riparte dall'ondata 1.
-- I mostri controllati dal host hanno statistiche potenziate (HP ×1.6, i boss restano integrali); i boss hanno l'attacco speciale ad area (tasto **F**).
-- I bot usano le classi reali: guerrieri e ladri si fanno sotto corpo a corpo, maghi/ranger/negromanti/Prof colpiscono da lontano con proiettili.
-- **Multiplayer**: la simulazione è gestita dall'host (muovimenti e attacchi validati, snapshot a 115 ms); i client inviano input e ricevono il mondo sincronizzato.
-
 ## Comandi
 
 | Tasto | Azione |
@@ -92,7 +81,7 @@ Dalla schermata di login scegli **Modalità**: *Abisso* (dungeon classico) oppur
 | `E` | Interagisci (forziere, scale, mercante, rianima) |
 | `Q` | Pozione |
 | `R` | Pozione di mana |
-| `F` | Abilità di classe / attacco speciale (Ondata) |
+| `F` | Abilità di classe |
 | `Invio` | Chat |
 | `M` | Minimappa |
 

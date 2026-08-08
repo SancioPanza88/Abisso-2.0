@@ -256,23 +256,6 @@ html,body{
 }
 .login-room-row{ display:flex; gap:6px; }
 .login-room-row input{ flex:1; }
-#login-mode-row{ display:flex; gap:8px; }
-.mode-pick{
-  flex:1; padding:9px 6px; cursor:pointer; border-radius:6px; text-align:center;
-  background:rgba(10,8,5,.7); border:1.5px solid rgba(232,161,61,.3); color:var(--parchment);
-  font-family:var(--font-ui); font-size:13px; transition:border-color .18s, background .18s, box-shadow .18s;
-}
-.mode-pick:hover{ border-color:var(--amber); }
-.mode-pick.active{
-  border-color:var(--amber); color:#ffe3a6;
-  background:linear-gradient(180deg,rgba(232,161,61,.22),rgba(232,161,61,.10));
-  box-shadow:0 0 14px rgba(232,161,61,.25);
-}
-#login-creature{
-  width:100%; background:rgba(10,8,5,.7); border:1px solid rgba(232,161,61,.3); border-radius:6px;
-  color:var(--parchment); font-family:var(--font-ui); font-size:14px; padding:9px 11px; box-sizing:border-box;
-}
-#login-creature-field:not(.hidden){ display:block; }
 #login-random-room{
   background:var(--stone); border:1px solid var(--amber-deep); color:var(--amber); border-radius:5px;
   width:38px; cursor:pointer; font-size:15px;
@@ -871,17 +854,6 @@ html,body{
           <input id="login-maxplayers" type="number" min="1" max="8" value="8">
         </div>
         <div class="login-hint">Usato solo se sei tu a creare la stanza (se è vuota). Oltre il limite, chi entra dopo può unirsi come osservatore.</div>
-      </div>
-      <div class="login-field">
-        <label>Modalità</label>
-        <div id="login-mode-row">
-          <button id="mode-pick-abisso" type="button" class="mode-pick active">⚔ Abisso</button>
-          <button id="mode-pick-wave" type="button" class="mode-pick">🌊 Ondata</button>
-        </div>
-      </div>
-      <div class="login-field" id="login-creature-field">
-        <label>Creatura (per Ondata)</label>
-        <select id="login-creature"></select>
       </div>
       <button id="login-submit">Entra nell'Abisso ⚔</button>
       <div class="login-note">Chiunque abbia lo stesso codice stanza entra nello stesso mondo condiviso e persistente.</div>
@@ -2009,41 +1981,19 @@ function buildSyncPayload(){
     depth: world.depth,
     seed: world.seed,
     maxPlayers: world.maxPlayers,
-    mode: world.mode,
     playerCount: computePlayerCount(),
-    monsters: world.monsters.map(m=>({id:m.id,type:m.type,x:round2(m.x),y:round2(m.y),hp:m.hp,maxHp:m.maxHp,dmg:m.dmg,facing:m.facing,splitLeft:m.splitLeft||0,winding:!!m._winding,att:round2(m.attackAnimT||0),human:!!m.human,owner:m.owner||'',
+    monsters: world.monsters.map(m=>({id:m.id,type:m.type,x:round2(m.x),y:round2(m.y),hp:m.hp,maxHp:m.maxHp,dmg:m.dmg,facing:m.facing,splitLeft:m.splitLeft||0,winding:!!m._winding,att:round2(m.attackAnimT||0),
       bm:m._bm?m._bm.move:'', bfly:!!(m._bm&&m._bm.fly), btx:(m._bm&&m._bm.move==='dive'?round2(m._bm.tx):null), bty:(m._bm&&m._bm.move==='dive'?round2(m._bm.ty):null)})),
     chestsOpened: world.chestsOpened,
     items: world.items,
     boss: world.boss ? {active:!!world.boss.active, dead:!!world.boss.dead} : null,
-    wave: world.wave ? {
-      n: world.wave.n,
-      phase: world.wave.phase,
-      sT: Math.round(world.wave.sT*10)/10,
-      bots: world.wave.bots.map(b=>({id:b.id,cls:b.cls,name:b.name,x:round2(b.x),y:round2(b.y),hp:Math.round(b.hp),maxHp:b.maxHp,ranged:!!b.ranged,projCol:b.projColor,elite:!!b.elite})),
-      bolts: world.wave.bolts.map(bl=>({x:round2(bl.x),y:round2(bl.y),vx:round2(bl.vx),vy:round2(bl.vy),color:bl.color,glyph:bl.glyph,life:Math.round(bl.life*10)/10,hostile:!!bl.hostile}))
-    } : null,
   };
 }
 function applyFullState(payload){
   world.depth = payload.depth;
   world.seed = payload.seed;
   world.maxPlayers = payload.maxPlayers || HARD_MAX_PLAYERS;
-  world.mode = payload.mode==='wave' ? 'wave' : 'abisso';
-  if (world.mode==='wave'){
-    world.layout = generateWaveArena(world.seed);
-    world.wave = {
-      n: payload.wave ? payload.wave.n : 0,
-      phase: payload.wave ? payload.wave.phase : 'wait',
-      sT: payload.wave ? payload.wave.sT : 3.5,
-      pendingN: 2,
-      bots: payload.wave ? payload.wave.bots.map(b=>({...b, rx:b.x, ry:b.y, facing:{x:0,y:1}, atkT:0, cdTimer:0, hit:0, strafe:1, strafeT:1})) : [],
-      bolts: payload.wave ? payload.wave.bolts||[] : [],
-    };
-    for (let y=0;y<world.layout.h;y++) for (let x=0;x<world.layout.w;x++) world.visibleSet.add(x+','+y);
-  } else {
-    world.layout = generateDepth(payload.depth);
-  }
+  world.layout = generateDepth(payload.depth);
   world.monsters = payload.monsters.map(m=>({...m, rx:m.x, ry:m.y, state:'idle', wanderT:0, wanderTarget:null, atkCd:0, speed:MONSTER_TYPES[m.type].speed, aggro:MONSTER_TYPES[m.type].aggro,
     _bm: m.bm ? {move:m.bm, fly:!!m.bfly, tx:m.btx, ty:m.bty, t:0, p:''} : null}));
   world.chestsOpened = {...payload.chestsOpened};
@@ -2052,15 +2002,10 @@ function applyFullState(payload){
   applyBossGates(world.layout, world.boss.active && !world.boss.dead);
   resetFog();
   updateDepthLabel();
-  if (!spawnedOnce){
+if (!spawnedOnce){
     placeAtSpawn(); spawnedOnce = true; hideConnecting(); worldBootTime = performance.now();
-    if (world.mode==='wave'){
-      // in arena ogni giocatore si presenta come la creatura scelta al login
-      act.spawnreq.send({type: pendingWaveCreature});
-      showToast('🌊 Sei nell\'arena: la prima ondata sta per arrivare!');
-    }
-    // chi entra a gioco iniziato mentre la lotta è in corso viene catapultato nell'arena
-    else if (world.boss && world.boss.active && !world.boss.dead && world.layout.bossRoom){
+    // chi entra a gioco iniziato mentre la lotta è in corso viene catapultato nella tana
+    if (world.boss && world.boss.active && !world.boss.dead && world.layout.bossRoom){
       const br = world.layout.bossRoom;
       me.x = br.x+1.5; me.y = br.y+br.h-1.5;
       showToast('⚔️ Il Drago Minore sta infuriando nella tana: sei dentro.');
@@ -2090,20 +2035,6 @@ function bootstrapFreshWorld(depth, maxPlayers){
   world.seed = (Math.random()*4294967296) >>> 0;
   world.maxPlayers = clamp(maxPlayers||HARD_MAX_PLAYERS, 1, HARD_MAX_PLAYERS);
   world.depth = depth;
-  world.mode = pendingWorldMode==='wave' ? 'wave' : 'abisso';
-  if (world.mode==='wave'){
-    // arena senza nebbia: layout dedicato, stato ondate, niente dungeon né boss
-    world.layout = generateWaveArena(world.seed);
-    world.wave = { n:0, phase:'wait', sT:3.5, pendingN:2, bots:[], bolts:[] };
-    world.boss = { active:false, dead:false };
-    world.monsters = [];
-    world.chestsOpened = {};
-    world.items = [];
-    for (let y=0;y<world.layout.h;y++) for (let x=0;x<world.layout.w;x++) world.visibleSet.add(x+','+y);
-    spawnWaveCreature(selfId, pendingWaveCreature);
-    me.x = world.layout.spawn.x+1; me.y = world.layout.spawn.y+1;
-    return;
-  }
   world.layout = generateDepth(depth);
   world.boss = { active:false, dead:false };
   const rng = mulberry32(hashStr(ROOM_CODE+'::'+world.seed+'::dyn::'+depth));
@@ -2131,21 +2062,6 @@ function mergeSnapshot(payload){
   world.monsters = world.monsters.filter(m=>incoming.has(m.id));
   world.chestsOpened = {...payload.chestsOpened};
   world.items = payload.items.map(it=>({...it}));
-  // modalità Ondata: stato ondate, bot e proiettili arrivano con gli snapshot
-  if (payload.wave){
-    if (!world.wave) world.wave = {n:0, phase:'wait', sT:6, pendingN:2, bots:[], bolts:[]};
-    world.wave.n = payload.wave.n;
-    world.wave.phase = payload.wave.phase;
-    world.wave.sT = payload.wave.sT;
-    world.wave.bolts = payload.wave.bolts||[];
-    const seenIds = new Set(payload.wave.bots.map(b=>b.id));
-    for (const ib of payload.wave.bots){
-      const exb = world.wave.bots.find(b=>b.id===ib.id);
-      if (exb){ exb.x=ib.x; exb.y=ib.y; exb.hp=ib.hp; exb.maxHp=ib.maxHp; }
-      else { world.wave.bots.push({...ib, rx:ib.x, ry:ib.y, facing:{x:0,y:1}, atkT:0, cdTimer:0, hit:0, strafe:1, strafeT:1}); }
-    }
-    world.wave.bots = world.wave.bots.filter(b=>seenIds.has(b.id));
-  }
   // stato del boss: sigilla/apre i cancelli della tana quando cambia
   const b = payload.boss || {};
   const nActive = !!b.active, nDead = !!b.dead;
@@ -3125,10 +3041,6 @@ async function connectToWorld(){
   act.bosstele = room.makeAction('bosstele');
   act.bossfx = room.makeAction('bossfx');
   act.monfx = room.makeAction('monfx');
-  act.mmove = room.makeAction('mmove');
-  act.spawnreq = room.makeAction('spawnreq');
-  act.catastk = room.makeAction('catastk');
-  act.waveevt = room.makeAction('waveevt');
   act.bossjump = room.makeAction('bossjump');
   act.worldfp = room.makeAction('worldfp');
 
@@ -3206,31 +3118,6 @@ async function connectToWorld(){
   act.revive.onMessage = () => applyRevive();
   act.bossfx.onMessage = (data) => bossFxLocal(data);
   act.monfx.onMessage = (data) => monFxLocal(data);
-  act.mmove.onMessage = (data, {peerId}) => {
-    if (!isHost || !data || !data.id) return;
-    const m = world.monsters.find(mm=>mm.id===data.id && mm.human);
-    if (!m || m.owner!==peerId) return;
-    m.x = clamp(data.x, 0.5, world.layout.w-0.5);
-    m.y = clamp(data.y, 0.5, world.layout.h-0.5);
-    if (data.fx!=null) m.facing = {x:data.fx, y:data.fy};
-    if (data.hp!=null && data.hp < m.hp) m.hp = data.hp;
-  };
-  act.catastk.onMessage = (data, {peerId}) => {
-    if (!isHost || !data || !data.id) return;
-    const m = world.monsters.find(mm=>mm.id===data.id && mm.human && mm.owner===peerId);
-    if (m && m.hp>0) hostCreatureAttack(m, {x:data.x||m.facing.x, y:data.y||m.facing.y}, !!data.special);
-  };
-  act.spawnreq.onMessage = (data, {peerId}) => {
-    if (!isHost || world.mode!=='wave') return;
-    if (world.monsters.some(mm=>mm.human && mm.owner===peerId)) return;
-    spawnWaveCreature(peerId, (data && data.type) || 'g');
-    act.snapshot.send(buildSyncPayload());
-  };
-  act.waveevt.onMessage = (data) => {
-    if (world.mode!=='wave') return;
-    if (data && data.evt==='start') showWaveBanner(data.n||1);
-    else if (data && data.evt==='defeat') showWaveBanner(0);
-  };
   act.bossjump.onMessage = () => { if (isHost) dbgRegenerateWorld(BOSS_FLOORS[0], true); };
   act.bosstele.onMessage = (data) => {
     if (!data || !world.layout || !world.layout.bossRoom) return;
@@ -4831,10 +4718,6 @@ function render(dt){
   const layout = world.layout;
   const viewCols = cssW/tile, viewRows = cssH/tile;
   let camX = me.x - viewCols/2, camY = me.y - viewRows/2;
-  if (world.mode==='wave'){
-    const wc = myCreature();
-    if (wc){ camX = wc.x - viewCols/2; camY = wc.y - viewRows/2; }
-  }
   lastCamX = camX; lastCamY = camY;
   const flick = 0.9 + 0.1*Math.sin(torchClock*3.1) + 0.04*Math.sin(torchClock*7.7);
   // alone di luce calda dalla torcia del giocatore: gradiente radiale tremolante
@@ -5112,7 +4995,7 @@ function render(dt){
   ctx.globalCompositeOperation = 'source-over';
   for (const m of world.monsters){
     const key = Math.floor(m.rx)+','+Math.floor(m.ry);
-    if (!me.isSpectator && world.mode!=='wave' && !world.visibleSet.has(key)) continue;
+    if (!me.isSpectator && !world.visibleSet.has(key)) continue;
     const sx=(m.rx-camX)*tile, sy=(m.ry-camY)*tile;
     const t = MONSTER_TYPES[m.type];
     // tracciamento visivo (solo rendering): flash sul danno, squash sull'attacco
@@ -5226,27 +5109,6 @@ function render(dt){
       if (diveProg>0.94) drawLabel('!!', wx, wy-tile*1.5, '#ffd27a', 15);
     } else if (t.boss){
       m._divePrevMove = '';
-    }
-  }
-
-  // modalità Ondata: eroi IA (bot) e proiettili in volo
-  if (world.mode==='wave' && world.wave){
-    for (const b of world.wave.bots){
-      if (b.hp<=0) continue;
-      const sx=(b.rx??b.x)-camX, sy=(b.ry??b.y)-camY;
-      const px=sx*tile, py=sy*tile;
-      drawSprite(b.cls, px, py, Math.round(tile*0.82), 1, b.facing, b.hit>0?0.15:0, {
-        flavor:b.cls, moving:true,
-        attackT:b.atkT>0?Math.min(b.atkT,0.45):0,
-        attackDur:CLASS_ATK_DUR[b.cls]||0.22,
-        lunge:0.16, phase:waveBotSeq,
-        flashColor:'#ff5040',
-      });
-      if (b.elite || b.hp<b.maxHp) drawHpBar(px, py-tile*0.58, tile*0.9, Math.max(0,b.hp/b.maxHp), b.elite?'#e8a13d':'#c1443a');
-    }
-    for (const bl of world.wave.bolts){
-      const px=(bl.x-camX)*tile, py=(bl.y-camY)*tile;
-      drawGlyph(bl.glyph||'✺', px, py, bl.color||'#ffd27a', 0.95, Math.round(tile*0.85));
     }
   }
 
@@ -5405,11 +5267,11 @@ function render(dt){
   }
   ctx.globalCompositeOperation = 'source-over';
 
-  // local player (always on top) — in modalità Ondata il giocatore è la sua creatura (disegnata con i mostri)
+  // local player (always on top)
   if (me.isSpectator){
     const sx=(me.x-camX)*tile, sy=(me.y-camY)*tile;
     drawStaticSprite('icon_eye', sx, sy, Math.round(tile*0.6), 0.7, '👁️', '#8fd1ff');
-  } else if (world.mode!=='wave'){
+  } else {
     const sx=(me.x-camX)*tile, sy=(me.y-camY)*tile;
     // tracciamento visivo locale (solo rendering): flash sul danno
     if (me._hp==null) me._hp = me.hp;
@@ -6436,7 +6298,6 @@ const keys = { up:false, down:false, left:false, right:false, attack:false, inte
 let lastMoveDir = {x:0,y:1};
 
 function updateLocalPlayer(dt){
-  if (world.mode==='wave'){ updateWaveLocal(dt); return; }
   me.atkTimer = Math.max(0, me.atkTimer-dt);
   me.abilityTimer = Math.max(0, me.abilityTimer-dt);
   me.invulnTimer = Math.max(0, me.invulnTimer-dt);
@@ -6641,389 +6502,10 @@ function updateMonsterSmoothing(dt){
   }
 }
 
-/* ================= MODALITÀ ONDATA (arena: mostro vs eroi IA) =================
-   Un'arena gigante senza nebbia: i giocatori controllano creature (17 mostri o
-   6 boss selezionabili) e devono sopravvivere a ondate di eroi IA sempre più
-   forti (le 9 classi vere del gioco). Ogni 5° ondata arriva una squadra élite.
-   Simulazione interamente host-authoritative: i client inviano input movimento
-   e attacchi (act.mmove/act.catastk) e ricevono snapshot + FX di gioco. */
-const WAVE_RECORD_KEY = 'abisso_wave_record';
-let pendingWaveCreature = 'g';
-let pendingWorldMode = 'abisso';
-let waveLastFacing = {x:0, y:1};
-
-function loadWaveRecord(){
-  try{ const r = JSON.parse(localStorage.getItem(WAVE_RECORD_KEY)); if (r && r.wave) return r; }catch(e){}
-  return {wave:1};
-}
-function saveWaveRecord(n){
-  try{
-    const r = loadWaveRecord();
-    if (n >= r.wave) localStorage.setItem(WAVE_RECORD_KEY, JSON.stringify({wave:n, when:Date.now()}));
-  }catch(e){}
-}
-let aliveBotsForHud = 0;
-function myCreature(){
-  return world.monsters.find(m=>m.human && m.owner===selfId) || null;
-}
-function spawnWaveSpot(minDist){
-  const L = world.layout;
-  for (let i=0;i<60;i++){
-    const x = 2+Math.floor(Math.random()*(L.w-4)), y = 2+Math.floor(Math.random()*(L.h-4));
-    if (L.grid[y][x] !== T_FLOOR) continue;
-    let ok = true;
-    for (const m of world.monsters){ if (dist2(x+0.5, y+0.5, m.x, m.y) < minDist*minDist){ ok=false; break; } }
-    if (world.wave) for (const b of world.wave.bots){ if (b.hp>0 && dist2(x+0.5, y+0.5, b.x, b.y) < minDist*minDist){ ok=false; break; } }
-    if (ok) return {x:x+0.5, y:y+0.5};
-  }
-  return {x:L.w/2, y:L.h/2};
-}
-function spawnWaveCreature(peerId, type){
-  const t = MONSTER_TYPES[type] || MONSTER_TYPES.g;
-  const p = spawnWaveSpot(6);
-  const m = makeMonster('cm'+peerId, type, Math.floor(p.x), Math.floor(p.y), 1);
-  m.x = p.x; m.y = p.y; m.rx = p.x; m.ry = p.y;
-  // in arena i mostri normali sono più massicci (hp ×1.6), i boss restano sé stessi
-  m.maxHp = Math.round(t.hp * (t.boss ? 1 : 1.6));
-  m.hp = m.maxHp;
-  m.dmg = t.dmg;
-  m.human = true;
-  m.owner = peerId;
-  m.name = t.name || 'Creatura';
-  m._atkLastT = 0;
-  m._spLastT = 0;
-  m._respawnT = 0;
-  world.monsters.push(m);
-  monFx({type:'burst', x:m.x, y:m.y, colors:[t.color,'#ffffff'], n:14});
-  return m;
-}
-function generateWaveArena(seed){
-  const rng = mulberry32(seed>>>0);
-  const w=34, h=24;
-  const grid = [];
-  for (let y=0;y<h;y++){
-    const row = new Array(w).fill(T_FLOOR);
-    grid.push(row);
-  }
-  for (let x=0;x<w;x++){ grid[0][x]=T_WALL; grid[h-1][x]=T_WALL; }
-  for (let y=0;y<h;y++){ grid[y][0]=T_WALL; grid[y][w-1]=T_WALL; }
-  // colonne di roccia sparse: copertura per le schivate
-  const cols = 4+Math.floor(rng()*3);
-  for (let i=0;i<cols;i++){
-    const px = 3+Math.floor(rng()*(w-6)), py = 3+Math.floor(rng()*(h-6));
-    if (Math.abs(px-w/2)>3 || Math.abs(py-h/2)>3) grid[py][px] = T_WALL;
-  }
-  const torches = [];
-  for (let x=4;x<w-3;x+=6) for (let y=4;y<h-3;y+=5) torches.push({x, y});
-  const layout = {
-    depth:1, w, h, grid, doors:new Set(), rooms:[], spawn:{x:Math.floor(w/2), y:Math.floor(h/2)},
-    stairsPos:null, chestSpots:[], monsterSpawnSpots:[], treasureSpots:[], powerupSpots:[], potionSpots:[],
-    merchantPos:null, torches, bossRoom:null,
-    safeZone:{x:1, y:1, w:w-2, h:h-2},
-  };
-  world.safeZone = layout.safeZone;
-  return layout;
-}
-/* statistiche base degli eroi IA: stesse classi del gioco, da scalare con l'ondata */
-const WAVE_BOT_BASE = {
-  guerriero:{cls:'guerriero', name:'Soldatessa',      hp:16, dmg:4.5,  speed:3.6, range:1.5, arc:1.05, cd:1.0, ranged:false},
-  ladro:    {cls:'ladro',     name:'Ladra Furtiva',   hp:10, dmg:3.0,  speed:4.6, range:1.35, arc:0.85, cd:0.75, ranged:false},
-  mago:     {cls:'mago',      name:'Maga Arcana',     hp:19, dmg:6.0,  speed:3.2, range:7.5, arc:0.9, cd:1.5, ranged:true, projGlyph:'✺', projSpeed:11, projColor:'#8fd1ff', projR:0.42},
-  ranger:   {cls:'ranger',    name:'Ranger del Bosco',hp:11, dmg:4.0,  speed:3.9, range:8.5, arc:0.9, cd:1.1, ranged:true, projGlyph:'➹', projSpeed:15, projColor:'#d8e6b0', projR:0.36},
-  paladino: {cls:'paladino',  name:'Paladina',        hp:20, dmg:4.0,  speed:3.3, range:1.5, arc:1.0, cd:1.15, ranged:false},
-  negrostelle:{cls:'negromante',name:'Negromante',     hp:12, dmg:5.5,  speed:3.2, range:7.5, arc:0.9, cd:1.5, ranged:true, projGlyph:'💀', projSpeed:11, projColor:'#8fe07b', projR:0.42},
-  bardo:    {cls:'bardo',     name:'Bardo Itinerante',hp:12, dmg:3.0,  speed:4.0, range:1.4, arc:0.8, cd:0.85, ranged:false},
-  monaco:   {cls:'monaco',    name:'Monaco',          hp:13, dmg:4.0,  speed:4.4, range:1.3, arc:0.9, cd:0.7, ranged:false},
-  prof:     {cls:'prof',      name:'Prof (IA)',       hp:20, dmg:6.5,  speed:3.6, range:8.0, arc:0.9, cd:1.4, ranged:true, projGlyph:'✦', projSpeed:14, projColor:'#7df9ff', projR:0.4},
-};
-let waveBotSeq = 1;
-function buildWaveBot(base, elite){
-  const lvl = (world.wave ? world.wave.n : 1) + (elite?2:0);
-  const hpMul = 1 + 0.30*(lvl-1), dmgMul = 1 + 0.22*(lvl-1), spMul = 1 + 0.02*(lvl-1);
-  const hp = Math.round(base.hp*hpMul*(elite?1.8:1));
-  return {
-    id:'wb'+(waveBotSeq++),
-    cls:base.cls, name:(elite?'⚔ ':'')+base.name,
-    x:0, y:0, rx:0, ry:0,
-    hp, maxHp:hp,
-    dmg:Math.round(base.dmg*dmgMul*(elite?1.4:1)),
-    speed:base.speed*spMul,
-    range:base.range, arc:Math.cos(base.arc), cd:base.cd,
-    ranged:!!base.ranged, projGlyph:base.projGlyph||'✺', projSpeed:base.projSpeed||11, projColor:base.projColor||'#ffffff', projR:base.projR||0.4,
-    facing:{x:0, y:1},
-    atkT:0, cdTimer:Math.random()*0.5, hit:0, strafe:1, strafeT:1+Math.random()*2,
-    elite:!!elite,
-  };
-}
-function startWaveLive(){
-  const w = world.wave;
-  w.phase='live';
-  const elite = (w.n%5===0);
-  const nElite = elite ? 3 : 0;
-  const pool = Object.keys(WAVE_BOT_BASE);
-  w.bots = [];
-  for (let i=0;i<w.pendingN;i++){
-    const b = buildWaveBot(WAVE_BOT_BASE[pool[Math.floor(Math.random()*pool.length)]], false);
-    const p = spawnWaveSpot(5);
-    b.x=p.x; b.y=p.y; b.rx=p.x; b.ry=p.y;
-    w.bots.push(b);
-    monFx({type:'burst', x:b.x, y:b.y, colors:['#f2eadd','#ffffff'], n:8});
-  }
-  for (let i=0;i<nElite;i++){
-    const b = buildWaveBot(WAVE_BOT_BASE[pool[Math.floor(Math.random()*pool.length)]], true);
-    const p = spawnWaveSpot(6);
-    b.x=p.x; b.y=p.y; b.rx=p.x; b.ry=p.y;
-    w.bots.push(b);
-    monFx({type:'burst', x:b.x, y:b.y, colors:[b.projColor,'#ffd23d'], n:12});
-  }
-}
-function botTakeDamage(bot, amount, fxColor){
-  if (bot.hp<=0) return;
-  bot.hp = Math.max(0, bot.hp-amount);
-  bot.hit = 0.15;
-  monFx({type:'burst', x:bot.x, y:bot.y, colors:[fxColor||'#f2eadd','#ffffff'], n:bot.hp<=0?16:8});
-}
-function hitWaveBots(x, y, radius, arcCos, fx, fy, dmg, fxCol){
-  const bots = world.wave ? world.wave.bots : [];
-  for (const b of bots){
-    if (b.hp<=0) continue;
-    const dx = b.x-x, dy = b.y-y;
-    const d = Math.hypot(dx,dy)||0.001;
-    if (d > radius) continue;
-    // contatto ravvicinato: colpisce anche se il mostro è esattamente sotto il punto d'impatto
-    if (d > 0.2 && arcCos!=null && fx!=null && ((dx/d)*fx + (dy/d)*fy) < arcCos) continue;
-    botTakeDamage(b, dmg, fxCol);
-  }
-}
-function hitWaveRing(x, y, radius, dmg, fxCol){
-  hitWaveBots(x, y, radius, null, null, null, dmg, fxCol);
-}
-function updateWaveBots(dt){
-  const bots = world.wave.bots;
-  const creatures = world.monsters.filter(m=>m.human && m.hp>0);
-  for (const b of bots){
-    if (b.hp<=0) continue;
-    b.hit -= dt;
-    b.atkT -= dt;
-    if (b.atkT<0) b.atkT=0;
-    b.cdTimer -= dt;
-    if (b.cdTimer<0) b.cdTimer=0;
-    if (!creatures.length) continue;
-    let tgt=null, bd=Infinity;
-    for (const m of creatures){
-      const dd=dist2(b.x,b.y,m.x,m.y);
-      if (dd<bd){ bd=dd; tgt=m; }
-    }
-    if (!tgt) continue;
-    const d = Math.sqrt(bd)||0.001;
-    const dx=(tgt.x-b.x)/d, dy=(tgt.y-b.y)/d;
-    b.facing = {x:dx,y:dy};
-    let mvX=0, mvY=0;
-    if (b.ranged){
-      if (d > b.range*0.8){ mvX=dx; mvY=dy; }
-      else if (d < 2.4){ mvX=-dx; mvY=-dy; }
-      else {
-        b.strafeT -= dt;
-        if (b.strafeT<=0){ b.strafe = Math.random()<0.5?1:-1; b.strafeT = 1+Math.random()*1.6; }
-        mvX = -dy*b.strafe; mvY = dx*b.strafe;
-      }
-      if (d<=b.range && b.cdTimer<=0){
-        b.cdTimer = b.cd;
-        b.atkT = 0.45;
-        const sp = b.projSpeed;
-        world.wave.bolts.push({x:b.x, y:b.y, vx:dx*sp, vy:dy*sp, dmg:b.dmg, life:d/sp+0.4, color:b.projColor, glyph:b.projGlyph, hostile:false, from:'bot'});
-        monFx({type:'bolt', x:b.x, y:b.y, vx:dx*sp, vy:dy*sp, glyph:b.projGlyph, color:b.projColor, life:d/sp+0.4});
-      }
-    } else {
-      if (d > b.range*0.72){ mvX=dx; mvY=dy; }
-      else if (b.cdTimer<=0){
-        b.cdTimer = b.cd;
-        b.atkT = 0.4;
-        for (const m of creatures){
-          const vx=m.x-b.x, vy=m.y-b.y;
-          const vd = Math.hypot(vx,vy)||0.001;
-          if (vd > b.range) continue;
-          if ((vx/vd)*dx + (vy/vd)*dy < b.arc) continue;
-          damageWaveCreature(m, b.dmg);
-          monFx({type:'slash', x:b.x, y:b.y, dx, dy, color:b.projColor});
-        }
-      }
-    }
-    if (mvX||mvY){
-      const l=Math.hypot(mvX,mvY)||1;
-      tryMoveEntity(world.layout, b, mvX/l, mvY/l, dt, 0.27, world.layout.safeZone);
-      b.rx = b.x; b.ry = b.y;
-    }
-  }
-}
-function damageWaveCreature(m, amount){
-  if (!m || m.hp<=0) return;
-  m.hp = Math.max(0, m.hp-amount);
-  if (m.hp<=0){
-    const t = MONSTER_TYPES[m.type];
-    monFx({type:'burst', x:m.x, y:m.y, colors:[t.color,'#ffffff'], n:18});
-    if (m.owner===selfId) addShake(0.3);
-  } else {
-    m.hitFlashAt = performance.now();
-  }
-}
-function hostCreatureAttack(m, facing, special){
-  const w = world.wave;
-  if (!m || !w || m.hp<=0) return;
-  const t = MONSTER_TYPES[m.type];
-  m.facing = facing;
-  const now = performance.now();
-  if (special){
-    if (now - (m._spLastT||0) < 4000) return; // colpo d'area: 4s di ricarica
-    m._spLastT = now;
-    m.attackAnimT = 0.35;
-    const r = 3.6*(t.boss?1.4:1);
-    hitWaveRing(m.x, m.y, r, Math.round(m.dmg*1.35), t.color);
-    monFx({type:'stomp', x:m.x, y:m.y, r, color:t.color});
-    addShake(0.35);
-    return;
-  }
-  const cd = (t.atkCd!=null?t.atkCd:0.8)+(t.boss?0.15:0);
-  if (now - (m._atkLastT||0) < cd*1000) return;
-  m._atkLastT = now;
-  m.attackAnimT = 0.27;
-  if (t.ranged || t.boss){
-    const sp = t.projSpeed!=null ? t.projSpeed : 9;
-    world.wave.bolts.push({x:m.x+facing.x*0.5, y:m.y+facing.y*0.5, vx:facing.x*sp, vy:facing.y*sp, dmg:m.dmg, life:2.6, color:t.projColor||'#ffd27a', glyph:t.projGlyph||'✺', hostile:true, from:'creature'});
-    monFx({type:'bolt', x:m.x+facing.x*0.5, y:m.y+facing.y*0.5, vx:facing.x*sp, vy:facing.y*sp, glyph:t.projGlyph||'✺', color:t.projColor||'#ffd27a', life:2.6});
-  } else {
-    const radius = t.boss ? 2.7 : 1.55;
-    hitWaveBots(m.x, m.y, radius, Math.cos(0.95), facing.x, facing.y, m.dmg, t.color);
-    monFx({type:'slash', x:m.x+facing.x*0.55, y:m.y+facing.y*0.55, dx:facing.x, dy:facing.y, color:t.color});
-  }
-}
-function hostWaveSimTick(dt){
-  const w = world.wave;
-  const creatures = world.monsters.filter(m=>m.human);
-  // respawn in arena: i morti si reincarnano dopo ~4s in un punto libero
-  for (const m of creatures){
-    if (m.hp>0) continue;
-    m._respawnT = (m._respawnT||4)-dt;
-    if (m._respawnT<=0){
-      const p = spawnWaveSpot(6);
-      m.x=p.x; m.y=p.y; m.rx=p.x; m.ry=p.y;
-      m.hp = m.maxHp; m._respawnT = 0; m._atkLastT = 0; m._spLastT = 0;
-      monFx({type:'burst', x:m.x, y:m.y, colors:[MONSTER_TYPES[m.type].color,'#ffffff'], n:12});
-    }
-  }
-  updateWaveBots(dt);
-  // proiettili in volo (di creature o di eroi IA)
-  const bolts = w.bolts;
-  for (let i=bolts.length-1;i>=0;i--){
-    const bl = bolts[i];
-    bl.life -= dt;
-    if (bl.life<=0){ bolts.splice(i,1); continue; }
-    bl.x += bl.vx*dt; bl.y += bl.vy*dt;
-    const gx = Math.floor(bl.x), gy = Math.floor(bl.y);
-    if (!world.layout || (world.layout.grid[gy]||[])[gx]===T_WALL){
-      bolts.splice(i,1);
-      monFx({type:'burst', x:bl.x, y:bl.y, colors:[bl.color,'#ffffff'], n:5});
-      continue;
-    }
-    let hit = false;
-    if (bl.hostile){
-      for (const b of w.bots){
-        if (b.hp<=0) continue;
-        const dx=b.x-bl.x, dy=b.y-bl.y;
-        if (dx*dx+dy*dy < 0.42*0.42){ botTakeDamage(b, bl.dmg, bl.color); hit=true; break; }
-      }
-    } else {
-      for (const m of creatures){
-        if (m.hp<=0) continue;
-        const dx=m.x-bl.x, dy=m.y-bl.y;
-        if (dx*dx+dy*dy < 0.5*0.5){ damageWaveCreature(m, bl.dmg); hit=true; break; }
-      }
-    }
-    if (hit) bolts.splice(i,1);
-  }
-  // macchina a stati delle ondate
-  const anyAlive = creatures.some(m=>m.hp>0);
-  if (w.phase==='wait'){
-    if (!anyAlive){ w.phase='over'; w.overT=0; }
-    else {
-      w.sT -= dt;
-      if (w.sT<=0){
-        w.n++;
-        w.pendingN = Math.min(14, creatures.length*(1+w.n));
-        if (w.n>14) w.pendingN = Math.min(8, w.pendingN);
-        startWaveLive();
-        monFx({type:'burst', x:world.layout.w/2, y:world.layout.h/2, colors:['#ffd23d','#ffffff'], n:20});
-      }
-    }
-  } else if (w.phase==='live'){
-    if (!anyAlive){ w.phase='over'; w.overT=0; }
-    else if (!w.bots.some(b=>b.hp>0)){
-      w.bolts.length = 0;
-      saveWaveRecord(w.n);
-      w.phase='wait'; w.sT = (w.n%5===0)?9:6;
-      w.bots = [];
-      showWavePrompt('Ondata '+w.n+' superata!');
-    }
-  } else if (w.phase==='over'){
-    w.overT += dt;
-    if (w.overT>2.5){
-      w.n = 0; w.phase='wait'; w.sT = 2.5; w.bots = [];
-      showWavePrompt('Tutti i mostri sono caduti. Si riparte!');
-    }
-  }
-  aliveBotsForHud = w.bots.filter(b=>b.hp>0).length;
-}
-// aggiornamento locale di movimento/attacco in modalità Ondata (chiamato da updateLocalPlayer)
-function updateWaveLocal(dt){
-  const c = myCreature();
-  if (!world.layout || !c) return;
-  c.attackAnimT = Math.max(0,(c.attackAnimT||0)-dt);
-  // movimento
-  let mx = (keys.right?1:0)-(keys.left?1:0);
-  let my = (keys.down?1:0)-(keys.up?1:0);
-  if (mx||my){
-    const l = Math.hypot(mx,my)||1;
-    mx/=l; my/=l;
-    waveLastFacing = {x:mx, y:my};
-    if (isHost){
-      tryMoveEntity(world.layout, c, mx, my, dt, 0.3, world.layout.safeZone);
-      c.rx=c.x; c.ry=c.y;
-    } else {
-      const prevX=c.x, prevY=c.y;
-      c.x += mx*c.speed*dt; c.y += my*c.speed*dt;
-      if ((world.layout.grid[Math.floor(c.y)]||[])[Math.floor(c.x)]===T_WALL){ c.x=prevX; c.y=prevY; }
-      c.rx=c.x; c.ry=c.y;
-      act.mmove.send({id:c.id, x:c.x, y:c.y, fx:mx, fy:my});
-    }
-  }
-  // attacco (spazio) e colpo d'area (F)
-  if (keys.attack){
-    keys.attack = false;
-    c.attackAnimT = 0.27;
-    if (isHost) hostCreatureAttack(c, {...waveLastFacing}, false);
-    else act.catastk.send({id:c.id, x:waveLastFacing.x, y:waveLastFacing.y, special:false});
-  }
-  if (keys.special){
-    keys.special = false;
-    if (isHost) hostCreatureAttack(c, {...waveLastFacing}, true);
-    else act.catastk.send({id:c.id, x:waveLastFacing.x, y:waveLastFacing.y, special:true});
-  }
-}
-
 function hostSimTick(dt){
   const players = [];
   if (!me.dead && !me.isSpectator) players.push({peerId:selfId, x:me.x, y:me.y});
   for (const [pid,p] of remotePlayers){ if (!p.dead && !p.spectator && p.x!=null) players.push({peerId:pid, x:p.x, y:p.y}); }
-  // modalità Ondata: simulazione dedicata (bot IA, proiettili, macchina a stati)
-  if (world.mode==='wave'){
-    hostWaveSimTick(dt);
-    const nowW = performance.now();
-    if (nowW-lastSnapshotSentT > 115){
-      lastSnapshotSentT = nowW;
-      act.snapshot.send(buildSyncPayload());
-    }
-    return;
-  }
   // il boss scatta appena QUALSIASI giocatore vivo mette piede nella tana
   const br = world.layout ? world.layout.bossRoom : null;
   if (br && world.boss && !world.boss.active && !world.boss.dead){
@@ -7031,7 +6513,6 @@ function hostSimTick(dt){
     if (entered) hostStartBossFight(players);
   }
   for (const m of world.monsters){
-    if (m.human) continue;
     updateMonsterAI(m, dt, players);
   }
   hostRespawnTick(dt);
@@ -7047,37 +6528,7 @@ function hostSimTick(dt){
   }
 }
 
-function showWavePrompt(txt){
-  showToast('🌊 '+txt);
-}
-function aliveWaveNow(){
-  return world.wave ? world.wave.bots.filter(b=>b.hp>0).length : 0;
-}
-function updateWaveHUD(){
-  const w = world.wave;
-  const c = myCreature();
-  if (!w || !c) return;
-  document.getElementById('hp-orb-text').textContent = Math.max(0,Math.round(c.hp))+'/'+c.maxHp;
-  document.getElementById('hp-orb-fill').style.height = Math.max(0,(c.hp/c.maxHp*100))+'%';
-  document.getElementById('hp-orb').title = 'Salute della creatura';
-  document.getElementById('hero-class-btn').textContent = (MONSTER_TYPES[c.type]||{}).glyph || '☠';
-  const alive = w.phase==='live' ? aliveBotsForHud||aliveWaveNow() : 0;
-  if (w.phase==='live'){
-    document.getElementById('gold-text').textContent = '🌊 Ondata '+w.n+' · Eroi: '+alive;
-  } else if (w.phase==='wait'){
-    document.getElementById('gold-text').textContent = '⏳ Ondata '+((w.n||0)+1)+' tra '+Math.max(0,Math.ceil(w.sT))+'s';
-  } else {
-    document.getElementById('gold-text').textContent = '💀 Squadra eliminata…';
-  }
-  document.getElementById('gold-span').title = 'Record ONDATA: '+loadWaveRecord().wave+' • Sopravvivi il più a lungo!';
-  document.getElementById('potion-text').textContent = 'F: area';
-  document.getElementById('mp-orb').style.display = 'none';
-  document.getElementById('manapotion-hint').style.display = 'none';
-  const ab = document.getElementById('ability-btn'); if (ab) ab.style.display = 'none';
-  const mpt = document.getElementById('mana-potion-btn'); if (mpt) mpt.style.display = 'none';
-}
 function updateHUD(){
-  if (world.mode==='wave'){ updateWaveHUD(); return; }
   updateRecordIfBetter();
   document.getElementById('hp-orb-text').textContent = Math.max(0,Math.round(me.hp))+'/'+me.maxHp;
   document.getElementById('hp-orb-fill').style.height = Math.max(0,(me.hp/me.maxHp*100))+'%';
@@ -7405,7 +6856,7 @@ window.addEventListener('keydown', (e)=>{
     case 'KeyE': keys.interact=true; tryInteract(); break;
     case 'KeyQ': drinkPotion(); break;
     case 'KeyR': drinkManaPotion(); break;
-    case 'KeyF': if (world.mode==='wave'){ keys.special = true; } else { useClassAbility(); } break;
+    case 'KeyF': useClassAbility(); break;
     case 'KeyM': toggleMinimap(); e.preventDefault(); break;
     case 'KeyV': toggleFP(); e.preventDefault(); break;
     case 'Enter': openChat(); e.preventDefault(); break;
@@ -7910,33 +7361,6 @@ document.getElementById('login-room').value = ROOM_CODE;
 document.getElementById('login-maxplayers').max = HARD_MAX_PLAYERS;
 document.getElementById('login-maxplayers').value = HARD_MAX_PLAYERS;
 populateLoginClasses();
-/* Modalità Ondata: selezione creatura e pulsanti di modalità nel login.
-   La scelta vive in pendingWorldMode/pendingWaveCreature; l'host la usa in
-   bootstrapFreshWorld, gli ospiti la inviano come richiesta di spawn. */
-(function initModePick(){
-  const modeBtnAbisso = document.getElementById('mode-pick-abisso');
-  const modeBtnWave = document.getElementById('mode-pick-wave');
-  const creatureField = document.getElementById('login-creature-field');
-  const creatureSel = document.getElementById('login-creature');
-  const nonBoss = Object.keys(MONSTER_TYPES).filter(k=>!MONSTER_TYPES[k].boss);
-  const bossKeys = Object.keys(MONSTER_TYPES).filter(k=>MONSTER_TYPES[k].boss);
-  const groups = [
-    '<optgroup label="Mostri">'+nonBoss.map(k=>{ const t=MONSTER_TYPES[k]; return '<option value="'+k+'">'+t.glyph+' '+t.name+'</option>'; }).join('')+'</optgroup>',
-    '<optgroup label="Boss">'+bossKeys.map(k=>{ const t=MONSTER_TYPES[k]; return '<option value="'+k+'">'+t.glyph+' '+t.name+'</option>'; }).join('')+'</optgroup>'
-  ];
-  creatureSel.innerHTML = groups.join('');
-  creatureSel.value = pendingWaveCreature;
-  creatureSel.addEventListener('change', ()=>{ pendingWaveCreature = creatureSel.value || 'g'; });
-  function setMode(wave){
-    pendingWorldMode = wave ? 'wave' : 'abisso';
-    modeBtnAbisso.classList.toggle('active', !wave);
-    modeBtnWave.classList.toggle('active', wave);
-    creatureField.classList.toggle('hidden', !wave);
-  }
-  modeBtnAbisso.addEventListener('click', ()=>setMode(false));
-  modeBtnWave.addEventListener('click', ()=>setMode(true));
-  setMode(false);
-})();
 
 document.getElementById('login-random-room').addEventListener('click', ()=>{
   document.getElementById('login-room').value = 'stanza-'+Math.random().toString(36).slice(2,7);
