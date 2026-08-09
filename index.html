@@ -92,6 +92,12 @@ html,body{
   box-shadow:0 4px 18px rgba(0,0,0,.6), 0 0 24px rgba(255,110,40,.14);
 }
 #boss-bar.show{ display:flex; }
+#boss-bar.low{ border-color:rgba(193,68,58,.75); animation:bossBarLow .8s ease-in-out infinite; }
+@keyframes bossBarLow{
+  0%,100%{ box-shadow:0 4px 18px rgba(0,0,0,.6), 0 0 24px rgba(255,110,40,.14); }
+  50%{ box-shadow:0 4px 18px rgba(0,0,0,.6), 0 0 36px rgba(255,40,30,.55); }
+}
+#boss-bar.low #boss-bar-fill{ background:linear-gradient(90deg,#8e1f17,#c1443a 45%,#ff2a20); }
 #boss-bar-name{
   font:700 12px var(--font-ui); color:#ffd27a; letter-spacing:.08em;
   text-shadow:0 0 8px rgba(255,120,40,.6);
@@ -775,6 +781,7 @@ html,body{
       <b>R / 🔮</b> — bevi pozione di mana (solo Mago)<br>
       <b>F / ⚡</b> — abilità speciale della tua classe (tempo di recupero lungo)<br>
       <b>M</b> — mostra/nascondi la minimappa (compagni, scale, forzieri)<br>
+      Sui piani del boss (ogni 5 piani): un <b>faro dorato</b> nel mondo, una <b>freccia d'oro</b> al bordo dello schermo e un <b>teschio pulsante</b> sulla minimappa indicano la tana del Signore della tana.<br>
       <b>Invio</b> — chat<br>
       <b>🎤</b> (accanto a "Nel mondo") — attiva la chat vocale<br>
       <b>🔊</b> (in basso a destra) — attiva/disattiva i suoni<br>
@@ -1742,6 +1749,31 @@ function drawMinimap(){
     const key = Math.floor(mo.rx)+','+Math.floor(mo.ry);
     if (me.isSpectator || world.visibleSet.has(key)) m.fillRect(offX+mo.rx*scale-1, offY+mo.ry*scale-1, 3, 3);
   }
+  // la tana del boss: disegnata SEMPRE (anche nella nebbia) finché il Signore è vivo,
+  // così i giocatori possono seguire il segnale pulsante per trovarla
+  if (isBossFloor(world.depth) && layout.bossRoom && (!world.boss || !world.boss.dead)){
+    const br = layout.bossRoom;
+    const bx = offX+(br.center.x-0.5)*scale, by = offY+(br.center.y-0.5)*scale;
+    const bw = br.w*scale, bh = br.h*scale;
+    m.fillStyle = 'rgba(232,80,40,0.14)';
+    m.fillRect(bx, by, bw, bh);
+    m.strokeStyle = 'rgba(255,140,60,0.55)';
+    m.lineWidth = 1;
+    m.strokeRect(bx+0.5, by+0.5, bw-1, bh-1);
+    const pulse = 0.6+0.4*Math.sin(torchClock*3.6);
+    const g = m.createRadialGradient(bx+bw/2, by+bh/2, 0, bx+bw/2, by+bh/2, 7*pulse+2);
+    g.addColorStop(0, 'rgba(255,120,50,'+(0.9*pulse)+')');
+    g.addColorStop(1, 'rgba(255,120,50,0)');
+    m.fillStyle = g;
+    m.beginPath(); m.arc(bx+bw/2, by+bh/2, 7*pulse+2, 0, Math.PI*2); m.fill();
+    m.fillStyle = '#ffd27a';
+    m.font = '10px sans-serif';
+    m.textAlign = 'center';
+    m.textBaseline = 'middle';
+    m.fillText('☠', bx+bw/2, by+bh/2+0.5);
+    m.textAlign = 'start';
+    m.textBaseline = 'alphabetic';
+  }
   for (const [pid,p] of remotePlayers){
     if (p.dead || p.spectator) continue;
     m.fillStyle = p.color||'#fff';
@@ -1761,7 +1793,12 @@ function updateDepthLabel(){
   const el = document.getElementById('hero-depth');
   if (!el) return;
   const mn = world.monsters ? world.monsters.length : 0;
-  el.textContent = 'Piano ' + world.depth + (mn ? ' · ' + mn + ' nemici' : '');
+  let txt = 'Piano ' + world.depth + (mn ? ' · ' + mn + ' nemici' : '');
+  if (isBossFloor(world.depth)){
+    const bAlive = !(world.boss && world.boss.dead);
+    txt += ' · <span style="color:'+(bAlive?'#ff8a5c':'#7fae63')+'">'+(bAlive?'☠ Boss: ':'✓ Boss sconfitto: ')+capFirst(currentBossName(world.depth))+'</span>';
+  }
+  if (el.innerHTML !== txt) el.innerHTML = txt;
 }
 
 /* ---------------------------------------------------------------------
@@ -2008,7 +2045,7 @@ if (!spawnedOnce){
     if (world.boss && world.boss.active && !world.boss.dead && world.layout.bossRoom){
       const br = world.layout.bossRoom;
       me.x = br.x+1.5; me.y = br.y+br.h-1.5;
-      showToast('⚔️ Il Drago Minore sta infuriando nella tana: sei dentro.');
+      showToast('⚔️ '+capFirst(currentBossName(world.depth))+' sta infuriando nella tana: sei dentro.');
     }
   }
 }
@@ -2103,8 +2140,10 @@ function onDepthArrival(depth){
   depthFadeTimer = DEPTH_FADE_TIME; // dissolvenza a schermo nero in ingresso al nuovo piano
   if (isBossFloor(depth)){
     const bName = currentBossName(depth);
-    showToast('⚔️ Piano del Boss: '+bName+' si nasconde in fondo alla mappa. Trovate la sua tana.');
-    logLine('Attenzione: su questo piano si cela '+bName+'. La sua tana è un\'unica stanza, in fondo al labirinto.', '#e8a13d', true);
+    showToast('⚔️ Piano del Boss: '+bName+' si nasconde in fondo alla mappa. Segui il faro dorato e la freccia.');
+    logLine('Attenzione: su questo piano si cela '+bName+'. Un faro dorato e una freccia ai bordi dello schermo segnano la sua tana.', '#e8a13d', true);
+    sfx.bossRoar();
+    addShake(0.25);
   }
 }
 let depthFadeTimer = 0;
@@ -3875,7 +3914,7 @@ const ENTITY_SPRITES = {
   ratto:{sheet:'monsters_sheet1',cell:0}, pipistrello:{sheet:'monsters_sheet1',cell:1}, goblin:{sheet:'monsters_sheet1',cell:2}, scheletro:{sheet:'monsters_sheet1',cell:3},
   melma:{sheet:'monsters_sheet2',cell:0}, gelatina:{sheet:'monsters_sheet2',cell:1}, zombie:{sheet:'monsters_sheet2',cell:2}, ragno:{sheet:'monsters_sheet2',cell:3},
   spettro:{sheet:'mon_spettro',cell:0}, drago:{sheet:'mon_drago',cell:0}, orco:{sheet:'mon_orco',cell:0},
-  serpente:{sheet:'mon_serpente',cell:0}, arpia:{sheet:'mon_arpia',cell:0}, cavaliere:{sheet:'mon_cavaliere',cell:0},
+  serpente:{sheet:'mon_serpente',cell:0}, arpia:{sheet:'mon_arpia',cell:0}, cavaliere:{sheet:'mon_cavaliere',cell:0}, cavaliere_alt:{sheet:'mon_cavaliere_alt',cell:0},
   cultista:{sheet:'mon_cultista',cell:0}, mantide:{sheet:'mon_mantide',cell:0}, golem:{sheet:'mon_golem',cell:0}, sciamano:{sheet:'mon_sciamano',cell:0},
   boss_golem:{sheet:'boss_golem',cell:0}, boss_lich:{sheet:'boss_lich',cell:0}, boss_melme:{sheet:'boss_melme',cell:0}, boss_ragno:{sheet:'boss_ragno',cell:0}, boss_ratti:{sheet:'boss_ratti',cell:0},
   prof:{sheet:'prof',cell:0},
@@ -5170,7 +5209,84 @@ function render(dt){
     ctx.restore();
   }
 
-  // projectiles — scia multi-segmento che si dissolve, invece del singolo tratto
+  // ------ INDICATORE DEL BOSS ------
+  // finché il Signore della tana è vivo e la lotta non è scattata, la sua tana è
+  // segnalata da: un faro di luce nel mondo, una freccia dorata al bordo schermo
+  // e un teschio pulsante sulla minimappa. Mai più tane introvabili.
+  const bossReady = isBossFloor(world.depth) && world.layout.bossRoom
+    && world.boss && !world.boss.dead && !world.boss.active;
+  if (bossReady){
+    const br = world.layout.bossRoom;
+    const bcx = br.center.x, bcy = br.center.y;
+
+    // ---- faro di luce: colonna pulsante che si vede attraverso i muri e la nebbia ----
+    const bwX = (bcx-camX)*tile, bwY = (bcy-camY)*tile;
+    const bpulse = 0.5+0.5*Math.sin(torchClock*3.2);
+    ctx.globalCompositeOperation = 'lighter';
+    const beamW = tile*0.9;
+    const bgrad = ctx.createLinearGradient(bwX-beamW/2, 0, bwX+beamW/2, 0);
+    bgrad.addColorStop(0, 'rgba(232,161,61,0)');
+    bgrad.addColorStop(0.5, 'rgba(255,196,110,'+(0.16+0.10*bpulse)+')');
+    bgrad.addColorStop(1, 'rgba(232,161,61,0)');
+    ctx.fillStyle = bgrad;
+    ctx.fillRect(bwX-beamW/2, bwY-tile*7.5, beamW, tile*7.5);
+    const halo = ctx.createRadialGradient(bwX, bwY, 0, bwX, bwY, tile*(2.6+0.8*bpulse));
+    halo.addColorStop(0, 'rgba(255,180,90,'+(0.30+0.14*bpulse)+')');
+    halo.addColorStop(1, 'rgba(255,180,90,0)');
+    ctx.fillStyle = halo;
+    ctx.fillRect(bwX-tile*4, bwY-tile*4, tile*8, tile*8);
+    ctx.globalCompositeOperation = 'source-over';
+    // anello runico a terra: tre cerchi concentrici che si dilatano
+    for (let ringI=0; ringI<3; ringI++){
+      const rk = ((torchClock*0.5+ringI/3)%1);
+      ctx.strokeStyle = 'rgba(255,196,110,'+(0.28*(1-rk))+')';
+      ctx.lineWidth = 1.6*(1-rk)+0.4;
+      ctx.beginPath();
+      ctx.arc(bwX, bwY, tile*(0.55+rk*1.5), 0, Math.PI*2);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = 'rgba(255,200,120,'+(0.30+0.15*bpulse)+')';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(bwX, bwY, tile*0.55, 0, Math.PI*2);
+    ctx.stroke();
+    // scintille che salgono dal faro
+    if (Math.random() < dt*6){
+      particles.push({
+        x: bcx+(Math.random()-0.5)*0.5, y: bcy+0.4,
+        vx:(Math.random()-0.5)*0.5, vy:-1.1-Math.random()*0.8,
+        life:0.8+Math.random()*0.5, maxLife:1.3,
+        size:1+Math.random()*1.4, color:Math.random()<0.5?'#ffd98a':'#e8a13d',
+        type:'dot', grav:0, drag:0.99, add:true, alpha:0.9,
+      });
+    }
+
+    // ---- freccia dorata al bordo dello schermo: punta verso la tana ----
+    const bossWX = bcx*tile, bossWY = bcy*tile;
+    const bdx = bossWX - camX*tile - cssW/2, bdy = bossWY - camY*tile - cssH/2;
+    if (Math.abs(bdx) > cssW/2-8 || Math.abs(bdy) > cssH/2-8){
+      const bang = Math.atan2(bdy, bdx);
+      const bmargin = 40;
+      const bpx = clamp(cssW/2 + Math.cos(bang)*(cssW/2-bmargin), bmargin, cssW-bmargin);
+      const bpy = clamp(cssH/2 + Math.sin(bang)*(cssH/2-bmargin), bmargin, cssH-bmargin);
+      ctx.save();
+      ctx.translate(bpx, bpy);
+      ctx.rotate(bang);
+      const bpul2 = 0.75+0.25*Math.sin(torchClock*5);
+      ctx.globalAlpha = 0.9*bpul2;
+      ctx.fillStyle = '#ffb050';
+      ctx.shadowColor = '#ffb050';
+      ctx.shadowBlur = 14*bpul2;
+      ctx.beginPath();
+      ctx.moveTo(16,0); ctx.lineTo(-6,-9); ctx.lineTo(-2,0); ctx.lineTo(-6,9);
+      ctx.closePath(); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = 1;
+      ctx.rotate(-bang);
+      drawLabel('☠', 0, -16, '#ffd27a', 12);
+      ctx.restore();
+    }
+  }
   ctx.globalCompositeOperation = 'lighter';
   for (const pr of projectiles){
     const sx=(pr.x-camX)*tile, sy=(pr.y-camY)*tile;
@@ -6633,6 +6749,7 @@ function updateHUD(){
     }
   }
   if (buffsRow.__lastHtml !== buffsHtml){ buffsRow.innerHTML = buffsHtml; buffsRow.__lastHtml = buffsHtml; }
+  updateDepthLabel();
   updateBossBar();
 }
 function updateBossBar(){
@@ -6644,14 +6761,19 @@ function updateBossBar(){
     el.classList.add('show');
     const nameEl = document.getElementById('boss-bar-name');
     const fillEl = document.getElementById('boss-bar-fill');
-    const label = MONSTER_TYPES[boss.type].glyph+' '+MONSTER_TYPES[boss.type].name;
-    if (nameEl && nameEl.textContent !== label){
-      nameEl.textContent = label;
-      nameEl.style.color = MONSTER_TYPES[boss.type].color;
+    const t = MONSTER_TYPES[boss.type];
+    const sprKey = MONSTER_SPRITE[boss.type];
+    const imgPath = 'assets/sprites/' + (sprKey==='drago' ? 'mon_drago' : sprKey) + '.png';
+    const label = '<img class="hud-icon" src="'+imgPath+'" alt=""'+IMG_FALLBACK_ATTR+' style="width:16px;height:16px;"><span class="hud-icon-fallback">'+t.glyph+'</span> '+t.name;
+    if (nameEl && nameEl.innerHTML !== label){
+      nameEl.innerHTML = label;
+      nameEl.style.color = t.color;
     }
     fillEl.style.width = Math.max(0, Math.round(boss.hp/boss.maxHp*100))+'%';
+    el.classList.toggle('low', boss.hp/boss.maxHp < 0.3);
   } else {
     el.classList.remove('show');
+    el.classList.remove('low');
   }
 }
 function refreshPeerList(){
@@ -6979,7 +7101,10 @@ function screenToWorld(px, py){
 function buildTooltipHtml(obj, type){
   if (type==='monster'){
     const t = MONSTER_TYPES[obj.type];
-    return t.glyph+' <b>'+capFirst(t.name)+'</b>'+(t.boss?' <i>(boss)</i>':'')+'<br>'
+    const sprKey = MONSTER_SPRITE[obj.type];
+    const imgPath = 'assets/sprites/' + (sprKey==='drago' ? 'mon_drago' : sprKey) + '.png';
+    const img = '<img class="hud-icon" src="'+imgPath+'" alt=""'+IMG_FALLBACK_ATTR+'><span class="hud-icon-fallback">'+t.glyph+'</span> ';
+    return img+'<b>'+capFirst(t.name)+'</b>'+(t.boss?' <i>(boss)</i>':'')+'<br>'
       +'Salute '+Math.max(0,Math.round(obj.hp))+'/'+obj.maxHp+' · danno '+obj.dmg;
   }
   if (type==='item'){
