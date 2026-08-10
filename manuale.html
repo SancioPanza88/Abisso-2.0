@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABISSO — Manuale del Giocatore</title>
+<title>ABISSO Ã¢â‚¬â€ Manuale del Giocatore</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=MedievalSharp&display=swap" rel="stylesheet">
@@ -314,7 +314,7 @@
   @keyframes badgeRing{ from{ transform:rotate(0); } to{ transform:rotate(360deg); } }
   /* ornamenti sopra e sotto il titolo */
   .chapter::before{
-    content:"✦ ✦ ✦"; color:var(--amber-deep);
+    content:"Ã¢Å“Â¦ Ã¢Å“Â¦ Ã¢Å“Â¦"; color:var(--amber-deep);
     position:absolute; top:34px; right:36px;
     font-size:11px; letter-spacing:.4em; text-indent:.4em;
     opacity:0; transition:opacity .8s ease .6s;
@@ -364,7 +364,7 @@
   .chapter ul, .chapter ol{ margin:12px 0 12px 4px; list-style:none; color:var(--ink); }
   .chapter li{ margin:7px 0; padding-left:26px; position:relative; transition:color .25s ease, transform .25s ease; }
   .chapter li::before{
-    content:"ᛟ"; position:absolute; left:0; top:0;
+    content:"Ã¡â€ºÅ¸"; position:absolute; left:0; top:0;
     font-family:var(--font-rune); color:var(--amber-deep); font-size:13px;
     text-shadow:0 0 8px rgba(232,161,61,.5);
     transition:color .25s ease, transform .25s ease;
@@ -469,7 +469,7 @@
     animation:boxIn .7s cubic-bezier(.2,.8,.3,1.15);
   }
   .note::before, .warn::before, .tip::before{
-    content:'✦'; position:absolute; right:12px; top:8px;
+    content:'Ã¢Å“Â¦'; position:absolute; right:12px; top:8px;
     color:var(--amber-deep); font-size:12px;
     animation:boxStar 2.6s ease-in-out infinite;
   }
@@ -483,12 +483,12 @@
   .note:hover::after, .warn:hover::after, .tip:hover::after{ opacity:1; }
   @keyframes boxIn{ from{ opacity:0; transform:translateX(-18px); } to{ opacity:1; transform:none; } }
   .warn{ border-left-color:var(--red); background:rgba(193,68,58,.08); }
-  .warn::before{ color:var(--red); content:'⚠'; animation:boxWarn 1.6s ease-in-out infinite; }
+  .warn::before{ color:var(--red); content:'Ã¢Å¡Â '; animation:boxWarn 1.6s ease-in-out infinite; }
   @keyframes boxWarn{ 0%,100%{ transform:scale(1); opacity:.6; } 50%{ transform:scale(1.35); opacity:1; } }
   .warn:hover{ box-shadow:inset 0 0 24px rgba(193,68,58,.08); }
   .warn::after{ background:linear-gradient(90deg, rgba(193,68,58,.7), transparent); }
   .tip{ border-left-color:var(--green); background:rgba(127,174,99,.08); }
-  .tip::before{ color:var(--green); content:'✦'; }
+  .tip::before{ color:var(--green); content:'Ã¢Å“Â¦'; }
   .tip:hover{ box-shadow:inset 0 0 24px rgba(127,174,99,.08); }
   .tip::after{ background:linear-gradient(90deg, rgba(127,174,99,.7), transparent); }
   .note b, .warn b, .tip b{ color:var(--parchment); }
@@ -517,7 +517,7 @@
   .beast.boss:hover{ border-color:var(--amber); }
   .beast.boss .b-name{ color:var(--amber); }
   .beast.boss .b-name::before{
-    content:'☠ '; color:var(--red);
+    content:'Ã¢ËœÂ  '; color:var(--red);
     text-shadow:0 0 10px rgba(193,68,58,.8);
     animation:skullPulse 1.8s ease-in-out infinite;
   }
@@ -577,7 +577,7 @@
 <body>
 
 <div id="progress"></div>
-<button id="to-top" title="Torna su">↑</button>
+<button id="to-top" title="Torna su">Ã¢â€ â€˜</button>
 <canvas id="magic-canvas"></canvas>
 
 <!-- ================= COPERTINA ================= -->
@@ -598,9 +598,9 @@
     </h1>
     <div class="sub">Manuale del Giocatore</div>
     <div class="tagline">Roguelike multiplayer in tempo reale, senza server, in un unico file.
-    Scendi nei piani sempre più bui, saccheggia i forzieri, sconfiggi i sei Signori delle tane
-    — e non morire mai. Perché qui la morte è per sempre.</div>
-    <div class="divider-line"><span class="gem">✦</span></div>
+    Scendi nei piani sempre piÃƒÂ¹ bui, saccheggia i forzieri, sconfiggi i sei Signori delle tane
+    Ã¢â‚¬â€ e non morire mai. PerchÃƒÂ© qui la morte ÃƒÂ¨ per sempre.</div>
+    <div class="divider-line"><span class="gem">Ã¢Å“Â¦</span></div>
     <div class="portraits">
       <img src="assets/sprites/hero_guerriero.png" alt="Guerriero" style="animation-delay:.0s">
       <img src="assets/sprites/hero_ladro.png" alt="Ladro" style="animation-delay:.08s">
@@ -612,31 +612,31 @@
       <img src="assets/sprites/hero_monaco.png" alt="Monaco" style="animation-delay:.56s">
       <img src="assets/speciali/prof.png" alt="Prof" style="animation-delay:.64s">
     </div>
-    <div class="edition">Edizione del Giocatore · v2.0</div>
+    <div class="edition">Edizione del Giocatore Ã‚Â· v2.0</div>
   </div>
-  <div class="scroll-hint">— scorri per leggere —</div>
+  <div class="scroll-hint">Ã¢â‚¬â€ scorri per leggere Ã¢â‚¬â€</div>
 </div>
 
 <div class="wrap">
 
 <!-- ================= INDICE ================= -->
 <div id="toc">
-  <h2>✦ Indice ✦</h2>
-  <a class="toc-row" href="#c1"><span class="toc-rune">ᛟ</span><span class="toc-n">I</span><span class="toc-t">L'Abisso ti chiama</span><span class="toc-d">Introduzione</span></a>
-  <a class="toc-row" href="#c2"><span class="toc-rune">ᚠ</span><span class="toc-n">II</span><span class="toc-t">La Discesa</span><span class="toc-d">Primi passi e stanza</span></a>
-  <a class="toc-row" href="#c3"><span class="toc-rune">ᚦ</span><span class="toc-n">III</span><span class="toc-t">Comandi</span><span class="toc-d">Tavola dei tasti</span></a>
-  <a class="toc-row" href="#c4"><span class="toc-rune">ᚨ</span><span class="toc-n">IV</span><span class="toc-t">Le Nove Classi</span><span class="toc-d">Eroi e abilità</span></a>
-  <a class="toc-row" href="#c5"><span class="toc-rune">ᛁ</span><span class="toc-n">V</span><span class="toc-t">Le Creature dell'Abisso</span><span class="toc-d">Bestiario</span></a>
-  <a class="toc-row" href="#c6"><span class="toc-rune">ᛗ</span><span class="toc-n">VI</span><span class="toc-t">I Sei Boss</span><span class="toc-d">Signori delle tane</span></a>
-  <a class="toc-row" href="#c7"><span class="toc-rune">ᛚ</span><span class="toc-n">VII</span><span class="toc-t">L'Arte del Combattimento</span><span class="toc-d">Mira, mana, telegrafi</span></a>
-  <a class="toc-row" href="#c8"><span class="toc-rune">ᛏ</span><span class="toc-n">VIII</span><span class="toc-t">Esplorazione</span><span class="toc-d">Nebbia, torce, forzieri</span></a>
-  <a class="toc-row" href="#c9"><span class="toc-rune">ᛞ</span><span class="toc-n">IX</span><span class="toc-t">Equipaggiamento</span><span class="toc-d">Rarità e statistiche</span></a>
-  <a class="toc-row" href="#c10"><span class="toc-rune">ᛒ</span><span class="toc-n">X</span><span class="toc-t">Potenziamenti</span><span class="toc-d">Benedizioni temporanee</span></a>
-  <a class="toc-row" href="#c11"><span class="toc-rune">ᛊ</span><span class="toc-n">XI</span><span class="toc-t">Il Mercante</span><span class="toc-d">Spendi prima che sia tardi</span></a>
-  <a class="toc-row" href="#c12"><span class="toc-rune">ᛉ</span><span class="toc-n">XII</span><span class="toc-t">La Morte è per Sempre</span><span class="toc-d">Permadeath e rianimazione</span></a>
-  <a class="toc-row" href="#c13"><span class="toc-rune">ᚲ</span><span class="toc-n">XIII</span><span class="toc-t">Compagnia nell'Ombra</span><span class="toc-d">Multiplayer, chat, vocale</span></a>
-  <a class="toc-row" href="#c14"><span class="toc-rune">ᚹ</span><span class="toc-n">XIV</span><span class="toc-t">Segreti e Consigli</span><span class="toc-d">Della sopravvivenza</span></a>
-  <a class="toc-row" href="#c64" style="border-color:#6C5EB5;"><span class="toc-rune" style="color:#7B71D5;">♦</span><span class="toc-n" style="color:#eeee77;">64</span><span class="toc-t" style="color:#7B71D5;">Modalità C64</span><span class="toc-d" style="color:#a098d8;">Easter Egg Commodore</span></a>
+  <h2>Ã¢Å“Â¦ Indice Ã¢Å“Â¦</h2>
+  <a class="toc-row" href="#c1"><span class="toc-rune">Ã¡â€ºÅ¸</span><span class="toc-n">I</span><span class="toc-t">L'Abisso ti chiama</span><span class="toc-d">Introduzione</span></a>
+  <a class="toc-row" href="#c2"><span class="toc-rune">Ã¡Å¡Â </span><span class="toc-n">II</span><span class="toc-t">La Discesa</span><span class="toc-d">Primi passi e stanza</span></a>
+  <a class="toc-row" href="#c3"><span class="toc-rune">Ã¡Å¡Â¦</span><span class="toc-n">III</span><span class="toc-t">Comandi</span><span class="toc-d">Tavola dei tasti</span></a>
+  <a class="toc-row" href="#c4"><span class="toc-rune">Ã¡Å¡Â¨</span><span class="toc-n">IV</span><span class="toc-t">Le Nove Classi</span><span class="toc-d">Eroi e abilitÃƒÂ </span></a>
+  <a class="toc-row" href="#c5"><span class="toc-rune">Ã¡â€ºÂ</span><span class="toc-n">V</span><span class="toc-t">Le Creature dell'Abisso</span><span class="toc-d">Bestiario</span></a>
+  <a class="toc-row" href="#c6"><span class="toc-rune">Ã¡â€ºâ€”</span><span class="toc-n">VI</span><span class="toc-t">I Sei Boss</span><span class="toc-d">Signori delle tane</span></a>
+  <a class="toc-row" href="#c7"><span class="toc-rune">Ã¡â€ºÅ¡</span><span class="toc-n">VII</span><span class="toc-t">L'Arte del Combattimento</span><span class="toc-d">Mira, mana, telegrafi</span></a>
+  <a class="toc-row" href="#c8"><span class="toc-rune">Ã¡â€ºÂ</span><span class="toc-n">VIII</span><span class="toc-t">Esplorazione</span><span class="toc-d">Nebbia, torce, forzieri</span></a>
+  <a class="toc-row" href="#c9"><span class="toc-rune">Ã¡â€ºÅ¾</span><span class="toc-n">IX</span><span class="toc-t">Equipaggiamento</span><span class="toc-d">RaritÃƒÂ  e statistiche</span></a>
+  <a class="toc-row" href="#c10"><span class="toc-rune">Ã¡â€ºâ€™</span><span class="toc-n">X</span><span class="toc-t">Potenziamenti</span><span class="toc-d">Benedizioni temporanee</span></a>
+  <a class="toc-row" href="#c11"><span class="toc-rune">Ã¡â€ºÅ </span><span class="toc-n">XI</span><span class="toc-t">Il Mercante</span><span class="toc-d">Spendi prima che sia tardi</span></a>
+  <a class="toc-row" href="#c12"><span class="toc-rune">Ã¡â€ºâ€°</span><span class="toc-n">XII</span><span class="toc-t">La Morte ÃƒÂ¨ per Sempre</span><span class="toc-d">Permadeath e rianimazione</span></a>
+  <a class="toc-row" href="#c13"><span class="toc-rune">Ã¡Å¡Â²</span><span class="toc-n">XIII</span><span class="toc-t">Compagnia nell'Ombra</span><span class="toc-d">Multiplayer, chat, vocale</span></a>
+  <a class="toc-row" href="#c14"><span class="toc-rune">Ã¡Å¡Â¹</span><span class="toc-n">XIV</span><span class="toc-t">Segreti e Consigli</span><span class="toc-d">Della sopravvivenza</span></a>
+  <a class="toc-row" href="#c64" style="border-color:#6C5EB5;"><span class="toc-rune" style="color:#7B71D5;">Ã¢â„¢Â¦</span><span class="toc-n" style="color:#eeee77;">64</span><span class="toc-t" style="color:#7B71D5;">ModalitÃƒÂ  C64</span><span class="toc-d" style="color:#a098d8;">Easter Egg Commodore</span></a>
 </div>
 
 <!-- ================= I ================= -->
@@ -648,18 +648,18 @@
   <h2>L'Abisso ti chiama</h2>
   <p class="drop">Sotto il villaggio di pietra esiste un vuoto senza fondo. Le cronache lo chiamano
   <b>l'Abisso</b>: piani di labirinti scolpiti nella roccia, pieni di oro, armi perdute e creature
-  che non hanno mai visto la luce del sole. Ogni discesa è una spedizione. Ogni spedizione è
-  l'ultima — perché chi muore laggiù non torna.</p>
-  <p>Questo manuale è la tua unica mappa. Studialo, memorizza la tavola dei tasti e le mosse dei
+  che non hanno mai visto la luce del sole. Ogni discesa ÃƒÂ¨ una spedizione. Ogni spedizione ÃƒÂ¨
+  l'ultima Ã¢â‚¬â€ perchÃƒÂ© chi muore laggiÃƒÂ¹ non torna.</p>
+  <p>Questo manuale ÃƒÂ¨ la tua unica mappa. Studialo, memorizza la tavola dei tasti e le mosse dei
   boss: l'Abisso non perdona l'improvvisazione.</p>
   <ul>
     <li><b>Genere:</b> roguelike multiplayer in tempo reale, condiviso, senza server.</li>
     <li><b>Come funziona:</b> tutto il gioco vive in un unico file <em>index.html</em>. Apri il link,
-    scegli un nome ed entra: la stanza che scegli è un mondo persistente.</li>
-    <li><b>Persistenza:</b> finché almeno un giocatore resta collegato, lo stato del mondo — mostri,
-    forzieri aperti, oggetti, profondità — resta vivo. Chi arriva dopo si sincronizza con la situazione corrente.</li>
-    <li><b>Zona sicura:</b> l'ingresso, tinta d'azzurro, è un santuario. I mostri non possono entrarci.
-    Lì trovi il mercante.</li>
+    scegli un nome ed entra: la stanza che scegli ÃƒÂ¨ un mondo persistente.</li>
+    <li><b>Persistenza:</b> finchÃƒÂ© almeno un giocatore resta collegato, lo stato del mondo Ã¢â‚¬â€ mostri,
+    forzieri aperti, oggetti, profonditÃƒÂ  Ã¢â‚¬â€ resta vivo. Chi arriva dopo si sincronizza con la situazione corrente.</li>
+    <li><b>Zona sicura:</b> l'ingresso, tinta d'azzurro, ÃƒÂ¨ un santuario. I mostri non possono entrarci.
+    LÃƒÂ¬ trovi il mercante.</li>
   </ul>
   <div class="note"><b>Nota di rete:</b> il gioco usa la rete peer-to-peer (Trystero) attraverso relay
   pubblici. In condizioni di rete particolari (VPN, firewall) i giocatori possono non vedersi subito:
@@ -675,18 +675,18 @@
   <h2>La Discesa</h2>
   <p class="drop">Al primo avvio vedi la schermata della discesa. I campi sono pochi e contano tutti:</p>
   <ul>
-    <li><b>Nome</b> — il nome che i compagni leggeranno sopra la tua testa (max 18 caratteri).</li>
-    <li><b>Stanza</b> — il codice del mondo condiviso. Chiunque usi lo <b>stesso codice</b> entra nello
-    stesso abisso. Premi il dado <b>🎲</b> per un codice casuale.</li>
-    <li><b>Giocatori max</b> — usato solo se sei tu a creare la stanza (se è vuota); tetto consigliato:
-    8 avventurieri. Oltre il limite, chi entra dopo può unirsi come osservatore.</li>
+    <li><b>Nome</b> Ã¢â‚¬â€ il nome che i compagni leggeranno sopra la tua testa (max 18 caratteri).</li>
+    <li><b>Stanza</b> Ã¢â‚¬â€ il codice del mondo condiviso. Chiunque usi lo <b>stesso codice</b> entra nello
+    stesso abisso. Premi il dado <b>Ã°Å¸Å½Â²</b> per un codice casuale.</li>
+    <li><b>Giocatori max</b> Ã¢â‚¬â€ usato solo se sei tu a creare la stanza (se ÃƒÂ¨ vuota); tetto consigliato:
+    8 avventurieri. Oltre il limite, chi entra dopo puÃƒÂ² unirsi come osservatore.</li>
   </ul>
   <p>Prima del login scegli il tuo <b>eroe</b> tra le 9 classi (capitolo IV). Poi premi
-  <b>«Entra nell'Abisso»</b> e vieni lanciato subito nel mondo: niente schermate di attesa, si parte.</p>
-  <div class="tip"><b>Consiglio:</b> quando la stanza è nuova e vuota sei tu l'ospite del mondo (l'host).
+  <b>Ã‚Â«Entra nell'AbissoÃ‚Â»</b> e vieni lanciato subito nel mondo: niente schermate di attesa, si parte.</p>
+  <div class="tip"><b>Consiglio:</b> quando la stanza ÃƒÂ¨ nuova e vuota sei tu l'ospite del mondo (l'host).
   Se crei tu la stanza, decidi il numero massimo di giocatori: oltre, chi entra diventa osservatore.</div>
-  <p>Se la stanza è piena puoi entrare in <b>modalità spettatore</b>: vedi il mondo e i giocatori ma non
-  interagisci. Utile per osservare gli amici — o i boss — senza rischiare la pelle.</p>
+  <p>Se la stanza ÃƒÂ¨ piena puoi entrare in <b>modalitÃƒÂ  spettatore</b>: vedi il mondo e i giocatori ma non
+  interagisci. Utile per osservare gli amici Ã¢â‚¬â€ o i boss Ã¢â‚¬â€ senza rischiare la pelle.</p>
 </div>
 
 <!-- ================= III ================= -->
@@ -696,25 +696,25 @@
   <span class="chap-badge">III</span>
   <div class="chap-num">Capitolo III</div>
   <h2>Comandi</h2>
-  <p class="drop">Il combattimento è in tempo reale: una mano sulla tastiera, l'occhio sulla barra
+  <p class="drop">Il combattimento ÃƒÂ¨ in tempo reale: una mano sulla tastiera, l'occhio sulla barra
   della salute. Memorizza la tavola:</p>
   <table>
     <tr><th>Tasto</th><th>Azione</th></tr>
     <tr><td><span class="kbd">WASD</span> / <span class="kbd">Frecce</span></td><td>Movimento</td></tr>
-    <tr><td><span class="kbd">Spazio</span> / click sinistro / <span class="kbd">⚔</span></td><td>Attacco — mira in automatico il nemico più vicino</td></tr>
+    <tr><td><span class="kbd">Spazio</span> / click sinistro / <span class="kbd">Ã¢Å¡â€</span></td><td>Attacco Ã¢â‚¬â€ mira in automatico il nemico piÃƒÂ¹ vicino</td></tr>
     <tr><td><span class="kbd">E</span></td><td>Interagisci: forziere, scale, mercante, rianimazione</td></tr>
-    <tr><td><span class="kbd">Q</span> / <span class="kbd">🧪</span></td><td>Bevi pozione di salute</td></tr>
-    <tr><td><span class="kbd">R</span> / <span class="kbd">🔮</span></td><td>Bevi pozione di mana (per chi usa mana)</td></tr>
-    <tr><td><span class="kbd">F</span> / <span class="kbd">⚡</span></td><td>Abilità speciale della classe (lungo tempo di recupero)</td></tr>
+    <tr><td><span class="kbd">Q</span> / <span class="kbd">Ã°Å¸Â§Âª</span></td><td>Bevi pozione di salute</td></tr>
+    <tr><td><span class="kbd">R</span> / <span class="kbd">Ã°Å¸â€Â®</span></td><td>Bevi pozione di mana (per chi usa mana)</td></tr>
+    <tr><td><span class="kbd">F</span> / <span class="kbd">Ã¢Å¡Â¡</span></td><td>AbilitÃƒÂ  speciale della classe (lungo tempo di recupero)</td></tr>
     <tr><td><span class="kbd">M</span></td><td>Mostra/nascondi la minimappa (scale, forzieri, mercante, compagni)</td></tr>
     <tr><td><span class="kbd">V</span></td><td>Attiva/disattiva la visuale in prima persona</td></tr>
     <tr><td><span class="kbd">Invio</span></td><td>Apre la chat</td></tr>
     <tr><td><span class="kbd">Esc</span></td><td>Chiude chat e pannelli</td></tr>
   </table>
   <p><b>Interfaccia:</b> l'orbita della salute (con flash al danno), l'orbita del mana, il conteggio
-  dell'oro, pozioni e il pulsante dell'abilità. Il pulsante <b>🔊</b> in basso a destra silenzia i suoni
+  dell'oro, pozioni e il pulsante dell'abilitÃƒÂ . Il pulsante <b>Ã°Å¸â€Å </b> in basso a destra silenzia i suoni
   generati al volo. Un click sullo zoom lo azzera. Su schermi touch appaiono i controlli: D-pad,
-  bottone attacco ⚔, pozioni 🧪/🔮 e abilità ⚡.</p>
+  bottone attacco Ã¢Å¡â€, pozioni Ã°Å¸Â§Âª/Ã°Å¸â€Â® e abilitÃƒÂ  Ã¢Å¡Â¡.</p>
   <div class="note"><b>Raccolta automatica:</b> oro, pozioni e potenziamenti si raccolgono da soli
   camminandoci sopra. Non serve premere nulla.</div>
 </div>
@@ -727,23 +727,23 @@
   <div class="chap-num">Capitolo IV</div>
   <h2>Le Nove Classi</h2>
   <p class="drop">Nove eroi, nove destini. Chi colpisce da vicino, chi scaglia energia da lontano,
-  chi ispira i compagni. Ogni classe ha la propria arma, velocità e <b>abilità speciale</b> (tasto F).</p>
+  chi ispira i compagni. Ogni classe ha la propria arma, velocitÃƒÂ  e <b>abilitÃƒÂ  speciale</b> (tasto F).</p>
   <table>
-    <tr><th>Classe</th><th>Salute</th><th>Velocità</th><th>Danno</th><th>Ruolo</th><th>Abilità (F)</th></tr>
-    <tr><td><img src="assets/sprites/hero_guerriero.png" alt=""> Guerriero</td><td>16</td><td>3.6</td><td>3–6</td><td>Corpo a corpo</td><td><b>Carica</b> — scatta avanti travolgendo i nemici</td></tr>
-    <tr><td><img src="assets/sprites/hero_ladro.png" alt=""> Ladro</td><td>10</td><td>4.6</td><td>2–4</td><td>Schermitore veloce (28% critico)</td><td><b>Passo Furtivo</b> — balza sul nemico con colpo critico garantito</td></tr>
-    <tr><td><img src="assets/sprites/hero_mago.png" alt=""> Mago</td><td>9</td><td>3.2</td><td>4–8</td><td>Attacchi a distanza (mana)</td><td><b>Onda d'Urto</b> — esplosione arcana intorno a te</td></tr>
-    <tr><td><img src="assets/sprites/hero_ranger.png" alt=""> Ranger</td><td>11</td><td>3.9</td><td>2–5</td><td>Arciere a lunga gittata</td><td><b>Raffica</b> — ventaglio di frecce</td></tr>
-    <tr><td><img src="assets/sprites/hero_paladino.png" alt=""> Paladino</td><td>18</td><td>3.3</td><td>3–5</td><td>Tank sacro</td><td><b>Muro Sacro</b> — scudo divino: −50% danno per 5s</td></tr>
-    <tr><td><img src="assets/sprites/hero_negromante.png" alt=""> Negromante</td><td>10</td><td>3.2</td><td>4–7</td><td>Scintille d'anima (mana)</td><td><b>Drenaggio d'Anima</b> — danneggia i vicini e ti cura</td></tr>
-    <tr><td><img src="assets/sprites/hero_bardo.png" alt=""> Bardo</td><td>12</td><td>4.0</td><td>2–4</td><td>Rapier veloce (15% critico)</td><td><b>Canto d'Ispirazione</b> — +40% danno per 8s</td></tr>
-    <tr><td><img src="assets/sprites/hero_monaco.png" alt=""> Monaco</td><td>14</td><td>4.4</td><td>3–5</td><td>Pugni fulminei (20% critico)</td><td><b>Onda di Chi</b> — energia che perfora i nemici</td></tr>
-    <tr><td><img src="assets/speciali/prof.png" alt=""> Prof</td><td>22</td><td>3.6</td><td>5–9</td><td>Fucile al plasma a distanza</td><td><b>Colpo Caricato</b> — 0.8s di carica, danno ~doppio</td></tr>
+    <tr><th>Classe</th><th>Salute</th><th>VelocitÃƒÂ </th><th>Danno</th><th>Ruolo</th><th>AbilitÃƒÂ  (F)</th></tr>
+    <tr><td><img src="assets/sprites/hero_guerriero.png" alt=""> Guerriero</td><td>16</td><td>3.6</td><td>3Ã¢â‚¬â€œ6</td><td>Corpo a corpo</td><td><b>Carica</b> Ã¢â‚¬â€ scatta avanti travolgendo i nemici</td></tr>
+    <tr><td><img src="assets/sprites/hero_ladro.png" alt=""> Ladro</td><td>10</td><td>4.6</td><td>2Ã¢â‚¬â€œ4</td><td>Schermitore veloce (28% critico)</td><td><b>Passo Furtivo</b> Ã¢â‚¬â€ balza sul nemico con colpo critico garantito</td></tr>
+    <tr><td><img src="assets/sprites/hero_mago.png" alt=""> Mago</td><td>9</td><td>3.2</td><td>4Ã¢â‚¬â€œ8</td><td>Attacchi a distanza (mana)</td><td><b>Onda d'Urto</b> Ã¢â‚¬â€ esplosione arcana intorno a te</td></tr>
+    <tr><td><img src="assets/sprites/hero_ranger.png" alt=""> Ranger</td><td>11</td><td>3.9</td><td>2Ã¢â‚¬â€œ5</td><td>Arciere a lunga gittata</td><td><b>Raffica</b> Ã¢â‚¬â€ ventaglio di frecce</td></tr>
+    <tr><td><img src="assets/sprites/hero_paladino.png" alt=""> Paladino</td><td>18</td><td>3.3</td><td>3Ã¢â‚¬â€œ5</td><td>Tank sacro</td><td><b>Muro Sacro</b> Ã¢â‚¬â€ scudo divino: Ã¢Ë†â€™50% danno per 5s</td></tr>
+    <tr><td><img src="assets/sprites/hero_negromante.png" alt=""> Negromante</td><td>10</td><td>3.2</td><td>4Ã¢â‚¬â€œ7</td><td>Scintille d'anima (mana)</td><td><b>Drenaggio d'Anima</b> Ã¢â‚¬â€ danneggia i vicini e ti cura</td></tr>
+    <tr><td><img src="assets/sprites/hero_bardo.png" alt=""> Bardo</td><td>12</td><td>4.0</td><td>2Ã¢â‚¬â€œ4</td><td>Rapier veloce (15% critico)</td><td><b>Canto d'Ispirazione</b> Ã¢â‚¬â€ +40% danno per 8s</td></tr>
+    <tr><td><img src="assets/sprites/hero_monaco.png" alt=""> Monaco</td><td>14</td><td>4.4</td><td>3Ã¢â‚¬â€œ5</td><td>Pugni fulminei (20% critico)</td><td><b>Onda di Chi</b> Ã¢â‚¬â€ energia che perfora i nemici</td></tr>
+    <tr><td><img src="assets/speciali/prof.png" alt=""> Prof</td><td>22</td><td>3.6</td><td>5Ã¢â‚¬â€œ9</td><td>Fucile al plasma a distanza</td><td><b>Colpo Caricato</b> Ã¢â‚¬â€ 0.8s di carica, danno ~doppio</td></tr>
   </table>
   <p>I <b>maghi</b> e i <b>negromanti</b> consumano mana a ogni colpo (2 di mana per attacco):
   tienilo d'occhio, le pozioni di mana (<span class="kbd">R</span>) esistono per questo.</p>
   <div class="tip"><b>Consiglio da veterano:</b> il Guerriero sopravvive agli errori, il Monaco li
-  evita, il Prof li paga tutti e tre i tipi di errore — ma quando colpisce, colpisce.</div>
+  evita, il Prof li paga tutti e tre i tipi di errore Ã¢â‚¬â€ ma quando colpisce, colpisce.</div>
 </div>
 
 <!-- ================= V ================= -->
@@ -753,33 +753,33 @@
   <span class="chap-badge">V</span>
   <div class="chap-num">Capitolo V</div>
   <h2>Le Creature dell'Abisso</h2>
-  <p class="drop">Diciassette famiglie di nemici popolano i piani. Quelle più grandi e maligne
-  hanno un <b>atteggiamento</b> (aggro) più ampio: ti notano da più lontano. Le statistiche qui sotto
-  sono quelle di base: con la profondità le creature diventano più forti.</p>
+  <p class="drop">Diciassette famiglie di nemici popolano i piani. Quelle piÃƒÂ¹ grandi e maligne
+  hanno un <b>atteggiamento</b> (aggro) piÃƒÂ¹ ampio: ti notano da piÃƒÂ¹ lontano. Le statistiche qui sotto
+  sono quelle di base: con la profonditÃƒÂ  le creature diventano piÃƒÂ¹ forti.</p>
   <div class="two-col">
     <div>
-      <div class="beast"><img src="assets/sprites/mon_ratto.png" alt=""><div><div class="b-name">Ratto</div><div class="b-info">Salute 7 · Danno 2 · Lento e timido</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_pipistrello.png" alt=""><div><div class="b-name">Pipistrello</div><div class="b-info">Salute 8 · Danno 2 · Volteggia rapido</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_goblin.png" alt=""><div><div class="b-name">Goblin</div><div class="b-info">Salute 14 · Danno 3 · Sporadico</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_melma.png" alt=""><div><div class="b-name">Melma</div><div class="b-info">Salute 9 · Danno 2 · Lenta, si divide</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_gelatina.png" alt=""><div><div class="b-name">Gelatina</div><div class="b-info">Salute 22 · Danno 3 · La melma grande</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_scheletro.png" alt=""><div><div class="b-name">Scheletro</div><div class="b-info">Salute 20 · Danno 4 · Il ritorno dei caduti</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_orco.png" alt=""><div><div class="b-name">Orco</div><div class="b-info">Salute 32 · Danno 6 · Massiccio e lento</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_zombie.png" alt=""><div><div class="b-name">Zombie</div><div class="b-info">Salute 26 · Danno 5 · Lento, inarrestabile</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_ragno.png" alt=""><div><div class="b-name">Ragno Gigante</div><div class="b-info">Salute 24 · Danno 5 · Veloce</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_ratto.png" alt=""><div><div class="b-name">Ratto</div><div class="b-info">Salute 7 Ã‚Â· Danno 2 Ã‚Â· Lento e timido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_pipistrello.png" alt=""><div><div class="b-name">Pipistrello</div><div class="b-info">Salute 8 Ã‚Â· Danno 2 Ã‚Â· Volteggia rapido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_goblin.png" alt=""><div><div class="b-name">Goblin</div><div class="b-info">Salute 14 Ã‚Â· Danno 3 Ã‚Â· Sporadico</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_melma.png" alt=""><div><div class="b-name">Melma</div><div class="b-info">Salute 9 Ã‚Â· Danno 2 Ã‚Â· Lenta, si divide</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_gelatina.png" alt=""><div><div class="b-name">Gelatina</div><div class="b-info">Salute 22 Ã‚Â· Danno 3 Ã‚Â· La melma grande</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_scheletro.png" alt=""><div><div class="b-name">Scheletro</div><div class="b-info">Salute 20 Ã‚Â· Danno 4 Ã‚Â· Il ritorno dei caduti</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_orco.png" alt=""><div><div class="b-name">Orco</div><div class="b-info">Salute 32 Ã‚Â· Danno 6 Ã‚Â· Massiccio e lento</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_zombie.png" alt=""><div><div class="b-name">Zombie</div><div class="b-info">Salute 26 Ã‚Â· Danno 5 Ã‚Â· Lento, inarrestabile</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_ragno.png" alt=""><div><div class="b-name">Ragno Gigante</div><div class="b-info">Salute 24 Ã‚Â· Danno 5 Ã‚Â· Veloce</div></div></div>
     </div>
     <div>
-      <div class="beast"><img src="assets/sprites/mon_spettro.png" alt=""><div><div class="b-name">Spettro</div><div class="b-info">Salute 28 · Danno 6 · Passa attraverso tutto</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_serpente.png" alt=""><div><div class="b-name">Serpente</div><div class="b-info">Salute 10 · Danno 2 · Striscia rapido</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_arpia.png" alt=""><div><div class="b-name">Arpia</div><div class="b-info">Salute 9 · Danno 2 · Sfiora e fugge</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_cavaliere.png" alt=""><div><div class="b-name">Cavaliere Caduto</div><div class="b-info">Salute 26 · Danno 5 · Armatura antica</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_cultista.png" alt=""><div><div class="b-name">Cultista</div><div class="b-info">Salute 18 · Danno 4 · Mistico, pericoloso</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_mantide.png" alt=""><div><div class="b-name">Mantide Abissale</div><div class="b-info">Salute 22 · Danno 4 · Balzi rapidi</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_sciamano.png" alt=""><div><div class="b-name">Sciamano Goblin</div><div class="b-info">Salute 20 · Danno 4 · Lancia maledizioni</div></div></div>
-      <div class="beast"><img src="assets/sprites/mon_golem.png" alt=""><div><div class="b-name">Golem di Roccia</div><div class="b-info">Salute 40 · Danno 7 · Pestone devastante</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_spettro.png" alt=""><div><div class="b-name">Spettro</div><div class="b-info">Salute 28 Ã‚Â· Danno 6 Ã‚Â· Passa attraverso tutto</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_serpente.png" alt=""><div><div class="b-name">Serpente</div><div class="b-info">Salute 10 Ã‚Â· Danno 2 Ã‚Â· Striscia rapido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_arpia.png" alt=""><div><div class="b-name">Arpia</div><div class="b-info">Salute 9 Ã‚Â· Danno 2 Ã‚Â· Sfiora e fugge</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_cavaliere.png" alt=""><div><div class="b-name">Cavaliere Caduto</div><div class="b-info">Salute 26 Ã‚Â· Danno 5 Ã‚Â· Armatura antica</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_cultista.png" alt=""><div><div class="b-name">Cultista</div><div class="b-info">Salute 18 Ã‚Â· Danno 4 Ã‚Â· Mistico, pericoloso</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_mantide.png" alt=""><div><div class="b-name">Mantide Abissale</div><div class="b-info">Salute 22 Ã‚Â· Danno 4 Ã‚Â· Balzi rapidi</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_sciamano.png" alt=""><div><div class="b-name">Sciamano Goblin</div><div class="b-info">Salute 20 Ã‚Â· Danno 4 Ã‚Â· Lancia maledizioni</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_golem.png" alt=""><div><div class="b-name">Golem di Roccia</div><div class="b-info">Salute 40 Ã‚Â· Danno 7 Ã‚Â· Pestone devastante</div></div></div>
     </div>
   </div>
-  <div class="note"><b>Meglio evitare le trappole della fretta:</b> i nemici più veloci (mantide,
+  <div class="note"><b>Meglio evitare le trappole della fretta:</b> i nemici piÃƒÂ¹ veloci (mantide,
   ragno, serpente, pipistrello) raggiungono chi scappa in rettilineo. Sfrutta i corridoi e i muri
   per tagliare la distanza e colpire per primi.</div>
 </div>
@@ -791,7 +791,7 @@
   <span class="chap-badge">VI</span>
   <div class="chap-num">Capitolo VI</div>
   <h2>I Sei Boss</h2>
-  <p class="drop">Ogni cinque piani, l'Abisso custodisce un <b>Signore della tana</b>. La sua arena è
+  <p class="drop">Ogni cinque piani, l'Abisso custodisce un <b>Signore della tana</b>. La sua arena ÃƒÂ¨
   un'unica stanza isolata in fondo al labirinto: quando metti piede nella tana i <b>cancelli si chiudono</b>
   e il combattimento comincia. Non si scappa. Se vinci, il <b>forziere leggendario</b> della tana si apre:
   contiene solo equipaggiamento epico o leggendario.</p>
@@ -805,10 +805,10 @@
     <tr><td>30</td><td><img src="assets/sprites/boss_ratti.png" alt=""> <b>Re dei Ratti</b></td><td>120</td><td>Evoca orde di ratti, carica, ondata di ratti dal soffio</td></tr>
   </table>
   <p>Oltre il piano 30 la ruota gira di nuovo: il piano 35 ospita un altro Drago Minore, il 40 un
-  altro Golem di Pietra, e così via — sempre più affamati.</p>
+  altro Golem di Pietra, e cosÃƒÂ¬ via Ã¢â‚¬â€ sempre piÃƒÂ¹ affamati.</p>
   <div class="warn"><b>Attenzione:</b> il boss si attiva appena <b>qualcuno</b> dei giocatori vivi
   mette piede nella tana. Se entri da solo mentre i compagni sono dall'altra parte del piano,
-  la porta si chiude e la lotta è tua.</div>
+  la porta si chiude e la lotta ÃƒÂ¨ tua.</div>
   <div class="tip"><b>Consiglio:</b> i boss telegrafano gli attacchi di area (anelli che si
   contraggono, bagliori). Impara a leggere i telegrafi e a uscire dalla zona prima dell'impatto:
   nel combattimento coi boss la difesa vince.</div>
@@ -821,19 +821,19 @@
   <span class="chap-badge">VII</span>
   <div class="chap-num">Capitolo VII</div>
   <h2>L'Arte del Combattimento</h2>
-  <p class="drop">L'attacco di base mira <b>automaticamente</b> al nemico più vicino dentro la tua
+  <p class="drop">L'attacco di base mira <b>automaticamente</b> al nemico piÃƒÂ¹ vicino dentro la tua
   gittata: tu ti occupi di posizione e ritmo. Ogni classe ha la propria animazione di fendente
   (spada, pugnali, bastone, arco, martello, bacchetta, mandolino, pugni, fucile al plasma).</p>
   <ul>
     <li><b>Critico:</b> Ladro (28%), Monaco (20%) e Bardo (15%) possono infliggere colpi critici.</li>
-    <li><b>Mana:</b> Mago e Negromante consumano 2 di mana per attacco e più mana per l'abilità.
-    Senza mana l'attacco a distanza si fa più debole: tieni pozioni di mana.</li>
+    <li><b>Mana:</b> Mago e Negromante consumano 2 di mana per attacco e piÃƒÂ¹ mana per l'abilitÃƒÂ .
+    Senza mana l'attacco a distanza si fa piÃƒÂ¹ debole: tieni pozioni di mana.</li>
     <li><b>Telegrafi:</b> le mosse pericolose (soffio, carica, pestone, picchiata) vengono
     annunciate da anelli che si contraggono e bagliori colorati sul terreno.</li>
     <li><b>Aggro:</b> ogni creatura ha un raggio d'attenzione. I nemici ignorati dopo un po'
     smettono di inseguirti.</li>
     <li><b>Schermo rosso:</b> quando subisci un colpo lo schermo si tinge di rosso dal lato
-    da cui arriva il danno: la direzione dell'attacco è scritta nel dolore.</li>
+    da cui arriva il danno: la direzione dell'attacco ÃƒÂ¨ scritta nel dolore.</li>
   </ul>
   <div class="note"><b>Flash di danno:</b> i nemici lampeggiano quando li colpisci; i loro
   attacchi in preparazione hanno un'aura colorata. Leggi i colori, sopravvivi ai piani.</div>
@@ -846,8 +846,8 @@
   <span class="chap-badge">VIII</span>
   <div class="chap-num">Capitolo VIII</div>
   <h2>Esplorazione</h2>
-  <p class="drop">L'Abisso è avvolto dalla <b>nebbia di guerra</b>: vedi solo le zone che hai già
-  esplorato. Le stanze sono illuminate da <b>torce tremolanti</b> — la luce non mente, il buio sì.</p>
+  <p class="drop">L'Abisso ÃƒÂ¨ avvolto dalla <b>nebbia di guerra</b>: vedi solo le zone che hai giÃƒÂ 
+  esplorato. Le stanze sono illuminate da <b>torce tremolanti</b> Ã¢â‚¬â€ la luce non mente, il buio sÃƒÂ¬.</p>
   <ul>
     <li><b>Forzieri:</b> tante casse di legno sparse per i piani. Avvicinati e premi <span class="kbd">E</span>:
     oro, pozioni, potenziamenti o equipaggiamento a sorte.</li>
@@ -856,16 +856,16 @@
     stessi pericoli.</li>
     <li><b>Minimappa:</b> premendo <span class="kbd">M</span> vedi le zone esplorate, le scale, i
     forzieri rimasti, il mercante e la posizione dei compagni.</li>
-    <li><b>Frecce ai bordi:</b> quando un compagno è fuori schermo, una freccia al bordo indica la
-    sua direzione. Lo stesso vale per i <b>boss</b>: una freccia d'oro pulsante indica la tana finché
-    il Signore della tana è vivo.</li>
+    <li><b>Frecce ai bordi:</b> quando un compagno ÃƒÂ¨ fuori schermo, una freccia al bordo indica la
+    sua direzione. Lo stesso vale per i <b>boss</b>: una freccia d'oro pulsante indica la tana finchÃƒÂ©
+    il Signore della tana ÃƒÂ¨ vivo.</li>
     <li><b>Prima persona:</b> con <span class="kbd">V</span> passi alla visuale in prima persona
     (stile Doom): l'arma della tua classe appare in mano. Ottima per l'immersione, richiede il
     doppio dell'attenzione.</li>
   </ul>
-  <div class="tip"><b>Consiglio:</b> i forzieri non si rigenerano scendendo di piano: ogni piano è
+  <div class="tip"><b>Consiglio:</b> i forzieri non si rigenerano scendendo di piano: ogni piano ÃƒÂ¨
   una scelta tra avanzare velocemente e saccheggiare fino all'ultima stanza. I boss premiano i
-  completisti: il loro forziere è solo per chi ha battuto la tana.</div>
+  completisti: il loro forziere ÃƒÂ¨ solo per chi ha battuto la tana.</div>
 </div>
 
 <!-- ================= IX ================= -->
@@ -876,28 +876,28 @@
   <div class="chap-num">Capitolo IX</div>
   <h2>Equipaggiamento</h2>
   <p class="drop">Sotto l'Abisso si trovano cinque tipi di equipaggiamento. A differenza dei
-  potenziamenti, restano <b>permanenti</b> finché non trovi qualcosa di meglio nello stesso slot.
+  potenziamenti, restano <b>permanenti</b> finchÃƒÂ© non trovi qualcosa di meglio nello stesso slot.
   Si equipaggiano da soli camminandoci sopra.</p>
   <table>
     <tr><th>Slot</th><th>Oggetto</th><th>Cosa migliora</th></tr>
-    <tr><td><img src="assets/sprites/equip_helm.png" alt=""> Elmo</td><td>🪖</td><td rowspan="5">Statistiche casuali tra: salute extra, % danno, % velocità, % danno subito in meno</td></tr>
-    <tr><td><img src="assets/sprites/equip_necklace.png" alt=""> Collana</td><td>📿</td></tr>
-    <tr><td><img src="assets/sprites/equip_armor.png" alt=""> Armatura</td><td>🛡️</td></tr>
-    <tr><td><img src="assets/sprites/equip_ring.png" alt=""> Anello</td><td>💍</td></tr>
-    <tr><td><img src="assets/sprites/equip_greaves.png" alt=""> Gambali</td><td>👢</td></tr>
+    <tr><td><img src="assets/sprites/equip_helm.png" alt=""> Elmo</td><td>Ã°Å¸Âªâ€“</td><td rowspan="5">Statistiche casuali tra: salute extra, % danno, % velocitÃƒÂ , % danno subito in meno</td></tr>
+    <tr><td><img src="assets/sprites/equip_necklace.png" alt=""> Collana</td><td>Ã°Å¸â€œÂ¿</td></tr>
+    <tr><td><img src="assets/sprites/equip_armor.png" alt=""> Armatura</td><td>Ã°Å¸â€ºÂ¡Ã¯Â¸Â</td></tr>
+    <tr><td><img src="assets/sprites/equip_ring.png" alt=""> Anello</td><td>Ã°Å¸â€™Â</td></tr>
+    <tr><td><img src="assets/sprites/equip_greaves.png" alt=""> Gambali</td><td>Ã°Å¸â€˜Â¢</td></tr>
   </table>
-  <p>Quattro <b>rarità</b>, più rara = più statistiche e più forti:</p>
+  <p>Quattro <b>raritÃƒÂ </b>, piÃƒÂ¹ rara = piÃƒÂ¹ statistiche e piÃƒÂ¹ forti:</p>
   <table>
-    <tr><th>Rarità</th><th>Statistiche</th><th>Potenza</th></tr>
-    <tr><td><b style="color:#b8b8b8">Comune</b></td><td>1</td><td>×1.0</td></tr>
-    <tr><td><b style="color:#5fa0c9">Raro</b></td><td>1</td><td>×1.35</td></tr>
-    <tr><td><b style="color:#b06bf2">Epico</b></td><td>2</td><td>×1.6</td></tr>
-    <tr><td><b style="color:#ff9d2e">Leggendario</b></td><td>3</td><td>×2.2</td></tr>
+    <tr><th>RaritÃƒÂ </th><th>Statistiche</th><th>Potenza</th></tr>
+    <tr><td><b style="color:#b8b8b8">Comune</b></td><td>1</td><td>Ãƒâ€”1.0</td></tr>
+    <tr><td><b style="color:#5fa0c9">Raro</b></td><td>1</td><td>Ãƒâ€”1.35</td></tr>
+    <tr><td><b style="color:#b06bf2">Epico</b></td><td>2</td><td>Ãƒâ€”1.6</td></tr>
+    <tr><td><b style="color:#ff9d2e">Leggendario</b></td><td>3</td><td>Ãƒâ€”2.2</td></tr>
   </table>
-  <p>Più scendi in profondità, più le rarità alte diventano comuni. Il forziere dei boss rilascia
+  <p>PiÃƒÂ¹ scendi in profonditÃƒÂ , piÃƒÂ¹ le raritÃƒÂ  alte diventano comuni. Il forziere dei boss rilascia
   solo pezzi <b>epici o leggendari</b>.</p>
-  <div class="warn"><b>Morte = perdita:</b> l'equipaggiamento è il bottino più prezioso e il
-  permadeath te lo porta via come tutto il resto. Spendilo… anzi, indossalo finché puoi.</div>
+  <div class="warn"><b>Morte = perdita:</b> l'equipaggiamento ÃƒÂ¨ il bottino piÃƒÂ¹ prezioso e il
+  permadeath te lo porta via come tutto il resto. SpendiloÃ¢â‚¬Â¦ anzi, indossalo finchÃƒÂ© puoi.</div>
 </div>
 
 <!-- ================= X ================= -->
@@ -909,10 +909,10 @@
   <h2>Potenziamenti</h2>
   <p class="drop">Benedizioni temporanee che si raccolgono da terra o si comprano dal mercante.
   Durano pochi secondi: il momento in cui le usi conta quanto il momento in cui le trovi.</p>
-  <div class="beast"><img src="assets/sprites/furia.png" alt=""><div><div class="b-name">💪 Furia</div><div class="b-desc">+40% danno per 12 secondi. Da attivare prima dell'assalto, non dopo.</div></div></div>
-  <div class="beast"><img src="assets/sprites/icon_shield_buff.png" alt=""><div><div class="b-name">🛡️ Scudo</div><div class="b-desc">−50% danno subito per 10 secondi. La salvezza nelle tane dei boss.</div></div></div>
-  <div class="beast"><img src="assets/sprites/potenziamento_fretta.png" alt=""><div><div class="b-name">👟 Fretta</div><div class="b-desc">+40% velocità per 12 secondi. Per chiudere le distanze o fuggire.</div></div></div>
-  <div class="beast"><img src="assets/sprites/powerupfocus.png" alt=""><div><div class="b-name">🔷 Concentrazione</div><div class="b-desc">−50% tempo di recupero dell'attacco per 10 secondi. La raffica di danno.</div></div></div>
+  <div class="beast"><img src="assets/sprites/furia.png" alt=""><div><div class="b-name">Ã°Å¸â€™Âª Furia</div><div class="b-desc">+40% danno per 12 secondi. Da attivare prima dell'assalto, non dopo.</div></div></div>
+  <div class="beast"><img src="assets/sprites/icon_shield_buff.png" alt=""><div><div class="b-name">Ã°Å¸â€ºÂ¡Ã¯Â¸Â Scudo</div><div class="b-desc">Ã¢Ë†â€™50% danno subito per 10 secondi. La salvezza nelle tane dei boss.</div></div></div>
+  <div class="beast"><img src="assets/sprites/potenziamento_fretta.png" alt=""><div><div class="b-name">Ã°Å¸â€˜Å¸ Fretta</div><div class="b-desc">+40% velocitÃƒÂ  per 12 secondi. Per chiudere le distanze o fuggire.</div></div></div>
+  <div class="beast"><img src="assets/sprites/powerupfocus.png" alt=""><div><div class="b-name">Ã°Å¸â€Â· Concentrazione</div><div class="b-desc">Ã¢Ë†â€™50% tempo di recupero dell'attacco per 10 secondi. La raffica di danno.</div></div></div>
 </div>
 
 <!-- ================= XI ================= -->
@@ -922,18 +922,18 @@
   <span class="chap-badge">XI</span>
   <div class="chap-num">Capitolo XI</div>
   <h2>Il Mercante</h2>
-  <p class="drop">Nel santuario della zona d'ingresso, il <b>mercante</b> 🏪 attende chi ha oro in
-  tasca — e sa bene che non lo terrà a lungo. Avvicinati e premi <span class="kbd">E</span> (o
+  <p class="drop">Nel santuario della zona d'ingresso, il <b>mercante</b> Ã°Å¸ÂÂª attende chi ha oro in
+  tasca Ã¢â‚¬â€ e sa bene che non lo terrÃƒÂ  a lungo. Avvicinati e premi <span class="kbd">E</span> (o
   clicca sulla scritta) per aprire il banco. Si chiude con <span class="kbd">E</span> o <span class="kbd">Esc</span>.</p>
   <table>
     <tr><th>Merce</th><th>Prezzo</th></tr>
-    <tr><td>🧪 Pozione di salute</td><td>12 + 2 × piano</td></tr>
-    <tr><td>🔮 Pozione di mana</td><td>12 + 2 × piano</td></tr>
-    <tr><td>💪 Potenziamento casuale</td><td>20 + 4 × piano</td></tr>
-    <tr><td>🎲 Equipaggiamento a sorte</td><td>45 + 8 × piano</td></tr>
+    <tr><td>Ã°Å¸Â§Âª Pozione di salute</td><td>12 + 2 Ãƒâ€” piano</td></tr>
+    <tr><td>Ã°Å¸â€Â® Pozione di mana</td><td>12 + 2 Ãƒâ€” piano</td></tr>
+    <tr><td>Ã°Å¸â€™Âª Potenziamento casuale</td><td>20 + 4 Ãƒâ€” piano</td></tr>
+    <tr><td>Ã°Å¸Å½Â² Equipaggiamento a sorte</td><td>45 + 8 Ãƒâ€” piano</td></tr>
   </table>
-  <p>I prezzi crescono con la profondità: l'oro è abbondante nei piani bassi, ma le cose belle
-  costano care. L'equipaggiamento comprato è casuale: può essere un comune… o un leggendario.</p>
+  <p>I prezzi crescono con la profonditÃƒÂ : l'oro ÃƒÂ¨ abbondante nei piani bassi, ma le cose belle
+  costano care. L'equipaggiamento comprato ÃƒÂ¨ casuale: puÃƒÂ² essere un comuneÃ¢â‚¬Â¦ o un leggendario.</p>
   <div class="warn"><b>La regola del mercante:</b> spendi prima di morire. Il permadeath non fa
   sconti e l'oro non ha valore nella tomba.</div>
 </div>
@@ -944,21 +944,21 @@
   <i class="sweep"></i>
   <span class="chap-badge">XII</span>
   <div class="chap-num">Capitolo XII</div>
-  <h2>La Morte è per Sempre</h2>
+  <h2>La Morte ÃƒÂ¨ per Sempre</h2>
   <p class="drop">Quando la tua salute tocca lo zero non muori subito: <b>cadi a terra</b>. Per
-  ventidue secondi giaci al suolo, in balia dell'oscurità — e dei compagni.</p>
+  ventidue secondi giaci al suolo, in balia dell'oscuritÃƒÂ  Ã¢â‚¬â€ e dei compagni.</p>
   <ul>
-    <li><b>Rianimazione:</b> un compagno può salvarti premendo e tenendo <span class="kbd">E</span>
-    vicino al tuo corpo. Un alleato vale più di qualsiasi pozione.</li>
-    <li><b>La fine:</b> se nessuno ti rianima entro il tempo limite — o se vieni colpito di nuovo
-    mentre sei a terra — è la fine.</li>
+    <li><b>Rianimazione:</b> un compagno puÃƒÂ² salvarti premendo e tenendo <span class="kbd">E</span>
+    vicino al tuo corpo. Un alleato vale piÃƒÂ¹ di qualsiasi pozione.</li>
+    <li><b>La fine:</b> se nessuno ti rianima entro il tempo limite Ã¢â‚¬â€ o se vieni colpito di nuovo
+    mentre sei a terra Ã¢â‚¬â€ ÃƒÂ¨ la fine.</li>
     <li><b>Permadeath:</b> perdi <b>tutto</b>: oro, pozioni, potenziamenti ed equipaggiamento.
     Resta solo il <b>record</b> (il miglior oro e il piano raggiunto in questo mondo).</li>
   </ul>
   <div class="warn"><b>La legge dell'Abisso:</b> nessuna resurrezione, nessun caricamento. Quando
-  rientri, riparti da zero nello stesso mondo condiviso — che nel frattempo è andato avanti
+  rientri, riparti da zero nello stesso mondo condiviso Ã¢â‚¬â€ che nel frattempo ÃƒÂ¨ andato avanti
   senza di te.</div>
-  <div class="tip"><b>Consiglio:</b> la rianimazione è il gesto più importante del gioco. Se vedi
+  <div class="tip"><b>Consiglio:</b> la rianimazione ÃƒÂ¨ il gesto piÃƒÂ¹ importante del gioco. Se vedi
   un compagno cadere, lascia perdere il bottino: corri da lui. L'oro si ritrova, gli amici no.</div>
 </div>
 
@@ -969,17 +969,17 @@
   <span class="chap-badge">XIII</span>
   <div class="chap-num">Capitolo XIII</div>
   <h2>Compagnia nell'Ombra</h2>
-  <p class="drop">L'Abisso è un mondo <b>condiviso e persistente</b>: stesso codice stanza, stesso
+  <p class="drop">L'Abisso ÃƒÂ¨ un mondo <b>condiviso e persistente</b>: stesso codice stanza, stesso
   mondo. Fino a 8 avventurieri (oltre il limite si entra da osservatori) si muovono nello stesso
-  labirinto, si vedono, si aiutano — e si dividono il bottino delle tane.</p>
+  labirinto, si vedono, si aiutano Ã¢â‚¬â€ e si dividono il bottino delle tane.</p>
   <ul>
     <li><b>Chat:</b> <span class="kbd">Invio</span> apre la chat; i messaggi appaiono come bolle
     sopra i personaggi.</li>
-    <li><b>Vocale:</b> il pulsante 🎤 accanto a «Nel mondo» attiva il microfono: parla con i compagni.</li>
-    <li><b>Host del mondo:</b> il primo che crea la stanza ne è il custode; se se ne va, il custode
+    <li><b>Vocale:</b> il pulsante Ã°Å¸Å½Â¤ accanto a Ã‚Â«Nel mondoÃ‚Â» attiva il microfono: parla con i compagni.</li>
+    <li><b>Host del mondo:</b> il primo che crea la stanza ne ÃƒÂ¨ il custode; se se ne va, il custode
     passa a un altro. Se due mondi si dividono per un attimo (VPN, relay), il gioco li ricongiunge
-    da solo scegliendo il mondo «vissuto».</li>
-    <li><b>Copia link:</b> nel pannello di aiuto c'è il pulsante «Copia link»: chiunque lo riceva
+    da solo scegliendo il mondo Ã‚Â«vissutoÃ‚Â».</li>
+    <li><b>Copia link:</b> nel pannello di aiuto c'ÃƒÂ¨ il pulsante Ã‚Â«Copia linkÃ‚Â»: chiunque lo riceva
     entra nello stesso abisso.</li>
     <li><b>Frecce ai bordi e minimappa:</b> non perdere mai di vista i compagni.</li>
   </ul>
@@ -996,523 +996,37 @@
   <div class="chap-num">Capitolo XIV</div>
   <h2>Segreti e Consigli</h2>
   <ul>
-    <li><b>Il santuario è casa tua:</b> i mostri non entrano nella zona d'ingresso. Usala per
+    <li><b>Il santuario ÃƒÂ¨ casa tua:</b> i mostri non entrano nella zona d'ingresso. Usala per
     riordinare, comprare e organizzare la discesa.</li>
-    <li><b>Il record non mente:</b> tienilo d'occhio; è la misura della tua discesa più profonda.</li>
+    <li><b>Il record non mente:</b> tienilo d'occhio; ÃƒÂ¨ la misura della tua discesa piÃƒÂ¹ profonda.</li>
     <li><b>I telegrafi dei boss:</b> anello che si contrae = esplosione in arrivo. Uscire dalla
-    zona prima dell'impatto è sempre possibile.</li>
+    zona prima dell'impatto ÃƒÂ¨ sempre possibile.</li>
     <li><b>Potenzia prima, affronta dopo:</b> Furia e Concentrazione trasformano un combattimento
     equilibrato in una vittoria netta. Scudo e Fretta salvano la vita.</li>
     <li><b>Il forziere del boss:</b> solo dopo la vittoria sulla tana. Epico o leggendario,
     garantito: vale ogni passo della discesa.</li>
-    <li><b>La prima persona (V)</b> non è solo estetica: nei corridoi stretti la precisione
+    <li><b>La prima persona (V)</b> non ÃƒÂ¨ solo estetica: nei corridoi stretti la precisione
     visiva aiuta a incassare meno colpi.</li>
     <li><b>Il suono avvisa:</b> il gioco genera suoni ed effetti al volo. Attivati, il ruggito
     di un boss ti salva la vita prima ancora che lo vedi.</li>
   </ul>
-  <div class="orn">❖ ❖ ❖</div>
+  <div class="orn">Ã¢Ââ€“ Ã¢Ââ€“ Ã¢Ââ€“</div>
   <p class="drop">L'Abisso non finisce mai. I suoi piani scendono oltre il trentesimo, i suoi
-  tesori non si esauriscono, e i suoi mostri si fanno ogni volta più affamati. Questo manuale
-  finisce qui — ma la discesa, avventuriero, è appena cominciata.</p>
-</div>
-
-<!-- ======== SEZIONE C64 ======== -->
-<div class="chapter" id="c64" style="background:linear-gradient(180deg, #40318D 0%, #2a1f5e 100%); border:3px solid #6C5EB5; border-radius:0; padding:30px; margin:40px 0; font-family:'Courier New',monospace; color:#7B71D5;">
-  <style>
-    #c64 h2{ color:#eeee77; font-family:'Courier New',monospace; text-shadow:2px 2px 0 #2a1f5e; letter-spacing:3px; text-transform:uppercase; }
-    #c64 h3{ color:#aaffee; font-family:'Courier New',monospace; font-size:14px; margin-top:20px; text-transform:uppercase; letter-spacing:1px; }
-    #c64 p, #c64 li{ color:#7B71D5; font-family:'Courier New',monospace; font-size:13px; line-height:1.7; }
-    #c64 .c64-note{ background:rgba(42,31,94,.6); border:2px solid #5045a0; padding:12px 16px; margin:12px 0; color:#aaffee; font-size:12px; }
-    #c64 .c64-sprite-row{ display:flex; flex-wrap:wrap; gap:12px; margin:12px 0; }
-    #c64 .c64-sprite-card{ background:rgba(42,31,94,.5); border:2px solid #5045a0; padding:10px; text-align:center; min-width:90px; }
-    #c64 .c64-sprite-card pre{ color:#eeee77; font-size:10px; line-height:1.1; letter-spacing:2px; margin:0; }
-    #c64 .c64-sprite-card .name{ color:#aaffee; font-size:10px; margin-top:6px; }
-    #c64 .c64-palette{ display:flex; flex-wrap:wrap; gap:4px; margin:10px 0; }
-    #c64 .c64-swatch{ width:28px; height:28px; border:2px solid #5045a0; display:inline-block; }
-    #c64 .c64-swatch-label{ color:#aaffee; font-size:9px; text-align:center; margin-top:2px; }
-    #c64 .c64-code{ background:#2a1f5e; border:2px solid #5045a0; padding:12px; color:#aaffee; font-family:'Courier New',monospace; font-size:12px; white-space:pre; overflow-x:auto; margin:10px 0; }
-    #c64 ul{ list-style:none; padding-left:0; }
-    #c64 ul li::before{ content:'► '; color:#eeee77; }
-  </style>
-
-  <h2>♦ Modalità C64 ♦</h2>
-  <p style="color:#aaffee;">Un easter egg che trasforma ABISSO in un gioco Commodore 64.</p>
-
-  <div class="c64-note">
-    <strong style="color:#eeee77;">COME ATTIVARLA:</strong><br>
-    Scrivi <span style="color:#eeee77;">64</span> o <span style="color:#eeee77;">c64</span> come nome della stanza nella schermata di login e premi "Entra nell'Abisso".<br>
-    Oppure apri direttamente: <span style="color:#eeee77;">index.html?room=64</span>
-  </div>
-
-  <h3>▸ Boot Screen</h3>
-  <p>Al caricamento appare una schermata che emula il boot del Commodore 64: scritta BASIC, cursore lampeggiante, loading bar gialla e messaggi di stato. Il tutto in palette viola con font pixel.</p>
-
-  <h3>▸ Palette Colori</h3>
-  <p>I 16 colori ufficiali del C64:</p>
-  <div class="c64-palette">
-    <div><div class="c64-swatch" style="background:#000;"></div><div class="c64-swatch-label">Nero</div></div>
-    <div><div class="c64-swatch" style="background:#fff;"></div><div class="c64-swatch-label">Bianco</div></div>
-    <div><div class="c64-swatch" style="background:#880000;"></div><div class="c64-swatch-label">Rosso</div></div>
-    <div><div class="c64-swatch" style="background:#aaffee;"></div><div class="c64-swatch-label">Ciano</div></div>
-    <div><div class="c64-swatch" style="background:#cc44cc;"></div><div class="c64-swatch-label">Viola</div></div>
-    <div><div class="c64-swatch" style="background:#00cc55;"></div><div class="c64-swatch-label">Verde</div></div>
-    <div><div class="c64-swatch" style="background:#0000aa;"></div><div class="c64-swatch-label">Blu</div></div>
-    <div><div class="c64-swatch" style="background:#eeee77;"></div><div class="c64-swatch-label">Giallo</div></div>
-    <div><div class="c64-swatch" style="background:#dd8855;"></div><div class="c64-swatch-label">Arancio</div></div>
-    <div><div class="c64-swatch" style="background:#664400;"></div><div class="c64-swatch-label">Marrone</div></div>
-    <div><div class="c64-swatch" style="background:#ff7777;"></div><div class="c64-swatch-label">R. Chiaro</div></div>
-    <div><div class="c64-swatch" style="background:#333;"></div><div class="c64-swatch-label">G. Scuro</div></div>
-    <div><div class="c64-swatch" style="background:#777;"></div><div class="c64-swatch-label">Grigio</div></div>
-    <div><div class="c64-swatch" style="background:#aaff66;"></div><div class="c64-swatch-label">V. Chiaro</div></div>
-    <div><div class="c64-swatch" style="background:#0088ff;"></div><div class="c64-swatch-label">B. Chiaro</div></div>
-    <div><div class="c64-swatch" style="background:#bbb;"></div><div class="c64-swatch-label">G. Chiaro</div></div>
-  </div>
-
-  <h3>▸ Sprite Pixel Art — Eroi</h3>
-  <div class="c64-sprite-row">
-    <div class="c64-sprite-card"><pre>   YY
-  YYYY
-  rr r
- RRRRRR
-  RRRR
-  R  R
- RR  RR
- NN  NN</pre><div class="name">Guerriero</div></div>
-    <div class="c64-sprite-card"><pre>  CCC
- CCCCC
-  cc c
-  CCCC
-  C  C
- Cdd dC
- C    C
-  d  d</pre><div class="name">Ladro</div></div>
-    <div class="c64-sprite-card"><pre>   PP
-  PPPP
-  ww w
- PPPPPP
-  PPPP
- P    P
-  PPPP
- P    P</pre><div class="name">Mago</div></div>
-    <div class="c64-sprite-card"><pre>   GG
-  GGGG
-  nn n
- GGGGGG
-  GGGG
-  G  G
- Gdd dG
-  d  d</pre><div class="name">Ranger</div></div>
-    <div class="c64-sprite-card"><pre>   YY
-  YYYY
-  WW W
-YYYYYYYY
-  YYYY
- YY  YY
- YYwwYY
-  d  d</pre><div class="name">Paladino</div></div>
-    <div class="c64-sprite-card"><pre>  KKKK
- KKKKKK
-  gg g
-KKKKKKKK
-  KPPK
- K    K
-  KKKK
- K    K</pre><div class="name">Negromante</div></div>
-    <div class="c64-sprite-card"><pre>  OOOO
- OOOOOO
-  YY Y
-OOOOOOOO
-  OOOO
- O    O
- OO  OO
-  d  d</pre><div class="name">Bardo</div></div>
-    <div class="c64-sprite-card"><pre>  NNNN
- NNNNNN
-  WW W
-NNNNNNNN
-  NNNN
- N    N
-  NNNN
-  d  d</pre><div class="name">Monaco</div></div>
-    <div class="c64-sprite-card"><pre>   bb
-  bbbb
-  WW W
- bbbbbb
-  bbbb
- b    b
- bbbbBb
-  d  d</pre><div class="name">Prof</div></div>
-  </div>
-
-  <h3>▸ Sprite Pixel Art — Mostri</h3>
-  <div class="c64-sprite-row">
-    <div class="c64-sprite-card"><pre>  nn nn
- nnnnnn
-  grrg
-  nnnn
-   nn
-  n  n</pre><div class="name">Ratto</div></div>
-    <div class="c64-sprite-card"><pre>  GGGG
- GGGGGG
- GrrGG
- GGGGGG
-  GGGG
-  G  G
- GG  GG
-  d  d</pre><div class="name">Goblin</div></div>
-    <div class="c64-sprite-card"><pre>  GGGG
- GGGGGG
- GrGG rG
- GGGGGG
-  GrrG
- GGGGGG
- GG  GG
- NN  NN</pre><div class="name">Orco</div></div>
-    <div class="c64-sprite-card"><pre>  GGGG
- GGGGGG
- GrrGG
- GGGGGG
-  GGGG
-  G  G
- GG  GG
-  d  d</pre><div class="name">Zombie</div></div>
-    <div class="c64-sprite-card"><pre>  wwww
- wwwwww
-wwKwwKww
-wwwwwwww
-ww UU ww
- wwwwww
-w w  w w</pre><div class="name">Spettro</div></div>
-    <div class="c64-sprite-card"><pre>K  KK  K
-K KK  KK
-  drrd
- ddddddd
-  dddd
- d d  d d
-d  d  d  d</pre><div class="name">Ragno</div></div>
-    <div class="c64-sprite-card"><pre>  GGGG
- GGGGGG
-GnGGGnGG
-GGGGGGGG
- GrrGG
-  GGGG
-   gg</pre><div class="name">Melma</div></div>
-    <div class="c64-sprite-card"><pre>  bbbb
- bbbbbb
-bbWbbWbb
-bbbbbbbb
- bbrrbb
-  bbbb
-   bb</pre><div class="name">Gelatina</div></div>
-    <div class="c64-sprite-card"><pre>  wwww
- wKwwKw
-  wwww
-   ww
-  wwww
- w w  w
-w  w  w</pre><div class="name">Scheletro</div></div>
-    <div class="c64-sprite-card"><pre>P      P
-PP    PP
-PPPPPPPP
- rPPPr
-  PPPP
-  P  P</pre><div class="name">Pipistrello</div></div>
-    <div class="c64-sprite-card"><pre>  GGG
- GGrrG
-  GGGG
-   GGG
-    GG
-     G</pre><div class="name">Serpente</div></div>
-    <div class="c64-sprite-card"><pre>  ww
- wwwww
-wKwwKww
- wwwwww
-  YYYY
-   YY
-  O  O</pre><div class="name">Arpia</div></div>
-    <div class="c64-sprite-card"><pre>  dddd
- dddddd
- drr rd
- ddddd
-  ddd
- dddd
- dd dd
- NN NN</pre><div class="name">Cavaliere</div></div>
-    <div class="c64-sprite-card"><pre>  PPPP
- PPPPPP
- PPKKPP
- PPPPPP
-  PPPP
-  K  K
- PP  PP
-  d  d</pre><div class="name">Cultista</div></div>
-    <div class="c64-sprite-card"><pre>   GG
-  GGGG
- GGrrGG
-  GGGG
- GGGGGG
-GG    GG
- G    G
-  G  G</pre><div class="name">Mantide</div></div>
-    <div class="c64-sprite-card"><pre>  OOOO
- OOOOOO
- OnrrnO
- OOOOOO
-  OOOO
- O    O
-  OOOO
-  N  N</pre><div class="name">Sciamano</div></div>
-    <div class="c64-sprite-card"><pre>  NNNN
- NNNNNN
-NNNNNNNN
-NNKNNKNN
-NNNNNNNN
- NNNNNN
-NNNNNNNN
-NN    NN</pre><div class="name">Golem</div></div>
-    <div class="c64-sprite-card"><pre>  dddd
- dddddd
- drr rd
- ddddd
-  ddd
- dddd
- dd dd
- NN NN</pre><div class="name">Cavaliere Alt</div></div>
-    <div class="c64-sprite-card"><pre>  rrrr
- rrrrrr
-rrrrrrrr
- WrrWWr
-  WWWW
-   ww
-   ww</pre><div class="name">Fungo</div></div>
-  </div>
-
-  <h3>▸ Sprite Pixel Art — Boss (12×12)</h3>
-  <div class="c64-sprite-row">
-    <div class="c64-sprite-card"><pre>    PPPP
-   PPPPPP
-  PPPPPPPP
-  PKwKwKPP
-  PPPPPPPP
-  P PUUP PP
-   PPPPPP
-  PPPPPPPP
- PP PP PP PP
-PP  PP  PP
- PP PP PP
-  P    P</pre><div class="name" style="color:#cc44cc;">Lich</div></div>
-    <div class="c64-sprite-card"><pre>    GGGG
-  GGGGGGGG
- GGGGGGGGGG
-GGnGGGGGnGGG
-GGGGGGGGGGGG
-GGGGrrGGGGGG
- GGGGGGGGGG
-  GGGGGGGG
- GGG  GGGGG
-GG      GGG
- G        G</pre><div class="name" style="color:#00cc55;">Melme</div></div>
-    <div class="c64-sprite-card"><pre>   NNNNNN
-  NNNNNNNN
- NNNNNNNNNN
- NNKNNNKNNN
- NNNNNNNNNN
-NNNNNNNNNNNN
- NNNNNNNNNN
-  NNNNNNNN
- NNNN NNNN
-NNNN   NNNN
-NNN     NNN
-NN       NN</pre><div class="name" style="color:#664400;">Golem</div></div>
-    <div class="c64-sprite-card"><pre>K
-KK  KKKK  KK
-KKKKrrrrKKKK
- KKKKKKKKKK
-  KKKKKKKK
- KK KK KK KK
-KK  KK  KK
-K   KK   K
-    KK
-   KKKK
-  KK  KK</pre><div class="name" style="color:#333;">Ragno</div></div>
-    <div class="c64-sprite-card"><pre> nn nn nn
-nnnnnnnnnnn
- nrrnnrrnnn
- nnnnnnnnn
-  nnnnnnn
- nnn nnn nn
-nn   n   nn
- n        n</pre><div class="name" style="color:#aaff66;">Ratti</div></div>
-    <div class="c64-sprite-card"><pre>    RRRRRR
-   RRRRRRRR
-  RRRRYRRRR
- RRRRrrRRRR
-RRRRRRRRRRRR
-RRRROORRRRR
- RRRRRRRRR
-  RRRRRRR
- RRR  RRRR
-RRR    RRRR
-RR      RR
-R        R</pre><div class="name" style="color:#880000;">Drago</div></div>
-  </div>
-
-  <h3>▸ Sprite Pixel Art — Items e Oggetti</h3>
-  <div class="c64-sprite-row">
-    <div class="c64-sprite-card"><pre> OOOOOO
-OOnOOnOO
-OOOOOOOO
-OYOYYOYO
-OOOOOOOO
-OOnOOnOO
-OOOOOOOO
-NNNNNNNN</pre><div class="name">Forziere Chiuso</div></div>
-    <div class="c64-sprite-card"><pre>OOnOOnOO
-OOOOOOOO
-
- OOOOOO
-OYOYYOYO
-OOOOOOOO
-OOnOOnOO
-NNNNNNNN</pre><div class="name">Forziere Aperto</div></div>
-    <div class="c64-sprite-card"><pre>  YY
- YYYY
-YOYYOY
-YOYYOY
- YYYY
-  YY</pre><div class="name">Oro</div></div>
-    <div class="c64-sprite-card"><pre>  bb
- bWWb
-bWbbWb
- bWWb
-  bb</pre><div class="name">Gemma</div></div>
-    <div class="c64-sprite-card"><pre>  rr
-  rr
- rrrr
-rWWWWr
-rWrrWr
-rWWWWr
- rrrr</pre><div class="name">Pozione Vita</div></div>
-    <div class="c64-sprite-card"><pre>  bb
-  bb
- bbbb
-bWWWWb
-bWbbWb
-bWWWWb
- bbbb</pre><div class="name">Pozione Mana</div></div>
-    <div class="c64-sprite-card"><pre>  nn nnn
- nnnnnn
-nnnrrnnn
- nnnnnn
-  nnnn
-   nn</pre><div class="name">Mercante</div></div>
-    <div class="c64-sprite-card"><pre>  YY
- YYYY
-YOYYOY
-YOYYOY
- YYYY
-  YY</pre><div class="name">Moneta (Icona)</div></div>
-    <div class="c64-sprite-card"><pre>   YY
-  YYR
- YYRR
-YYYYR
-  YRR
-   YR
-  YR
- YR</pre><div class="name">Furia</div></div>
-    <div class="c64-sprite-card"><pre> bbbbbb
-bWWWWWWb
-bWbbbbWb
-bWbbbbWb
- bWbbWb
-  bWWb
-   bb</pre><div class="name">Scudo</div></div>
-    <div class="c64-sprite-card"><pre>    YY
-   YY
-  YY
- YYRRR
-YY  RR
-    R
-   RRR</pre><div class="name">Fretta</div></div>
-    <div class="c64-sprite-card"><pre>  bb
- bWWb
-bWbbWb
- bWWb
-  bb</pre><div class="name">Concentrazione</div></div>
-    <div class="c64-sprite-card"><pre>  nn
- nWWn
-nWnnWn
-nWnnWn
- nWWn
-  nn</pre><div class="name">Rianima</div></div>
-    <div class="c64-sprite-card"><pre>  dddd
- dddddd
-dddddddd
- dKddKd
-  dddd
-   dd</pre><div class="name">Elmo</div></div>
-    <div class="c64-sprite-card"><pre>  OOOO
- O    O
-O  YY  O
-O  YY  O
- O    O
-  OOOO</pre><div class="name">Collana</div></div>
-    <div class="c64-sprite-card"><pre> dddddd
-dddddddd
-ddKddKdd
-dddddddd
- dddddd
- dd  dd</pre><div class="name">Armatura</div></div>
-    <div class="c64-sprite-card"><pre>  OOOO
- O    O
-O  WW  O
- O    O
-  OOOO</pre><div class="name">Anello</div></div>
-    <div class="c64-sprite-card"><pre> dd  dd
- dddd d
- dddd d
- dddddd
- dd  dd
- dd  dd</pre><div class="name">Gambali</div></div>
-  </div>
-
-  <h3>▸ Cosa Cambia</h3>
-  <ul>
-    <li><span style="color:#eeee77;">Muri e pavimento</span> — blocchi piatti colorati con griglia, nessuna texture PNG</li>
-    <li><span style="color:#eeee77;">Tutte le entità</span> — sprite pixel art 8×8 (12×12 per i boss) disegnati con la palette C64</li>
-    <li><span style="color:#eeee77;">Font</span> — "Press Start 2P" ovunque (login, HUD, toast, log, minimap)</li>
-    <li><span style="color:#eeee77;">HUD</span> — barre vita/mana viola-rosso, testo giallo, bordi quadrati</li>
-    <li><span style="color:#eeee77;">Illuminazione</span> — glow viola/ciano invece che arancione caldo</li>
-    <li><span style="color:#eeee77;">Torce</span> — colori diversi per ogni torce nella stanza C64</li>
-    <li><span style="color:#eeee77;">Particelle</span> — fluttuano colorate nella stanza speciale</li>
-    <li><span style="color:#eeee77;">Suoni</span> — 15 suoni chiptune (square/triangle wave) via Web Audio API</li>
-    <li><span style="color:#eeee77;">Minimap</span> — colori viola con indicatore stanza C64</li>
-    <li><span style="color:#eeee77;">Scanline</span> — effetto CRT sovrapposto per autenticità</li>
-    <li><span style="color:#eeee77;">Boot screen</span> — emulazione BASIC C64 con loading bar</li>
-    <li><span style="color:#eeee77;">Mostri</span> — ogni mostro ha un colore unico dalla palette C64</li>
-  </ul>
-
-  <div class="c64-note">
-    <strong style="color:#eeee77;">NOTA TECNICA:</strong> La modalità C64 non carica file esterni — tutti gli sprite sono definiti come array ASCII nel codice JavaScript e disegnati su canvas offscreen cachati. Il font "Press Start 2P" viene caricato da Google Fonts. La stanza C64 speciale viene generata casualmente in ogni piano con forziere lilla, torce multicolori e particelle fluttuanti.
-  </div>
-</div>
-<!-- ======== FINE SEZIONE C64 ======== -->
-
 </div><!-- /wrap -->
 
 <div class="footer">
-  ❦ Manuale del Giocatore di ABISSO ❦<br>
+  Ã¢ÂÂ¦ Manuale del Giocatore di ABISSO Ã¢ÂÂ¦<br>
   Roguelike multiplayer in tempo reale, senza server, in un unico file.<br>
-  <a href="index.html">🎮 Torna al gioco</a> · <a href="https://github.com/SancioPanza88/Abisso-2.0">Repository</a> ·
+  <a href="index.html">Ã°Å¸Å½Â® Torna al gioco</a> Ã‚Â· <a href="https://github.com/SancioPanza88/Abisso-2.0">Repository</a> Ã‚Â·
   <a href="https://github.com/SancioPanza88/Abisso-2.0/issues">Segnala un bug</a><br>
   Buona discesa.
 </div>
 
 <script>
-/* ============ Il tomo incantato — effetti e magia ============ */
+/* ============ Il tomo incantato Ã¢â‚¬â€ effetti e magia ============ */
 (function(){
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var RUNES = ['ᛟ','ᛉ','ᚠ','ᚨ','ᚦ','ᛁ','ᛗ','ᛚ','ᛏ','ᛞ','ᛒ','ᛊ','ᚲ','ᚹ'];
+  var RUNES = ['Ã¡â€ºÅ¸','Ã¡â€ºâ€°','Ã¡Å¡Â ','Ã¡Å¡Â¨','Ã¡Å¡Â¦','Ã¡â€ºÂ','Ã¡â€ºâ€”','Ã¡â€ºÅ¡','Ã¡â€ºÂ','Ã¡â€ºÅ¾','Ã¡â€ºâ€™','Ã¡â€ºÅ ','Ã¡Å¡Â²','Ã¡Å¡Â¹'];
 
   /* ---------- copertina: tilt 3D che segue il mouse ---------- */
   var cover = document.getElementById('cover');
@@ -1640,7 +1154,7 @@ O  WW  O
   }
 
   /* ---------- anelli di rune della copertina ---------- */
-  var rChars = 'ᛟᛉᚠᚨᚦᛁᛗᛚᛏᛞᛒᛊ';
+  var rChars = 'Ã¡â€ºÅ¸Ã¡â€ºâ€°Ã¡Å¡Â Ã¡Å¡Â¨Ã¡Å¡Â¦Ã¡â€ºÂÃ¡â€ºâ€”Ã¡â€ºÅ¡Ã¡â€ºÂÃ¡â€ºÅ¾Ã¡â€ºâ€™Ã¡â€ºÅ ';
   function fillRing(el, scale, size){
     if (!el) return;
     var n = rChars.length;

@@ -6,6 +6,7 @@ Roguelike multiplayer in tempo reale, senza server, in un unico file.
 - 🎮 Gioco originale: https://www.youdev.it/games/abisso.html
 - 🚀 Questa versione: https://sanciopanza88.github.io/Abisso-2.0/
 - 📖 Manuale del giocatore: https://sanciopanza88.github.io/Abisso-2.0/manuale.html
+- 🕹️ Manuale C64 (easter egg): https://sanciopanza88.github.io/Abisso-2.0/manuale-c64.html
 
 ## Come si gioca
 
@@ -32,6 +33,7 @@ Roguelike multiplayer in tempo reale, senza server, in un unico file.
 - **Flash di danno**: lo schermo si tinge di rosso dal lato da cui arriva il colpo.
 - **Multiplayer più affidabile**: connessioni più stabili, e se due mondi si dividono si ricongiungono da soli.
 - **Qualità della vita**: barra HP nuova con flash, toast di benvenuto, abilità di classe, pozioni di mana, clic sullo zoom per azzerarlo, pulsanti d'interazione per il touch.
+- **Modalità C64** (easter egg): scrivi "64" o "c64" come nome della stanza per attivare la modalità Commodore 64 — boot screen, palette 16 colori, sprite pixel art 8×8, suoni chiptune, font "Press Start 2P", scanline CRT. Manuale dedicato: [manuale-c64.html](manuale-c64.html).
 
 ## Eroi giocabili
 

@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABYSS 64 — Manuale del Giocatore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --c64-bg:#40318D;
+    --c64-bg2:#2a1f5e;
+    --c64-border:#6C5EB5;
+    --c64-border-dim:#5045a0;
+    --c64-yellow:#eeee77;
+    --c64-cyan:#aaffee;
+    --c64-purple:#cc44cc;
+    --c64-green:#00cc55;
+    --c64-blue:#0000aa;
+    --c64-red:#880000;
+    --c64-orange:#dd8855;
+    --c64-brown:#664400;
+    --c64-lightred:#ff7777;
+    --c64-darkgray:#333;
+    --c64-gray:#777;
+    --c64-lightgreen:#aaff66;
+    --c64-lightblue:#0088ff;
+    --c64-lightgray:#bbb;
+    --c64-white:#fff;
+    --c64-black:#000;
+    --font-c64:"Press Start 2P","Courier New","Courier",monospace;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  ::selection{ background:rgba(204,68,204,.4); color:#eeee77; }
+  body{
+    background:var(--c64-bg);
+    color:var(--c64-cyan);
+    font-family:var(--font-c64);
+    font-size:13px;
+    line-height:2.0;
+    overflow-x:hidden;
+  }
+  body::after{
+    content:''; position:fixed; inset:0; z-index:100; pointer-events:none;
+    background:repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.12) 2px 4px);
+  }
+
+  /* ---- SCROLLBAR ---- */
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:var(--c64-bg2); }
+  ::-webkit-scrollbar-thumb{ background:var(--c64-border); border:2px solid var(--c64-bg2); }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--c64-yellow); }
+
+  /* ---- PROGRESS BAR ---- */
+  #progress{
+    position:fixed; top:0; left:0; height:3px; width:0%; z-index:90;
+    background:linear-gradient(90deg, var(--c64-border), var(--c64-yellow) 50%, var(--c64-cyan));
+    box-shadow:0 0 12px rgba(238,238,119,.65);
+  }
+
+  /* ---- TO TOP ---- */
+  #to-top{
+    position:fixed; right:18px; bottom:18px; z-index:80;
+    width:44px; height:44px; border-radius:0;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--c64-bg2); border:2px solid var(--c64-border);
+    color:var(--c64-yellow); font-family:var(--font-c64); font-size:14px;
+    opacity:0; pointer-events:none; cursor:pointer;
+    transition:opacity .3s, border-color .2s;
+  }
+  #to-top.show{ opacity:1; pointer-events:auto; }
+  #to-top:hover{ border-color:var(--c64-yellow); }
+
+  /* ---- WRAP ---- */
+  .wrap{ position:relative; z-index:2; max-width:960px; margin:0 auto; padding:20px 16px 80px; }
+
+  /* ---- COVER ---- */
+  .cover{
+    position:relative; z-index:2;
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:40px 20px;
+    background:radial-gradient(700px 400px at 50% 50%, rgba(108,94,181,.25), transparent 65%),
+      var(--c64-bg);
+    border-bottom:3px solid var(--c64-border);
+  }
+  .cover h1{
+    font-family:var(--font-c64); font-size:42px; color:var(--c64-yellow);
+    text-shadow:3px 3px 0 var(--c64-purple), 6px 6px 0 rgba(0,0,0,.4);
+    letter-spacing:6px; margin-bottom:8px;
+    animation:titlePulse 3s ease-in-out infinite;
+  }
+  @keyframes titlePulse{
+    0%,100%{ text-shadow:3px 3px 0 var(--c64-purple), 6px 6px 0 rgba(0,0,0,.4); }
+    50%{ text-shadow:3px 3px 0 var(--c64-purple), 6px 6px 0 rgba(0,0,0,.4), 0 0 30px rgba(238,238,119,.4); }
+  }
+  .cover .subtitle{
+    font-size:11px; color:var(--c64-cyan); margin-top:12px;
+    text-shadow:1px 1px 0 var(--c64-bg2);
+  }
+  .cover .blink{
+    animation:blink .8s step-end infinite;
+  }
+  @keyframes blink{ 0%,100%{ opacity:1; } 50%{ opacity:0; } }
+  .cover .boot-text{
+    margin-top:40px; text-align:left; font-size:10px;
+    color:var(--c64-yellow); background:rgba(0,0,0,.4);
+    padding:16px 20px; border:2px solid var(--c64-border);
+    max-width:500px; width:100%; line-height:2.2;
+  }
+  .cover .boot-text .cursor{ animation:blink .6s step-end infinite; }
+  .cover .load-bar{
+    margin-top:16px; width:100%; max-width:500px; height:12px;
+    border:2px solid var(--c64-yellow); background:var(--c64-bg2);
+    position:relative; overflow:hidden;
+  }
+  .cover .load-fill{
+    position:absolute; left:0; top:0; height:100%; width:0%;
+    background:var(--c64-yellow);
+    animation:loadFill 2.5s ease-in-out forwards;
+  }
+  @keyframes loadFill{ 0%{ width:0%; } 100%{ width:100%; } }
+
+  /* ---- TOC ---- */
+  .toc{
+    margin:40px 0; padding:20px;
+    border:3px solid var(--c64-border); background:rgba(42,31,94,.5);
+  }
+  .toc h2{ color:var(--c64-yellow); font-size:14px; margin-bottom:16px; text-align:center; letter-spacing:2px; }
+  .toc-row{
+    display:flex; align-items:baseline; padding:6px 0;
+    border-bottom:1px solid var(--c64-border-dim);
+    font-size:11px;
+  }
+  .toc-row .chap{ color:var(--c64-yellow); min-width:50px; }
+  .toc-row a{ color:var(--c64-cyan); text-decoration:none; flex:1; }
+  .toc-row a:hover{ color:var(--c64-yellow); text-decoration:underline; }
+
+  /* ---- CHAPTER ---- */
+  .chapter{
+    margin:30px 0; padding:24px 20px;
+    border:3px solid var(--c64-border);
+    background:rgba(42,31,94,.35);
+    position:relative; overflow:hidden;
+  }
+  .chapter .badge{
+    position:absolute; top:0; right:0;
+    background:var(--c64-yellow); color:var(--c64-bg);
+    font-size:9px; padding:6px 10px;
+    font-family:var(--font-c64);
+  }
+  .chapter h2{
+    color:var(--c64-yellow); font-size:16px; margin-bottom:16px;
+    text-transform:uppercase; letter-spacing:3px;
+    text-shadow:2px 2px 0 var(--c64-bg2);
+  }
+  .chapter p{
+    margin:10px 0; font-size:11px; line-height:2.2;
+  }
+  .chapter p.drop::first-letter{
+    color:var(--c64-yellow); font-size:18px;
+  }
+  .chapter ul{ list-style:none; padding-left:0; margin:10px 0; }
+  .chapter ul li{
+    padding:4px 0 4px 20px; position:relative; font-size:11px;
+  }
+  .chapter ul li::before{
+    content:'▶'; position:absolute; left:0; color:var(--c64-yellow);
+    font-size:8px; top:7px;
+  }
+  .chapter b{ color:var(--c64-yellow); }
+
+  /* ---- TABLE ---- */
+  table{
+    width:100%; border-collapse:collapse; margin:14px 0; font-size:10px;
+  }
+  th{
+    background:var(--c64-bg2); color:var(--c64-yellow);
+    padding:8px 6px; text-align:left;
+    border:2px solid var(--c64-border);
+    font-family:var(--font-c64); font-size:9px;
+  }
+  td{
+    padding:7px 6px; border:1px solid var(--c64-border-dim);
+    font-size:10px;
+  }
+  tr:nth-child(even) td{ background:rgba(42,31,94,.25); }
+  tr:hover td{ background:rgba(108,94,181,.15); }
+  td img{ vertical-align:middle; margin-right:6px; width:24px; height:24px; image-rendering:pixelated; }
+
+  /* ---- TIP / WARN / NOTE ---- */
+  .tip,.warn,.note{
+    margin:14px 0; padding:12px 14px;
+    border:2px solid var(--c64-border-dim);
+    font-size:10px;
+  }
+  .tip{ border-color:var(--c64-green); background:rgba(0,204,85,.08); }
+  .tip::before{ content:'💡 '; }
+  .warn{ border-color:var(--c64-orange); background:rgba(221,136,85,.08); }
+  .warn::before{ content:'⚠ '; }
+  .note{ border-color:var(--c64-lightblue); background:rgba(0,136,255,.08); }
+  .note::before{ content:'ℹ '; }
+
+  /* ---- KEYBOARD ---- */
+  kbd{
+    display:inline-block; padding:2px 6px;
+    background:var(--c64-bg2); border:2px solid var(--c64-border);
+    color:var(--c64-yellow); font-family:var(--font-c64); font-size:9px;
+    vertical-align:middle;
+  }
+
+  /* ---- TWO COL ---- */
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media(max-width:640px){ .two-col{ grid-template-columns:1fr; } }
+
+  /* ---- BEAST (monster card) ---- */
+  .beast{
+    display:flex; align-items:center; gap:10px;
+    padding:8px 10px; margin:6px 0;
+    border:1px solid var(--c64-border-dim); background:rgba(42,31,94,.3);
+  }
+  .beast img{ width:28px; height:28px; image-rendering:pixelated; }
+  .beast .b-name{ color:var(--c64-yellow); font-size:10px; }
+  .beast .b-info{ color:var(--c64-cyan); font-size:9px; margin-top:2px; }
+
+  /* ---- PALETTE ---- */
+  .palette{ display:flex; flex-wrap:wrap; gap:6px; margin:14px 0; }
+  .swatch{ width:32px; height:32px; border:2px solid var(--c64-border); display:inline-block; }
+  .swatch-label{ color:var(--c64-cyan); font-size:8px; text-align:center; margin-top:2px; }
+
+  /* ---- SPRITE CARDS ---- */
+  .sprite-row{ display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
+  .sprite-card{
+    background:rgba(42,31,94,.5); border:2px solid var(--c64-border);
+    padding:10px; text-align:center; min-width:90px;
+  }
+  .sprite-card pre{
+    color:var(--c64-yellow); font-size:9px; line-height:1.1;
+    letter-spacing:2px; margin:0;
+  }
+  .sprite-card .name{ color:var(--c64-cyan); font-size:9px; margin-top:6px; }
+
+  /* ---- CODE BLOCK ---- */
+  .code{
+    background:rgba(0,0,0,.4); border:2px solid var(--c64-border);
+    padding:12px; color:var(--c64-cyan); font-family:var(--font-c64);
+    font-size:10px; white-space:pre; overflow-x:auto; margin:12px 0;
+  }
+
+  /* ---- ORNAMENT ---- */
+  .orn{ text-align:center; color:var(--c64-yellow); font-size:12px; margin:20px 0; letter-spacing:8px; }
+
+  /* ---- FOOTER ---- */
+  .footer{
+    text-align:center; padding:30px 20px; font-size:9px; color:var(--c64-gray);
+    border-top:3px solid var(--c64-border); margin-top:40px;
+  }
+  .footer a{ color:var(--c64-cyan); text-decoration:none; }
+  .footer a:hover{ color:var(--c64-yellow); }
+</style>
+</head>
+<body>
+
+<!-- ======== COVER ======== -->
+<div class="cover">
+  <h1>ABYSS 64</h1>
+  <div class="subtitle">MANUALE DEL GIOCATORE — COMMODORE 64 EDITION</div>
+  <div class="boot-text">
+<span id="boot-line1">    *** ABYSS 64 BASIC V2.0 ***</span><br>
+<span id="boot-line2">    64K RAM SYSTEM  38911 BASIC BYTES FREE</span><br>
+<br>
+<span id="boot-line3">LOADING ABYSS.PRG...</span><br>
+<span id="boot-line4">READY.</span><br>
+<span id="boot-line5">RUN<span class="cursor">█</span></span>
+  </div>
+  <div class="load-bar"><div class="load-fill"></div></div>
+</div>
+
+<div class="wrap">
+
+<!-- ======== TOC ======== -->
+<div class="toc">
+  <h2>♦ INDICE ♦</h2>
+  <div class="toc-row"><span class="chap">I</span><a href="#c1">La Storia</a></div>
+  <div class="toc-row"><span class="chap">II</span><a href="#c2">Il Mundo dell'Abisso</a></div>
+  <div class="toc-row"><span class="chap">III</span><a href="#c3">Le Regole</a></div>
+  <div class="toc-row"><span class="chap">IV</span><a href="#c4">Le Nove Classi</a></div>
+  <div class="toc-row"><span class="chap">V</span><a href="#c5">Le Creature dell'Abisso</a></div>
+  <div class="toc-row"><span class="chap">VI</span><a href="#c6">I Sei Boss</a></div>
+  <div class="toc-row"><span class="chap">VII</span><a href="#c7">L'Arte del Combattimento</a></div>
+  <div class="toc-row"><span class="chap">VIII</span><a href="#c8">Esplorazione</a></div>
+  <div class="toc-row"><span class="chap">IX</span><a href="#c9">Equipaggiamento</a></div>
+  <div class="toc-row"><span class="chap">X</span><a href="#c10">Potenziamenti</a></div>
+  <div class="toc-row"><span class="chap">XI</span><a href="#c11">Il Mercante</a></div>
+  <div class="toc-row"><span class="chap">XII</span><a href="#c12">La Morte e per Sempre</a></div>
+  <div class="toc-row"><span class="chap">XIII</span><a href="#c13">Compagnia nell'Ombra</a></div>
+  <div class="toc-row"><span class="chap">XIV</span><a href="#c14">Segreti e Consigli</a></div>
+  <div class="toc-row"><span class="chap">XV</span><a href="#c15">Modalita C64</a></div>
+</div>
+
+<!-- ================= I ================= -->
+<div class="chapter" id="c1">
+  <span class="badge">I</span>
+  <h2>La Storia</h2>
+  <p class="drop">Nel cuore della terra, dove la luce non arriva, si apre l'<b>Abisso</b> — un labirinto
+  infinito di stanze oscure, mostri affamati e tesori dimenticati. Dall'ultimo albero del mondo,
+  da una radice millenaria, i primi eroi scesero per curare una foresta morente. Nessuno e mai tornato.</p>
+  <p>Oggi, nuovi avventurieri calano nella oscurita, con la speranza di sopravvivere, trovare
+  la cura e — forse — scoprire cosa si nasconde oltre il trentesimo piano.</p>
+  <p>Ma l'Abisso ha le sue regole: <b>morte e per sempre</b>. Nessuna seconda chance.</p>
+</div>
+
+<!-- ================= II ================= -->
+<div class="chapter" id="c2">
+  <span class="badge">II</span>
+  <h2>Il Mondo dell'Abisso</h2>
+  <p class="drop">Ogni mondi e un mondo <b>condiviso e persistente</b>: stessa stanza, stesso labirinto.
+  Fino a 8 avventurieri si muovono nello stesso mondo, combattono gli stessi mostri, raccolgono
+  gli stessi tesori.</p>
+  <ul>
+    <li><b>La stanza</b> e il codice del mondo — condividilo con gli amici.</li>
+    <li><b>Ogni piano</b> e un nuovo labirinto generato proceduralmente.</li>
+    <li><b>La nebbia di guerra</b> nasconde le zone inesplorate.</li>
+    <li><b>Le scale</b> portano al piano successivo — piu si scende, piu e pericoloso.</li>
+    <li><b>La zona d'ingresso</b> e sicura: i mostri non entrano.</li>
+  </ul>
+</div>
+
+<!-- ================= III ================= -->
+<div class="chapter" id="c3">
+  <span class="badge">III</span>
+  <h2>Le Regole</h2>
+  <p class="drop">L'Abisso non perdona. Ecco le regole fondamentali:</p>
+  <ul>
+    <li><b>Permadesu</b> — muori e perdi tutto: oro, pozioni, potenziamenti, equipaggiamento.</li>
+    <li><b>Non si scappa</b> — non esiste un pulsante per uscire dal gioco.</li>
+    <li><b>Gli amici ti salvano</b> — un compagno puo rianimarti premendo <kbd>E</kbd>.</li>
+    <li><b>L'oro non vale nulla nella tomba</b> — spendilo prima di morire.</li>
+    <li><b>La nebbia non mente</b> — quello che vedi e quello che hai esplorato.</li>
+  </ul>
+</div>
+
+<!-- ================= IV ================= -->
+<div class="chapter" id="c4">
+  <span class="badge">IV</span>
+  <h2>Le Nove Classi</h2>
+  <p class="drop">Nove eroi, nove destini. Chi colpisce da vicino, chi scaglia energia da lontano,
+  chi ispira i compagni. Ogni classe ha la propria arma, velocita e <b>abilita speciale</b> (tasto F).</p>
+  <table>
+    <tr><th>Classe</th><th>HP</th><th>Vel</th><th>Danno</th><th>Ruolo</th><th>Abilita (F)</th></tr>
+    <tr><td><img src="assets/sprites/hero_guerriero.png" alt=""> Guerriero</td><td>16</td><td>3.6</td><td>3-6</td><td>Corpo a corpo</td><td><b>Carica</b> — scatta avanti travolgendo i nemici</td></tr>
+    <tr><td><img src="assets/sprites/hero_ladro.png" alt=""> Ladro</td><td>10</td><td>4.6</td><td>2-4</td><td>Schermitore veloce (28% critico)</td><td><b>Passo Furtivo</b> — balza sul nemico con colpo critico garantito</td></tr>
+    <tr><td><img src="assets/sprites/hero_mago.png" alt=""> Mago</td><td>9</td><td>3.2</td><td>4-8</td><td>Attacchi a distanza (mana)</td><td><b>Onda d'Urto</b> — esplosione arcana intorno a te</td></tr>
+    <tr><td><img src="assets/sprites/hero_ranger.png" alt=""> Ranger</td><td>11</td><td>3.9</td><td>2-5</td><td>Arciere a lunga gittata</td><td><b>Raffica</b> — ventaglio di frecce</td></tr>
+    <tr><td><img src="assets/sprites/hero_paladino.png" alt=""> Paladino</td><td>18</td><td>3.3</td><td>3-5</td><td>Tank sacro</td><td><b>Muro Sacro</b> — scudo divino: -50% danno per 5s</td></tr>
+    <tr><td><img src="assets/sprites/hero_negromante.png" alt=""> Negromante</td><td>10</td><td>3.2</td><td>4-7</td><td>Scintille d'anima (mana)</td><td><b>Drenaggio d'Anima</b> — danneggia i vicini e ti cura</td></tr>
+    <tr><td><img src="assets/sprites/hero_bardo.png" alt=""> Bardo</td><td>12</td><td>4.0</td><td>2-4</td><td>Rapier veloce (15% critico)</td><td><b>Canto d'Ispirazione</b> — +40% danno per 8s</td></tr>
+    <tr><td><img src="assets/sprites/hero_monaco.png" alt=""> Monaco</td><td>14</td><td>4.4</td><td>3-5</td><td>Pugni fulminei (20% critico)</td><td><b>Onda di Chi</b> — energia che perfora i nemici</td></tr>
+    <tr><td><img src="assets/speciali/prof.png" alt=""> Prof</td><td>22</td><td>3.6</td><td>5-9</td><td>Fucile al plasma a distanza</td><td><b>Colpo Caricato</b> — 0.8s di carica, danno ~doppio</td></tr>
+  </table>
+  <p>I <b>maghi</b> e i <b>negromanti</b> consumano mana a ogni colpo (2 di mana per attacco):
+  tienilo d'occhio, le pozioni di mana (<kbd>R</kbd>) esistono per questo.</p>
+</div>
+
+<!-- ================= V ================= -->
+<div class="chapter" id="c5">
+  <span class="badge">V</span>
+  <h2>Le Creature dell'Abisso</h2>
+  <p class="drop">Diciassette famiglie di nemici popolano i piani. Quelle piu grandi e maligne
+  hanno un <b>atteggiamento</b> (aggro) piu ampio: ti notano da piu lontano.</p>
+  <div class="two-col">
+    <div>
+      <div class="beast"><img src="assets/sprites/mon_ratto.png" alt=""><div><div class="b-name">Ratto</div><div class="b-info">HP 7 · Danno 2 · Lento e timido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_pipistrello.png" alt=""><div><div class="b-name">Pipistrello</div><div class="b-info">HP 8 · Danno 2 · Volteggia rapido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_goblin.png" alt=""><div><div class="b-name">Goblin</div><div class="b-info">HP 14 · Danno 3 · Sporadico</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_melma.png" alt=""><div><div class="b-name">Melma</div><div class="b-info">HP 9 · Danno 2 · Lenta, si divide</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_gelatina.png" alt=""><div><div class="b-name">Gelatina</div><div class="b-info">HP 22 · Danno 3 · La melma grande</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_scheletro.png" alt=""><div><div class="b-name">Scheletro</div><div class="b-info">HP 20 · Danno 4 · Il ritorno dei caduti</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_orco.png" alt=""><div><div class="b-name">Orco</div><div class="b-info">HP 32 · Danno 6 · Massiccio e lento</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_zombie.png" alt=""><div><div class="b-name">Zombie</div><div class="b-info">HP 26 · Danno 5 · Lento, inarrestabile</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_ragno.png" alt=""><div><div class="b-name">Ragno Gigante</div><div class="b-info">HP 24 · Danno 5 · Veloce</div></div></div>
+    </div>
+    <div>
+      <div class="beast"><img src="assets/sprites/mon_spettro.png" alt=""><div><div class="b-name">Spettro</div><div class="b-info">HP 28 · Danno 6 · Passa attraverso tutto</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_serpente.png" alt=""><div><div class="b-name">Serpente</div><div class="b-info">HP 10 · Danno 2 · Striscia rapido</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_arpia.png" alt=""><div><div class="b-name">Arpia</div><div class="b-info">HP 9 · Danno 2 · Sfiora e fugge</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_cavaliere.png" alt=""><div><div class="b-name">Cavaliere Caduto</div><div class="b-info">HP 26 · Danno 5 · Armatura antica</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_cultista.png" alt=""><div><div class="b-name">Cultista</div><div class="b-info">HP 18 · Danno 4 · Mistico, pericoloso</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_mantide.png" alt=""><div><div class="b-name">Mantide Abissale</div><div class="b-info">HP 22 · Danno 4 · Balzi rapidi</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_sciamano.png" alt=""><div><div class="b-name">Sciamano Goblin</div><div class="b-info">HP 20 · Danno 4 · Lancia maledizioni</div></div></div>
+      <div class="beast"><img src="assets/sprites/mon_golem.png" alt=""><div><div class="b-name">Golem di Roccia</div><div class="b-info">HP 40 · Danno 7 · Pestone devastante</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= VI ================= -->
+<div class="chapter" id="c6">
+  <span class="badge">VI</span>
+  <h2>I Sei Boss</h2>
+  <p class="drop">Ogni cinque piani, l'Abisso custodisce un <b>Signore della tana</b>. La sua arena e
+  un'unica stanza isolata: quando entri i <b>cancelli si chiudono</b>. Non si scappa.
+  Se vinci, il <b>forziere leggendario</b> della tana si apre.</p>
+  <table>
+    <tr><th>Piano</th><th>Boss</th><th>HP</th><th>Firme della tana</th></tr>
+    <tr><td>5</td><td><img src="assets/sprites/mon_drago.png" alt=""> <b>Drago Minore</b></td><td>120</td><td>L'unico che vola: soffio di fuoco a cono, palle di fuoco, picchiata dal cielo con telegrafo</td></tr>
+    <tr><td>10</td><td><img src="assets/sprites/boss_golem.png" alt=""> <b>Golem di Pietra</b></td><td>150</td><td>Non vola: pestone con onda d'urto radiale e clava di roccia lanciata</td></tr>
+    <tr><td>15</td><td><img src="assets/sprites/boss_lich.png" alt=""> <b>Lich Signore dei Nonmorti</b></td><td>135</td><td>Evoca servitori scheletrici, proiettili di energia arcana</td></tr>
+    <tr><td>20</td><td><img src="assets/sprites/boss_melme.png" alt=""> <b>Regina delle Melme</b></td><td>130</td><td>Sputa melma acida, evoca melme, rigenera</td></tr>
+    <tr><td>25</td><td><img src="assets/sprites/boss_ragno.png" alt=""> <b>Re Ragno</b></td><td>140</td><td>Tela velenosa, morso che avvelena</td></tr>
+    <tr><td>30</td><td><img src="assets/sprites/boss_ratti.png" alt=""> <b>Re dei Ratti</b></td><td>120</td><td>Evoca orde di ratti, carica, ondata di ratti dal soffio</td></tr>
+  </table>
+  <p>Oltre il piano 30 la ruota gira di nuovo: il piano 35 ospita un altro Drago Minore, il 40 un
+  altro Golem, e cosi via — sempre piu affamati.</p>
+</div>
+
+<!-- ================= VII ================= -->
+<div class="chapter" id="c7">
+  <span class="badge">VII</span>
+  <h2>L'Arte del Combattimento</h2>
+  <p class="drop">L'attacco di base mira <b>automaticamente</b> al nemico piu vicino dentro la tua
+  gittata: tu ti occupi di posizione e ritmo.</p>
+  <ul>
+    <li><b>Critico:</b> Ladro (28%), Monaco (20%) e Bardo (15%) possono infliggere colpi critici.</li>
+    <li><b>Mana:</b> Mago e Negromante consumano 2 di mana per attacco e piu mana per l'abilita.
+    Senza mana l'attacco a distanza si fa piu debole.</li>
+    <li><b>Telegrafi:</b> le mosse pericolose (soffio, carica, pestone, picchiata) vengono
+    annunciate da anelli che si contraggono e bagliori colorati sul terreno.</li>
+    <li><b>Aggro:</b> ogni creatura ha un raggio d'attenzione. I nemici ignorati dopo un po'
+    smettono di inseguirti.</li>
+    <li><b>Schermo rosso:</b> quando subisci un colpo lo schermo si tinge di rosso dal lato
+    da cui arriva il danno.</li>
+  </ul>
+</div>
+
+<!-- ================= VIII ================= -->
+<div class="chapter" id="c8">
+  <span class="badge">VIII</span>
+  <h2>Esplorazione</h2>
+  <p class="drop">L'Abisso e avvolto dalla <b>nebbia di guerra</b>: vedi solo le zone che hai gia
+  esplorato. Le stanze sono illuminate da <b>torce tremolanti</b>.</p>
+  <ul>
+    <li><b>Forzieri:</b> tante casse di legno sparse per i piani. Avvicinati e premi <kbd>E</kbd>:
+    oro, pozioni, potenziamenti o equipaggiamento a sorte.</li>
+    <li><b>Scale:</b> la via verso il basso. Premi <kbd>E</kbd>
+    per scendere al piano successivo. Ogni piano viene rigenerato.</li>
+    <li><b>Minimappa:</b> premendo <kbd>M</kbd> vedi le zone esplorate, le scale, i
+    forzieri rimasti, il mercante e la posizione dei compagni.</li>
+    <li><b>Frecce ai bordi:</b> quando un compagno e fuori schermo, una freccia al bordo indica la
+    sua direzione. Lo stesso vale per i <b>boss</b>.</li>
+    <li><b>Prima persona:</b> con <kbd>V</kbd> passi alla visuale in prima persona
+    (stile Doom): l'arma della tua classe appare in mano.</li>
+  </ul>
+</div>
+
+<!-- ================= IX ================= -->
+<div class="chapter" id="c9">
+  <span class="badge">IX</span>
+  <h2>Equipaggiamento</h2>
+  <p class="drop">Sotto l'Abisso si trovano cinque tipi di equipaggiamento. A differenza dei
+  potenziamenti, restano <b>permanenti</b> finche non trovi qualcosa di meglio nello stesso slot.
+  Si equipaggiano da soli camminandoci sopra.</p>
+  <table>
+    <tr><th>Slot</th><th>Oggetto</th><th>Cosa migliora</th></tr>
+    <tr><td><img src="assets/sprites/equip_helm.png" alt=""> Elmo</td><td>Caschetto</td><td rowspan="5">Statistiche casuali tra: salute extra, % danno, % velocita, % danno subito in meno</td></tr>
+    <tr><td><img src="assets/sprites/equip_necklace.png" alt=""> Collana</td><td>Monile</td></tr>
+    <tr><td><img src="assets/sprites/equip_armor.png" alt=""> Armatura</td><td>Corazza</td></tr>
+    <tr><td><img src="assets/sprites/equip_ring.png" alt=""> Anello</td><td>Forellino</td></tr>
+    <tr><td><img src="assets/sprites/equip_greaves.png" alt=""> Gambali</td><td>Uoseri</td></tr>
+  </table>
+  <p>Quattro <b>rarita</b>, piu rara = piu statistiche e piu forti:</p>
+  <table>
+    <tr><th>Rarita</th><th>Statistiche</th><th>Potenza</th></tr>
+    <tr><td><b style="color:#b8b8b8">Comune</b></td><td>1</td><td>x1.0</td></tr>
+    <tr><td><b style="color:#5fa0c9">Raro</b></td><td>1</td><td>x1.35</td></tr>
+    <tr><td><b style="color:#b06bf2">Epico</b></td><td>2</td><td>x1.6</td></tr>
+    <tr><td><b style="color:#ff9d2e">Leggendario</b></td><td>3</td><td>x2.2</td></tr>
+  </table>
+  <p>Piu scendi in profondita, piu le rarita alte diventano comuni. Il forziere dei boss rilascia
+  solo pezzi <b>epici o leggendari</b>.</p>
+</div>
+
+<!-- ================= X ================= -->
+<div class="chapter" id="c10">
+  <span class="badge">X</span>
+  <h2>Potenziamenti</h2>
+  <p class="drop">Benedizioni temporanee che si raccolgono da terra o si comprano dal mercante.
+  Durano pochi secondi: il momento in cui le usi conta quanto il momento in cui le trovi.</p>
+  <div class="beast"><img src="assets/sprites/furia.png" alt=""><div><div class="b-name">Furia</div><div class="b-info">+40% danno per 12 secondi. Da attivare prima dell'assalto, non dopo.</div></div></div>
+  <div class="beast"><img src="assets/sprites/icon_shield_buff.png" alt=""><div><div class="b-name">Scudo</div><div class="b-info">-50% danno subito per 10 secondi. La salvezza nelle tane dei boss.</div></div></div>
+  <div class="beast"><img src="assets/sprites/potenziamento_fretta.png" alt=""><div><div class="b-name">Fretta</div><div class="b-info">+40% velocita per 12 secondi. Per chiudere le distanze o fuggire.</div></div></div>
+  <div class="beast"><img src="assets/sprites/powerupfocus.png" alt=""><div><div class="b-name">Concentrazione</div><div class="b-info">-50% tempo di recupero dell'attacco per 10 secondi. La raffica di danno.</div></div></div>
+</div>
+
+<!-- ================= XI ================= -->
+<div class="chapter" id="c11">
+  <span class="badge">XI</span>
+  <h2>Il Mercante</h2>
+  <p class="drop">Nel santuario della zona d'ingresso, il <b>mercante</b> attende chi ha oro in
+  tasca — e sa bene che non lo terraa a lungo. Avvicinati e premi <kbd>E</kbd> (o
+  clicca sulla scritta) per aprire il banco.</p>
+  <table>
+    <tr><th>Merce</th><th>Prezzo</th></tr>
+    <tr><td>Pozione di salute</td><td>12 + 2 x piano</td></tr>
+    <tr><td>Pozione di mana</td><td>12 + 2 x piano</td></tr>
+    <tr><td>Potenziamento casuale</td><td>20 + 4 x piano</td></tr>
+    <tr><td>Equipaggiamento a sorte</td><td>45 + 8 x piano</td></tr>
+  </table>
+  <p>I prezzi crescono con la profondita: l'oro e abbondante nei piani bassi, ma le cose belle
+  costano care. L'equipaggiamento comprato e casuale: puo essere un comune... o un leggendario.</p>
+</div>
+
+<!-- ================= XII ================= -->
+<div class="chapter" id="c12">
+  <span class="badge">XII</span>
+  <h2>La Morte e per Sempre</h2>
+  <p class="drop">Quando la tua salute tocca lo zero non muori subito: <b>cadi a terra</b>. Per
+  ventidue secondi giaci al suolo, in balia dell'oscurita — e dei compagni.</p>
+  <ul>
+    <li><b>Rianimazione:</b> un compagno puo salvarti premendo e tenendo <kbd>E</kbd>
+    vicino al tuo corpo. Un alleato vale piu di qualsiasi pozione.</li>
+    <li><b>La fine:</b> se nessuno ti rianima entro il tempo limite — o se vieni colpito di nuovo
+    mentre sei a terra — e la fine.</li>
+    <li><b>Permadeath:</b> perdi <b>tutto</b>: oro, pozioni, potenziamenti ed equipaggiamento.
+    Resta solo il <b>record</b> (il miglior oro e il piano raggiunto in questo mondo).</li>
+  </ul>
+</div>
+
+<!-- ================= XIII ================= -->
+<div class="chapter" id="c13">
+  <span class="badge">XIII</span>
+  <h2>Compagnia nell'Ombra</h2>
+  <p class="drop">L'Abisso e un mondo <b>condiviso e persistente</b>: stesso codice stanza, stesso
+  mondo. Fino a 8 avventurieri si muovono nello stesso labirinto, si vedono, si aiutano — e si
+  dividono il bottino delle tane.</p>
+  <ul>
+    <li><b>Chat:</b> <kbd>Invio</kbd> apre la chat; i messaggi appaiono come bolle
+    sopra i personaggi.</li>
+    <li><b>Vocale:</b> il pulsante microfono accanto a "Nel mondo" attiva il microfono: parla con i compagni.</li>
+    <li><b>Host del mondo:</b> il primo che crea la stanza ne e il custode; se se ne va, il custode
+    passa a un altro.</li>
+    <li><b>Copia link:</b> nel pannello di aiuto c'e il pulsante "Copia link": chiunque lo riceva
+    entra nello stesso abisso.</li>
+    <li><b>Frecce ai bordi e minimappa:</b> non perdere mai di vista i compagni.</li>
+  </ul>
+</div>
+
+<!-- ================= XIV ================= -->
+<div class="chapter" id="c14">
+  <span class="badge">XIV</span>
+  <h2>Segreti e Consigli</h2>
+  <ul>
+    <li><b>Il santuario e casa tua:</b> i mostri non entrano nella zona d'ingresso. Usala per
+    riordinare, comprare e organizzare la discesa.</li>
+    <li><b>Il record non mente:</b> tienilo d'occhio; e la misura della tua discesa piu profonda.</li>
+    <li><b>I telegrafi dei boss:</b> anello che si contrae = esplosione in arrivo. Uscire dalla
+    zona prima dell'impatto e sempre possibile.</li>
+    <li><b>Potenzia prima, affronta dopo:</b> Furia e Concentrazione trasformano un combattimento
+    equilibrato in una vittoria netta. Scudo e Fretta salvano la vita.</li>
+    <li><b>Il forziere del boss:</b> solo dopo la vittoria sulla tana. Epico o leggendario,
+    garantito: vale ogni passo della discesa.</li>
+    <li><b>La prima persona (V)</b> non e solo estetica: nei corridoi stretti la precisione
+    visiva aiuta a incassare meno colpi.</li>
+    <li><b>Il suono avvisa:</b> il gioco genera suoni ed effetti al volo. Attivati, il ruggito
+    di un boss ti salva la vita prima ancora che lo vedi.</li>
+  </ul>
+</div>
+
+<!-- ================= XV ================= -->
+<div class="chapter" id="c15">
+  <span class="badge">XV</span>
+  <h2>Modalita C64</h2>
+  <p class="drop">Un easter egg che trasforma ABISSO in un gioco <b>Commodore 64</b>.
+  Tutto e generato dal codice: sprite pixel art, suoni chiptune, palette ufficiale e boot screen.</p>
+
+  <div class="note">
+    <b>COME ATTIVARLA:</b><br>
+    Scrivi <b>64</b> o <b>c64</b> come nome della stanza nella schermata di login e premi "Entra nell'Abisso".
+    Oppure apri direttamente: <kbd>index.html?room=64</kbd>
+  </div>
+
+  <h2 style="margin-top:20px;">Palette Colori C64</h2>
+  <p>I 16 colori ufficiali del Commodore 64:</p>
+  <div class="palette">
+    <div><div class="swatch" style="background:#000;"></div><div class="swatch-label">Nero</div></div>
+    <div><div class="swatch" style="background:#fff;"></div><div class="swatch-label">Bianco</div></div>
+    <div><div class="swatch" style="background:#880000;"></div><div class="swatch-label">Rosso</div></div>
+    <div><div class="swatch" style="background:#aaffee;"></div><div class="swatch-label">Ciano</div></div>
+    <div><div class="swatch" style="background:#cc44cc;"></div><div class="swatch-label">Viola</div></div>
+    <div><div class="swatch" style="background:#00cc55;"></div><div class="swatch-label">Verde</div></div>
+    <div><div class="swatch" style="background:#0000aa;"></div><div class="swatch-label">Blu</div></div>
+    <div><div class="swatch" style="background:#eeee77;"></div><div class="swatch-label">Giallo</div></div>
+    <div><div class="swatch" style="background:#dd8855;"></div><div class="swatch-label">Arancio</div></div>
+    <div><div class="swatch" style="background:#664400;"></div><div class="swatch-label">Marrone</div></div>
+    <div><div class="swatch" style="background:#ff7777;"></div><div class="swatch-label">R. Chiaro</div></div>
+    <div><div class="swatch" style="background:#333;"></div><div class="swatch-label">G. Scuro</div></div>
+    <div><div class="swatch" style="background:#777;"></div><div class="swatch-label">Grigio</div></div>
+    <div><div class="swatch" style="background:#aaff66;"></div><div class="swatch-label">V. Chiaro</div></div>
+    <div><div class="swatch" style="background:#0088ff;"></div><div class="swatch-label">B. Chiaro</div></div>
+    <div><div class="swatch" style="background:#bbb;"></div><div class="swatch-label">G. Chiaro</div></div>
+  </div>
+
+  <h2 style="margin-top:20px;">Sprite Pixel Art — Eroi</h2>
+  <div class="sprite-row">
+    <div class="sprite-card"><pre>   YY
+   YYYY
+   rr r
+  RRRRRR
+   RRRR
+   R  R
+  RR  RR
+  NN  NN</pre><div class="name">Guerriero</div></div>
+    <div class="sprite-card"><pre>  CCC
+  CCCCC
+   cc c
+   CCCC
+   C  C
+  Cdd dC
+  C    C
+   d  d</pre><div class="name">Ladro</div></div>
+    <div class="sprite-card"><pre>   PP
+   PPPP
+   ww w
+  PPPPPP
+   PPPP
+  P    P
+   PPPP
+  P    P</pre><div class="name">Mago</div></div>
+    <div class="sprite-card"><pre>   GG
+   GGGG
+   nn n
+  GGGGGG
+   GGGG
+   G  G
+  Gdd dG
+   d  d</pre><div class="name">Ranger</div></div>
+    <div class="sprite-card"><pre>   YY
+   YYYY
+   WW W
+ YYYYYYYY
+   YYYY
+  YY  YY
+  YYwwYY
+   d  d</pre><div class="name">Paladino</div></div>
+    <div class="sprite-card"><pre>  KKKK
+  KKKKKK
+   gg g
+ KKKKKKKK
+   KPPK
+  K    K
+   KKKK
+  K    K</pre><div class="name">Negromante</div></div>
+    <div class="sprite-card"><pre>  OOOO
+  OOOOOO
+   YY Y
+ OOOOOOOO
+   OOOO
+  O    O
+  OO  OO
+   d  d</pre><div class="name">Bardo</div></div>
+    <div class="sprite-card"><pre>  NNNN
+  NNNNNN
+   WW W
+ NNNNNNNN
+   NNNN
+  N    N
+   NNNN
+   d  d</pre><div class="name">Monaco</div></div>
+    <div class="sprite-card"><pre>   bb
+   bbbb
+   WW W
+  bbbbbb
+   bbbb
+  b    b
+  bbbbBb
+   d  d</pre><div class="name">Prof</div></div>
+  </div>
+
+  <h2 style="margin-top:20px;">Sprite Pixel Art — Mostri</h2>
+  <div class="sprite-row">
+    <div class="sprite-card"><pre>  nn nn
+  nnnnnn
+   grrg
+   nnnn
+    nn
+   n  n</pre><div class="name">Ratto</div></div>
+    <div class="sprite-card"><pre>  GGGG
+  GGGGGG
+  GrrGG
+  GGGGGG
+   GGGG
+   G  G
+  GG  GG
+   d  d</pre><div class="name">Goblin</div></div>
+    <div class="sprite-card"><pre>  GGGG
+  GGGGGG
+  GrGG rG
+  GGGGGG
+   GrrG
+  GGGGGG
+  GG  GG
+  NN  NN</pre><div class="name">Orco</div></div>
+    <div class="sprite-card"><pre>  wwww
+  wwwwww
+ wwKwwKww
+ wwwwwwww
+ ww UU ww
+  wwwwww
+ w w  w w</pre><div class="name">Spettro</div></div>
+    <div class="sprite-card"><pre>K  KK  K
+ K KK  KK
+   drrd
+  ddddddd
+   dddd
+  d d  d d
+ d  d  d  d</pre><div class="name">Ragno</div></div>
+    <div class="sprite-card"><pre>  GGGG
+  GGGGGG
+ GnGGGnGG
+ GGGGGGGG
+  GrrGG
+   GGGG
+    gg</pre><div class="name">Melma</div></div>
+    <div class="sprite-card"><pre>  bbbb
+  bbbbbb
+ bbWbbWbb
+ bbbbbbbb
+  bbrrbb
+   bbbb
+    bb</pre><div class="name">Gelatina</div></div>
+    <div class="sprite-card"><pre>  wwww
+  wKwwKw
+   wwww
+    ww
+   wwww
+  w w  w
+ w  w  w</pre><div class="name">Scheletro</div></div>
+    <div class="sprite-card"><pre>P      P
+ PP    PP
+ PPPPPPPP
+  rPPPr
+   PPPP
+   P  P</pre><div class="name">Pipistrello</div></div>
+    <div class="sprite-card"><pre>  GGG
+  GGrrG
+   GGGG
+    GGG
+     GG
+      G</pre><div class="name">Serpente</div></div>
+    <div class="sprite-card"><pre>  ww
+  wwwww
+ wKwwKww
+  wwwwww
+   YYYY
+    YY
+   O  O</pre><div class="name">Arpia</div></div>
+    <div class="sprite-card"><pre>  dddd
+  dddddd
+  drr rd
+  ddddd
+   ddd
+  dddd
+  dd dd
+  NN NN</pre><div class="name">Cavaliere</div></div>
+    <div class="sprite-card"><pre>  PPPP
+  PPPPPP
+  PPKKPP
+  PPPPPP
+   PPPP
+   K  K
+  PP  PP
+   d  d</pre><div class="name">Cultista</div></div>
+    <div class="sprite-card"><pre>   GG
+   GGGG
+  GGrrGG
+   GGGG
+  GGGGGG
+ GG    GG
+  G    G
+   G  G</pre><div class="name">Mantide</div></div>
+    <div class="sprite-card"><pre>  OOOO
+  OOOOOO
+  OnrrnO
+  OOOOOO
+   OOOO
+  O    O
+   OOOO
+   N  N</pre><div class="name">Sciamano</div></div>
+    <div class="sprite-card"><pre>  NNNN
+  NNNNNN
+ NNNNNNNN
+ NNKNNKNN
+ NNNNNNNN
+  NNNNNN
+ NNNNNNNN
+ NN    NN</pre><div class="name">Golem</div></div>
+    <div class="sprite-card"><pre>  rrrr
+  rrrrrr
+ rrrrrrrr
+  WrrWWr
+   WWWW
+    ww
+    ww</pre><div class="name">Fungo</div></div>
+  </div>
+
+  <h2 style="margin-top:20px;">Sprite Pixel Art — Boss (12x12)</h2>
+  <div class="sprite-row">
+    <div class="sprite-card"><pre>    PPPP
+    PPPPPP
+   PPPPPPPP
+   PKwKwKPP
+   PPPPPPPP
+   P PUUP PP
+    PPPPPP
+   PPPPPPPP
+  PP PP PP PP
+ PP  PP  PP
+  PP PP PP
+   P    P</pre><div class="name" style="color:#cc44cc;">Lich</div></div>
+    <div class="sprite-card"><pre>    GGGG
+   GGGGGGGG
+  GGGGGGGGGG
+ GGnGGGGGnGGG
+ GGGGGGGGGGGG
+ GGGGrrGGGGGG
+  GGGGGGGGGG
+   GGGGGGGG
+  GGG  GGGGG
+ GG      GGG
+  G        G</pre><div class="name" style="color:#00cc55;">Melme</div></div>
+    <div class="sprite-card"><pre>   NNNNNN
+   NNNNNNNN
+  NNNNNNNNNN
+  NNKNNNKNNN
+  NNNNNNNNNN
+ NNNNNNNNNNNN
+  NNNNNNNNNN
+   NNNNNNNN
+  NNNN NNNN
+ NNNN   NNNN
+ NNN     NNN
+ NN       NN</pre><div class="name" style="color:#664400;">Golem</div></div>
+    <div class="sprite-card"><pre>K
+KK  KKKK  KK
+KKKKrrrrKKKK
+ KKKKKKKKKK
+  KKKKKKKK
+ KK KK KK KK
+KK  KK  KK
+K   KK   K
+    KK
+   KKKK
+  KK  KK</pre><div class="name" style="color:#333;">Ragno</div></div>
+    <div class="sprite-card"><pre> nn nn nn
+nnnnnnnnnnn
+ nrrnnrrnnn
+ nnnnnnnnn
+  nnnnnnn
+ nnn nnn nn
+nn   n   nn
+ n        n</pre><div class="name" style="color:#aaff66;">Ratti</div></div>
+    <div class="sprite-card"><pre>    RRRRRR
+    RRRRRRRR
+   RRRRYRRRR
+  RRRRrrRRRR
+ RRRRRRRRRRRR
+ RRRROORRRRR
+  RRRRRRRRR
+   RRRRRRR
+  RRR  RRRR
+ RRR    RRRR
+ RR      RR
+ R        R</pre><div class="name" style="color:#880000;">Drago</div></div>
+  </div>
+
+  <h2 style="margin-top:20px;">Sprite Pixel Art — Items e Oggetti</h2>
+  <div class="sprite-row">
+    <div class="sprite-card"><pre> OOOOOO
+ OOnOOnOO
+ OOOOOOOO
+ OYOYYOYO
+ OOOOOOOO
+ OOnOOnOO
+ OOOOOOOO
+ NNNNNNNN</pre><div class="name">Forziere</div></div>
+    <div class="sprite-card"><pre>  YY
+  YYYY
+ YOYYOY
+ YOYYOY
+  YYYY
+   YY</pre><div class="name">Oro</div></div>
+    <div class="sprite-card"><pre>  bb
+  bWWb
+ bWbbWb
+  bWWb
+   bb</pre><div class="name">Gemma</div></div>
+    <div class="sprite-card"><pre>  rr
+   rr
+  rrrr
+ rWWWWr
+ rWrrWr
+ rWWWWr
+  rrrr</pre><div class="name">Pozione Vita</div></div>
+    <div class="sprite-card"><pre>  bb
+   bb
+  bbbb
+ bWWWWb
+ bWbbWb
+ bWWWWb
+  bbbb</pre><div class="name">Pozione Mana</div></div>
+    <div class="sprite-card"><pre>  nn nnn
+  nnnnnn
+ nnnrrnnn
+  nnnnnn
+   nnnn
+    nn</pre><div class="name">Mercante</div></div>
+    <div class="sprite-card"><pre>   YY
+   YYR
+  YYRR
+ YYYYR
+   YRR
+    YR
+   YR
+  YR</pre><div class="name">Furia</div></div>
+    <div class="sprite-card"><pre> bbbbbb
+bWWWWWWb
+bWbbbbWb
+bWbbbbWb
+ bWbbWb
+  bWWb
+   bb</pre><div class="name">Scudo</div></div>
+    <div class="sprite-card"><pre>    YY
+    YY
+   YY
+  YYRRR
+ YY  RR
+     R
+    RRR</pre><div class="name">Fretta</div></div>
+    <div class="sprite-card"><pre>  nn
+  nWWn
+ nWnnWn
+ nWnnWn
+  nWWn
+   nn</pre><div class="name">Rianima</div></div>
+    <div class="sprite-card"><pre>  dddd
+  dddddd
+ dddddddd
+  dKddKd
+   dddd
+    dd</pre><div class="name">Elmo</div></div>
+    <div class="sprite-card"><pre>  OOOO
+  O    O
+ O  YY  O
+ O  YY  O
+  O    O
+   OOOO</pre><div class="name">Collana</div></div>
+    <div class="sprite-card"><pre> dddddd
+ dddddddd
+ ddKddKdd
+ dddddddd
+  dddddd
+  dd  dd</pre><div class="name">Armatura</div></div>
+    <div class="sprite-card"><pre>  OOOO
+  O    O
+ O  WW  O
+  O    O
+   OOOO</pre><div class="name">Anello</div></div>
+    <div class="sprite-card"><pre> dd  dd
+  dddd d
+  dddd d
+  dddddd
+  dd  dd
+  dd  dd</pre><div class="name">Gambali</div></div>
+  </div>
+
+  <h2 style="margin-top:20px;">Cosa Cambia</h2>
+  <ul>
+    <li><b>Muri e pavimento</b> — blocchi piatti colorati con griglia, nessuna texture PNG</li>
+    <li><b>Tutte le entita</b> — sprite pixel art 8x8 (12x12 per i boss) disegnati con la palette C64</li>
+    <li><b>Font</b> — "Press Start 2P" ovunque (login, HUD, toast, log, minimap)</li>
+    <li><b>HUD</b> — barre vita/mana viola-rosso, testo giallo, bordi quadrati</li>
+    <li><b>Illuminazione</b> — glow viola/ciano invece che arancione caldo</li>
+    <li><b>Torce</b> — colori diversi per ogni torce nella stanza C64</li>
+    <li><b>Particelle</b> — fluttuano colorate nella stanza speciale</li>
+    <li><b>Suoni</b> — 15 suoni chiptune (square/triangle wave) via Web Audio API</li>
+    <li><b>Minimap</b> — colori viola con indicatore stanza C64</li>
+    <li><b>Scanline</b> — effetto CRT sovrapposto per autenticita</li>
+    <li><b>Boot screen</b> — emulazione BASIC C64 con loading bar</li>
+    <li><b>Mostri</b> — ogni mostro ha un colore unico dalla palette C64</li>
+  </ul>
+
+  <div class="note">
+    <b>NOTA TECNICA:</b> La modalita C64 non carica file esterni — tutti gli sprite sono definiti come array
+    ASCII nel codice JavaScript e disegnati su canvas offscreen cachati. Il font "Press Start 2P" viene
+    caricato da Google Fonts. La stanza C64 speciale viene generata casualmente in ogni piano con forziere
+    lilla, torce multicolori e particelle fluttuanti.
+  </div>
+
+  <div class="orn">*** FINE ***</div>
+</div>
+
+</div><!-- /wrap -->
+
+<div class="footer">
+  ABYSS 64 — Manuale del Giocatore<br>
+  Roguelike multiplayer in tempo reale, senza server, in un unico file.<br>
+  <a href="index.html">Torna al gioco</a> · <a href="https://github.com/SancioPanza88/Abisso-2.0">Repository</a> ·
+  <a href="https://github.com/SancioPanza88/Abisso-2.0/issues">Segnala un bug</a><br>
+  Buona discesa.
+</div>
+
+<script>
+/* Progress bar */
+(function(){
+  var prog = document.getElementById('progress');
+  var toTop = document.getElementById('to-top');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    if (prog) prog.style.width = p + '%';
+    if (toTop) toTop.classList.toggle('show', h.scrollTop > 500);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  if (toTop) toTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+</script>
+
+</body>
+</html>
