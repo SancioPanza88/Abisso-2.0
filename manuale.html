@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=MedievalSharp&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0e0b07; --bg2:#14100a; --panel:#1a150e;
@@ -635,6 +636,7 @@
   <a class="toc-row" href="#c12"><span class="toc-rune">ᛉ</span><span class="toc-n">XII</span><span class="toc-t">La Morte è per Sempre</span><span class="toc-d">Permadeath e rianimazione</span></a>
   <a class="toc-row" href="#c13"><span class="toc-rune">ᚲ</span><span class="toc-n">XIII</span><span class="toc-t">Compagnia nell'Ombra</span><span class="toc-d">Multiplayer, chat, vocale</span></a>
   <a class="toc-row" href="#c14"><span class="toc-rune">ᚹ</span><span class="toc-n">XIV</span><span class="toc-t">Segreti e Consigli</span><span class="toc-d">Della sopravvivenza</span></a>
+  <a class="toc-row" href="#c64" style="border-color:#6C5EB5;"><span class="toc-rune" style="color:#7B71D5;">♦</span><span class="toc-n" style="color:#eeee77;">64</span><span class="toc-t" style="color:#7B71D5;">Modalità C64</span><span class="toc-d" style="color:#a098d8;">Easter Egg Commodore</span></a>
 </div>
 
 <!-- ================= I ================= -->
@@ -1013,6 +1015,488 @@
   tesori non si esauriscono, e i suoi mostri si fanno ogni volta più affamati. Questo manuale
   finisce qui — ma la discesa, avventuriero, è appena cominciata.</p>
 </div>
+
+<!-- ======== SEZIONE C64 ======== -->
+<div class="chapter" id="c64" style="background:linear-gradient(180deg, #40318D 0%, #2a1f5e 100%); border:3px solid #6C5EB5; border-radius:0; padding:30px; margin:40px 0; font-family:'Courier New',monospace; color:#7B71D5;">
+  <style>
+    #c64 h2{ color:#eeee77; font-family:'Courier New',monospace; text-shadow:2px 2px 0 #2a1f5e; letter-spacing:3px; text-transform:uppercase; }
+    #c64 h3{ color:#aaffee; font-family:'Courier New',monospace; font-size:14px; margin-top:20px; text-transform:uppercase; letter-spacing:1px; }
+    #c64 p, #c64 li{ color:#7B71D5; font-family:'Courier New',monospace; font-size:13px; line-height:1.7; }
+    #c64 .c64-note{ background:rgba(42,31,94,.6); border:2px solid #5045a0; padding:12px 16px; margin:12px 0; color:#aaffee; font-size:12px; }
+    #c64 .c64-sprite-row{ display:flex; flex-wrap:wrap; gap:12px; margin:12px 0; }
+    #c64 .c64-sprite-card{ background:rgba(42,31,94,.5); border:2px solid #5045a0; padding:10px; text-align:center; min-width:90px; }
+    #c64 .c64-sprite-card pre{ color:#eeee77; font-size:10px; line-height:1.1; letter-spacing:2px; margin:0; }
+    #c64 .c64-sprite-card .name{ color:#aaffee; font-size:10px; margin-top:6px; }
+    #c64 .c64-palette{ display:flex; flex-wrap:wrap; gap:4px; margin:10px 0; }
+    #c64 .c64-swatch{ width:28px; height:28px; border:2px solid #5045a0; display:inline-block; }
+    #c64 .c64-swatch-label{ color:#aaffee; font-size:9px; text-align:center; margin-top:2px; }
+    #c64 .c64-code{ background:#2a1f5e; border:2px solid #5045a0; padding:12px; color:#aaffee; font-family:'Courier New',monospace; font-size:12px; white-space:pre; overflow-x:auto; margin:10px 0; }
+    #c64 ul{ list-style:none; padding-left:0; }
+    #c64 ul li::before{ content:'► '; color:#eeee77; }
+  </style>
+
+  <h2>♦ Modalità C64 ♦</h2>
+  <p style="color:#aaffee;">Un easter egg che trasforma ABISSO in un gioco Commodore 64.</p>
+
+  <div class="c64-note">
+    <strong style="color:#eeee77;">COME ATTIVARLA:</strong><br>
+    Scrivi <span style="color:#eeee77;">64</span> o <span style="color:#eeee77;">c64</span> come nome della stanza nella schermata di login e premi "Entra nell'Abisso".<br>
+    Oppure apri direttamente: <span style="color:#eeee77;">index.html?room=64</span>
+  </div>
+
+  <h3>▸ Boot Screen</h3>
+  <p>Al caricamento appare una schermata che emula il boot del Commodore 64: scritta BASIC, cursore lampeggiante, loading bar gialla e messaggi di stato. Il tutto in palette viola con font pixel.</p>
+
+  <h3>▸ Palette Colori</h3>
+  <p>I 16 colori ufficiali del C64:</p>
+  <div class="c64-palette">
+    <div><div class="c64-swatch" style="background:#000;"></div><div class="c64-swatch-label">Nero</div></div>
+    <div><div class="c64-swatch" style="background:#fff;"></div><div class="c64-swatch-label">Bianco</div></div>
+    <div><div class="c64-swatch" style="background:#880000;"></div><div class="c64-swatch-label">Rosso</div></div>
+    <div><div class="c64-swatch" style="background:#aaffee;"></div><div class="c64-swatch-label">Ciano</div></div>
+    <div><div class="c64-swatch" style="background:#cc44cc;"></div><div class="c64-swatch-label">Viola</div></div>
+    <div><div class="c64-swatch" style="background:#00cc55;"></div><div class="c64-swatch-label">Verde</div></div>
+    <div><div class="c64-swatch" style="background:#0000aa;"></div><div class="c64-swatch-label">Blu</div></div>
+    <div><div class="c64-swatch" style="background:#eeee77;"></div><div class="c64-swatch-label">Giallo</div></div>
+    <div><div class="c64-swatch" style="background:#dd8855;"></div><div class="c64-swatch-label">Arancio</div></div>
+    <div><div class="c64-swatch" style="background:#664400;"></div><div class="c64-swatch-label">Marrone</div></div>
+    <div><div class="c64-swatch" style="background:#ff7777;"></div><div class="c64-swatch-label">R. Chiaro</div></div>
+    <div><div class="c64-swatch" style="background:#333;"></div><div class="c64-swatch-label">G. Scuro</div></div>
+    <div><div class="c64-swatch" style="background:#777;"></div><div class="c64-swatch-label">Grigio</div></div>
+    <div><div class="c64-swatch" style="background:#aaff66;"></div><div class="c64-swatch-label">V. Chiaro</div></div>
+    <div><div class="c64-swatch" style="background:#0088ff;"></div><div class="c64-swatch-label">B. Chiaro</div></div>
+    <div><div class="c64-swatch" style="background:#bbb;"></div><div class="c64-swatch-label">G. Chiaro</div></div>
+  </div>
+
+  <h3>▸ Sprite Pixel Art — Eroi</h3>
+  <div class="c64-sprite-row">
+    <div class="c64-sprite-card"><pre>   YY
+  YYYY
+  rr r
+ RRRRRR
+  RRRR
+  R  R
+ RR  RR
+ NN  NN</pre><div class="name">Guerriero</div></div>
+    <div class="c64-sprite-card"><pre>  CCC
+ CCCCC
+  cc c
+  CCCC
+  C  C
+ Cdd dC
+ C    C
+  d  d</pre><div class="name">Ladro</div></div>
+    <div class="c64-sprite-card"><pre>   PP
+  PPPP
+  ww w
+ PPPPPP
+  PPPP
+ P    P
+  PPPP
+ P    P</pre><div class="name">Mago</div></div>
+    <div class="c64-sprite-card"><pre>   GG
+  GGGG
+  nn n
+ GGGGGG
+  GGGG
+  G  G
+ Gdd dG
+  d  d</pre><div class="name">Ranger</div></div>
+    <div class="c64-sprite-card"><pre>   YY
+  YYYY
+  WW W
+YYYYYYYY
+  YYYY
+ YY  YY
+ YYwwYY
+  d  d</pre><div class="name">Paladino</div></div>
+    <div class="c64-sprite-card"><pre>  KKKK
+ KKKKKK
+  gg g
+KKKKKKKK
+  KPPK
+ K    K
+  KKKK
+ K    K</pre><div class="name">Negromante</div></div>
+    <div class="c64-sprite-card"><pre>  OOOO
+ OOOOOO
+  YY Y
+OOOOOOOO
+  OOOO
+ O    O
+ OO  OO
+  d  d</pre><div class="name">Bardo</div></div>
+    <div class="c64-sprite-card"><pre>  NNNN
+ NNNNNN
+  WW W
+NNNNNNNN
+  NNNN
+ N    N
+  NNNN
+  d  d</pre><div class="name">Monaco</div></div>
+    <div class="c64-sprite-card"><pre>   bb
+  bbbb
+  WW W
+ bbbbbb
+  bbbb
+ b    b
+ bbbbBb
+  d  d</pre><div class="name">Prof</div></div>
+  </div>
+
+  <h3>▸ Sprite Pixel Art — Mostri</h3>
+  <div class="c64-sprite-row">
+    <div class="c64-sprite-card"><pre>  nn nn
+ nnnnnn
+  grrg
+  nnnn
+   nn
+  n  n</pre><div class="name">Ratto</div></div>
+    <div class="c64-sprite-card"><pre>  GGGG
+ GGGGGG
+ GrrGG
+ GGGGGG
+  GGGG
+  G  G
+ GG  GG
+  d  d</pre><div class="name">Goblin</div></div>
+    <div class="c64-sprite-card"><pre>  GGGG
+ GGGGGG
+ GrGG rG
+ GGGGGG
+  GrrG
+ GGGGGG
+ GG  GG
+ NN  NN</pre><div class="name">Orco</div></div>
+    <div class="c64-sprite-card"><pre>  GGGG
+ GGGGGG
+ GrrGG
+ GGGGGG
+  GGGG
+  G  G
+ GG  GG
+  d  d</pre><div class="name">Zombie</div></div>
+    <div class="c64-sprite-card"><pre>  wwww
+ wwwwww
+wwKwwKww
+wwwwwwww
+ww UU ww
+ wwwwww
+w w  w w</pre><div class="name">Spettro</div></div>
+    <div class="c64-sprite-card"><pre>K  KK  K
+K KK  KK
+  drrd
+ ddddddd
+  dddd
+ d d  d d
+d  d  d  d</pre><div class="name">Ragno</div></div>
+    <div class="c64-sprite-card"><pre>  GGGG
+ GGGGGG
+GnGGGnGG
+GGGGGGGG
+ GrrGG
+  GGGG
+   gg</pre><div class="name">Melma</div></div>
+    <div class="c64-sprite-card"><pre>  bbbb
+ bbbbbb
+bbWbbWbb
+bbbbbbbb
+ bbrrbb
+  bbbb
+   bb</pre><div class="name">Gelatina</div></div>
+    <div class="c64-sprite-card"><pre>  wwww
+ wKwwKw
+  wwww
+   ww
+  wwww
+ w w  w
+w  w  w</pre><div class="name">Scheletro</div></div>
+    <div class="c64-sprite-card"><pre>P      P
+PP    PP
+PPPPPPPP
+ rPPPr
+  PPPP
+  P  P</pre><div class="name">Pipistrello</div></div>
+    <div class="c64-sprite-card"><pre>  GGG
+ GGrrG
+  GGGG
+   GGG
+    GG
+     G</pre><div class="name">Serpente</div></div>
+    <div class="c64-sprite-card"><pre>  ww
+ wwwww
+wKwwKww
+ wwwwww
+  YYYY
+   YY
+  O  O</pre><div class="name">Arpia</div></div>
+    <div class="c64-sprite-card"><pre>  dddd
+ dddddd
+ drr rd
+ ddddd
+  ddd
+ dddd
+ dd dd
+ NN NN</pre><div class="name">Cavaliere</div></div>
+    <div class="c64-sprite-card"><pre>  PPPP
+ PPPPPP
+ PPKKPP
+ PPPPPP
+  PPPP
+  K  K
+ PP  PP
+  d  d</pre><div class="name">Cultista</div></div>
+    <div class="c64-sprite-card"><pre>   GG
+  GGGG
+ GGrrGG
+  GGGG
+ GGGGGG
+GG    GG
+ G    G
+  G  G</pre><div class="name">Mantide</div></div>
+    <div class="c64-sprite-card"><pre>  OOOO
+ OOOOOO
+ OnrrnO
+ OOOOOO
+  OOOO
+ O    O
+  OOOO
+  N  N</pre><div class="name">Sciamano</div></div>
+    <div class="c64-sprite-card"><pre>  NNNN
+ NNNNNN
+NNNNNNNN
+NNKNNKNN
+NNNNNNNN
+ NNNNNN
+NNNNNNNN
+NN    NN</pre><div class="name">Golem</div></div>
+    <div class="c64-sprite-card"><pre>  dddd
+ dddddd
+ drr rd
+ ddddd
+  ddd
+ dddd
+ dd dd
+ NN NN</pre><div class="name">Cavaliere Alt</div></div>
+    <div class="c64-sprite-card"><pre>  rrrr
+ rrrrrr
+rrrrrrrr
+ WrrWWr
+  WWWW
+   ww
+   ww</pre><div class="name">Fungo</div></div>
+  </div>
+
+  <h3>▸ Sprite Pixel Art — Boss (12×12)</h3>
+  <div class="c64-sprite-row">
+    <div class="c64-sprite-card"><pre>    PPPP
+   PPPPPP
+  PPPPPPPP
+  PKwKwKPP
+  PPPPPPPP
+  P PUUP PP
+   PPPPPP
+  PPPPPPPP
+ PP PP PP PP
+PP  PP  PP
+ PP PP PP
+  P    P</pre><div class="name" style="color:#cc44cc;">Lich</div></div>
+    <div class="c64-sprite-card"><pre>    GGGG
+  GGGGGGGG
+ GGGGGGGGGG
+GGnGGGGGnGGG
+GGGGGGGGGGGG
+GGGGrrGGGGGG
+ GGGGGGGGGG
+  GGGGGGGG
+ GGG  GGGGG
+GG      GGG
+ G        G</pre><div class="name" style="color:#00cc55;">Melme</div></div>
+    <div class="c64-sprite-card"><pre>   NNNNNN
+  NNNNNNNN
+ NNNNNNNNNN
+ NNKNNNKNNN
+ NNNNNNNNNN
+NNNNNNNNNNNN
+ NNNNNNNNNN
+  NNNNNNNN
+ NNNN NNNN
+NNNN   NNNN
+NNN     NNN
+NN       NN</pre><div class="name" style="color:#664400;">Golem</div></div>
+    <div class="c64-sprite-card"><pre>K
+KK  KKKK  KK
+KKKKrrrrKKKK
+ KKKKKKKKKK
+  KKKKKKKK
+ KK KK KK KK
+KK  KK  KK
+K   KK   K
+    KK
+   KKKK
+  KK  KK</pre><div class="name" style="color:#333;">Ragno</div></div>
+    <div class="c64-sprite-card"><pre> nn nn nn
+nnnnnnnnnnn
+ nrrnnrrnnn
+ nnnnnnnnn
+  nnnnnnn
+ nnn nnn nn
+nn   n   nn
+ n        n</pre><div class="name" style="color:#aaff66;">Ratti</div></div>
+    <div class="c64-sprite-card"><pre>    RRRRRR
+   RRRRRRRR
+  RRRRYRRRR
+ RRRRrrRRRR
+RRRRRRRRRRRR
+RRRROORRRRR
+ RRRRRRRRR
+  RRRRRRR
+ RRR  RRRR
+RRR    RRRR
+RR      RR
+R        R</pre><div class="name" style="color:#880000;">Drago</div></div>
+  </div>
+
+  <h3>▸ Sprite Pixel Art — Items e Oggetti</h3>
+  <div class="c64-sprite-row">
+    <div class="c64-sprite-card"><pre> OOOOOO
+OOnOOnOO
+OOOOOOOO
+OYOYYOYO
+OOOOOOOO
+OOnOOnOO
+OOOOOOOO
+NNNNNNNN</pre><div class="name">Forziere Chiuso</div></div>
+    <div class="c64-sprite-card"><pre>OOnOOnOO
+OOOOOOOO
+
+ OOOOOO
+OYOYYOYO
+OOOOOOOO
+OOnOOnOO
+NNNNNNNN</pre><div class="name">Forziere Aperto</div></div>
+    <div class="c64-sprite-card"><pre>  YY
+ YYYY
+YOYYOY
+YOYYOY
+ YYYY
+  YY</pre><div class="name">Oro</div></div>
+    <div class="c64-sprite-card"><pre>  bb
+ bWWb
+bWbbWb
+ bWWb
+  bb</pre><div class="name">Gemma</div></div>
+    <div class="c64-sprite-card"><pre>  rr
+  rr
+ rrrr
+rWWWWr
+rWrrWr
+rWWWWr
+ rrrr</pre><div class="name">Pozione Vita</div></div>
+    <div class="c64-sprite-card"><pre>  bb
+  bb
+ bbbb
+bWWWWb
+bWbbWb
+bWWWWb
+ bbbb</pre><div class="name">Pozione Mana</div></div>
+    <div class="c64-sprite-card"><pre>  nn nnn
+ nnnnnn
+nnnrrnnn
+ nnnnnn
+  nnnn
+   nn</pre><div class="name">Mercante</div></div>
+    <div class="c64-sprite-card"><pre>  YY
+ YYYY
+YOYYOY
+YOYYOY
+ YYYY
+  YY</pre><div class="name">Moneta (Icona)</div></div>
+    <div class="c64-sprite-card"><pre>   YY
+  YYR
+ YYRR
+YYYYR
+  YRR
+   YR
+  YR
+ YR</pre><div class="name">Furia</div></div>
+    <div class="c64-sprite-card"><pre> bbbbbb
+bWWWWWWb
+bWbbbbWb
+bWbbbbWb
+ bWbbWb
+  bWWb
+   bb</pre><div class="name">Scudo</div></div>
+    <div class="c64-sprite-card"><pre>    YY
+   YY
+  YY
+ YYRRR
+YY  RR
+    R
+   RRR</pre><div class="name">Fretta</div></div>
+    <div class="c64-sprite-card"><pre>  bb
+ bWWb
+bWbbWb
+ bWWb
+  bb</pre><div class="name">Concentrazione</div></div>
+    <div class="c64-sprite-card"><pre>  nn
+ nWWn
+nWnnWn
+nWnnWn
+ nWWn
+  nn</pre><div class="name">Rianima</div></div>
+    <div class="c64-sprite-card"><pre>  dddd
+ dddddd
+dddddddd
+ dKddKd
+  dddd
+   dd</pre><div class="name">Elmo</div></div>
+    <div class="c64-sprite-card"><pre>  OOOO
+ O    O
+O  YY  O
+O  YY  O
+ O    O
+  OOOO</pre><div class="name">Collana</div></div>
+    <div class="c64-sprite-card"><pre> dddddd
+dddddddd
+ddKddKdd
+dddddddd
+ dddddd
+ dd  dd</pre><div class="name">Armatura</div></div>
+    <div class="c64-sprite-card"><pre>  OOOO
+ O    O
+O  WW  O
+ O    O
+  OOOO</pre><div class="name">Anello</div></div>
+    <div class="c64-sprite-card"><pre> dd  dd
+ dddd d
+ dddd d
+ dddddd
+ dd  dd
+ dd  dd</pre><div class="name">Gambali</div></div>
+  </div>
+
+  <h3>▸ Cosa Cambia</h3>
+  <ul>
+    <li><span style="color:#eeee77;">Muri e pavimento</span> — blocchi piatti colorati con griglia, nessuna texture PNG</li>
+    <li><span style="color:#eeee77;">Tutte le entità</span> — sprite pixel art 8×8 (12×12 per i boss) disegnati con la palette C64</li>
+    <li><span style="color:#eeee77;">Font</span> — "Press Start 2P" ovunque (login, HUD, toast, log, minimap)</li>
+    <li><span style="color:#eeee77;">HUD</span> — barre vita/mana viola-rosso, testo giallo, bordi quadrati</li>
+    <li><span style="color:#eeee77;">Illuminazione</span> — glow viola/ciano invece che arancione caldo</li>
+    <li><span style="color:#eeee77;">Torce</span> — colori diversi per ogni torce nella stanza C64</li>
+    <li><span style="color:#eeee77;">Particelle</span> — fluttuano colorate nella stanza speciale</li>
+    <li><span style="color:#eeee77;">Suoni</span> — 15 suoni chiptune (square/triangle wave) via Web Audio API</li>
+    <li><span style="color:#eeee77;">Minimap</span> — colori viola con indicatore stanza C64</li>
+    <li><span style="color:#eeee77;">Scanline</span> — effetto CRT sovrapposto per autenticità</li>
+    <li><span style="color:#eeee77;">Boot screen</span> — emulazione BASIC C64 con loading bar</li>
+    <li><span style="color:#eeee77;">Mostri</span> — ogni mostro ha un colore unico dalla palette C64</li>
+  </ul>
+
+  <div class="c64-note">
+    <strong style="color:#eeee77;">NOTA TECNICA:</strong> La modalità C64 non carica file esterni — tutti gli sprite sono definiti come array ASCII nel codice JavaScript e disegnati su canvas offscreen cachati. Il font "Press Start 2P" viene caricato da Google Fonts. La stanza C64 speciale viene generata casualmente in ogni piano con forziere lilla, torce multicolori e particelle fluttuanti.
+  </div>
+</div>
+<!-- ======== FINE SEZIONE C64 ======== -->
 
 </div><!-- /wrap -->
 
