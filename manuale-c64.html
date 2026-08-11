@@ -230,6 +230,13 @@
   .swatch{ width:32px; height:32px; border:2px solid var(--c64-border); display:inline-block; }
   .swatch-label{ color:var(--c64-cyan); font-size:8px; text-align:center; margin-top:2px; }
 
+  /* ---- C64 INLINE SPRITES ---- */
+  .c64-icon{ display:inline-block; vertical-align:middle; margin-right:6px; }
+  .c64-icon pre{ color:var(--c64-yellow); font-size:7px; line-height:1; letter-spacing:1px; margin:0; white-space:pre; }
+  .c64-icon-boss pre{ font-size:5px; letter-spacing:0; }
+  .beast{ align-items:flex-start; }
+  .beast .c64-icon{ margin-top:2px; }
+
   /* ---- SPRITE CARDS ---- */
   .sprite-row{ display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
   .sprite-card{
@@ -350,15 +357,78 @@
   chi ispira i compagni. Ogni classe ha la propria arma, velocita e <b>abilita speciale</b> (tasto F).</p>
   <table>
     <tr><th>Classe</th><th>HP</th><th>Vel</th><th>Danno</th><th>Ruolo</th><th>Abilita (F)</th></tr>
-    <tr><td style="color:#ff7777;">Guerriero</td><td>16</td><td>3.6</td><td>3-6</td><td>Corpo a corpo</td><td><b>Carica</b> — scatta avanti travolgendo i nemici</td></tr>
-    <tr><td style="color:#aaffee;">Ladro</td><td>10</td><td>4.6</td><td>2-4</td><td>Schermitore veloce (28% critico)</td><td><b>Passo Furtivo</b> — balza sul nemico con colpo critico garantito</td></tr>
-    <tr><td style="color:#cc44cc;">Mago</td><td>9</td><td>3.2</td><td>4-8</td><td>Attacchi a distanza (mana)</td><td><b>Onda d'Urto</b> — esplosione arcana intorno a te</td></tr>
-    <tr><td style="color:#00cc55;">Ranger</td><td>11</td><td>3.9</td><td>2-5</td><td>Arciere a lunga gittata</td><td><b>Raffica</b> — ventaglio di frecce</td></tr>
-    <tr><td style="color:#eeee77;">Paladino</td><td>18</td><td>3.3</td><td>3-5</td><td>Tank sacro</td><td><b>Muro Sacro</b> — scudo divino: -50% danno per 5s</td></tr>
-    <tr><td style="color:#333;">Negromante</td><td>10</td><td>3.2</td><td>4-7</td><td>Scintille d'anima (mana)</td><td><b>Drenaggio d'Anima</b> — danneggia i vicini e ti cura</td></tr>
-    <tr><td style="color:#dd8855;">Bardo</td><td>12</td><td>4.0</td><td>2-4</td><td>Rapier veloce (15% critico)</td><td><b>Canto d'Ispirazione</b> — +40% danno per 8s</td></tr>
-    <tr><td style="color:#0000aa;">Monaco</td><td>14</td><td>4.4</td><td>3-5</td><td>Pugni fulminei (20% critico)</td><td><b>Onda di Chi</b> — energia che perfora i nemici</td></tr>
-    <tr><td style="color:#0088ff;">Prof</td><td>22</td><td>3.6</td><td>5-9</td><td>Fucile al plasma a distanza</td><td><b>Colpo Caricato</b> — 0.8s di carica, danno ~doppio</td></tr>
+    <tr><td><div class="c64-icon"><pre>   YY
+  YYYY
+  rr r
+ RRRRRR
+  RRRR
+  R  R
+ RR  RR
+ NN  NN</pre></div>Guerriero</td><td>16</td><td>3.6</td><td>3-6</td><td>Corpo a corpo</td><td><b>Carica</b> — scatta avanti travolgendo i nemici</td></tr>
+    <tr><td><div class="c64-icon"><pre>  CCC
+ CCCCC
+  cc c
+  CCCC
+  C  C
+ Cdd dC
+ C    C
+  d  d</pre></div>Ladro</td><td>10</td><td>4.6</td><td>2-4</td><td>Schermitore veloce (28% critico)</td><td><b>Passo Furtivo</b> — balza sul nemico con colpo critico garantito</td></tr>
+    <tr><td><div class="c64-icon"><pre>   PP
+  PPPP
+  ww w
+ PPPPPP
+  PPPP
+ P    P
+  PPPP
+ P    P</pre></div>Mago</td><td>9</td><td>3.2</td><td>4-8</td><td>Attacchi a distanza (mana)</td><td><b>Onda d'Urto</b> — esplosione arcana intorno a te</td></tr>
+    <tr><td><div class="c64-icon"><pre>   GG
+  GGGG
+  nn n
+ GGGGGG
+  GGGG
+  G  G
+ Gdd dG
+  d  d</pre></div>Ranger</td><td>11</td><td>3.9</td><td>2-5</td><td>Arciere a lunga gittata</td><td><b>Raffica</b> — ventaglio di frecce</td></tr>
+    <tr><td><div class="c64-icon"><pre>  YYYY
+ YYYYYY
+  WW W
+YYYYYYYY
+  YYYY
+ YY  YY
+ YYwwYY
+  d  d</pre></div>Paladino</td><td>18</td><td>3.3</td><td>3-5</td><td>Tank sacro</td><td><b>Muro Sacro</b> — scudo divino: -50% danno per 5s</td></tr>
+    <tr><td><div class="c64-icon"><pre>  KKKK
+ KKKKKK
+  gg g
+KKKKKKKK
+  KPPK
+ K    K
+  KKKK
+ K    K</pre></div>Negromante</td><td>10</td><td>3.2</td><td>4-7</td><td>Scintille d'anima (mana)</td><td><b>Drenaggio d'Anima</b> — danneggia i vicini e ti cura</td></tr>
+    <tr><td><div class="c64-icon"><pre>  OOOO
+ OOOOOO
+  YY Y
+OOOOOOOO
+  OOOO
+ O    O
+ OO  OO
+  d  d</pre></div>Bardo</td><td>12</td><td>4.0</td><td>2-4</td><td>Rapier veloce (15% critico)</td><td><b>Canto d'Ispirazione</b> — +40% danno per 8s</td></tr>
+    <tr><td><div class="c64-icon"><pre>  NNNN
+ NNNNNN
+  WW W
+NNNNNNNN
+  NNNN
+ N    N
+  NNNN
+  d  d</pre></div>Monaco</td><td>14</td><td>4.4</td><td>3-5</td><td>Pugni fulminei (20% critico)</td><td><b>Onda di Chi</b> — energia che perfora i nemici</td></tr>
+    <tr><td><div class="c64-icon"><pre>   bb
+  bbbb
+  WW W
+ bbbbbb
+  bbbb
+ b    b
+ bbbbBb
+  d  d</pre></div>Prof</td><td>22</td><td>3.6</td><td>5-9</td><td>Fucile al plasma a distanza</td><td><b>Colpo Caricato</b> — 0.8s di carica, danno ~doppio</td></tr>
   </table>
   <p>I <b>maghi</b> e i <b>negromanti</b> consumano mana a ogni colpo (2 di mana per attacco):
   tienilo d'occhio, le pozioni di mana (<kbd>R</kbd>) esistono per questo.</p>
@@ -372,25 +442,139 @@
   hanno un <b>atteggiamento</b> (aggro) piu ampio: ti notano da piu lontano.</p>
   <div class="two-col">
     <div>
-      <div class="beast"><div style="color:#aaff66;font-size:16px;">::</div><div><div class="b-name">Ratto</div><div class="b-info">HP 7 · Danno 2 · Lento e timido</div></div></div>
-      <div class="beast"><div style="color:#cc44cc;font-size:16px;">::</div><div><div class="b-name">Pipistrello</div><div class="b-info">HP 8 · Danno 2 · Volteggia rapido</div></div></div>
-      <div class="beast"><div style="color:#00cc55;font-size:16px;">::</div><div><div class="b-name">Goblin</div><div class="b-info">HP 14 · Danno 3 · Sporadico</div></div></div>
-      <div class="beast"><div style="color:#00cc55;font-size:16px;">::</div><div><div class="b-name">Melma</div><div class="b-info">HP 9 · Danno 2 · Lenta, si divide</div></div></div>
-      <div class="beast"><div style="color:#0088ff;font-size:16px;">::</div><div><div class="b-name">Gelatina</div><div class="b-info">HP 22 · Danno 3 · La melma grande</div></div></div>
-      <div class="beast"><div style="color:#bbb;font-size:16px;">::</div><div><div class="b-name">Scheletro</div><div class="b-info">HP 20 · Danno 4 · Il ritorno dei caduti</div></div></div>
-      <div class="beast"><div style="color:#00cc55;font-size:16px;">::</div><div><div class="b-name">Orco</div><div class="b-info">HP 32 · Danno 6 · Massiccio e lento</div></div></div>
-      <div class="beast"><div style="color:#00cc55;font-size:16px;">::</div><div><div class="b-name">Zombie</div><div class="b-info">HP 26 · Danno 5 · Lento, inarrestabile</div></div></div>
-      <div class="beast"><div style="color:#664400;font-size:16px;">::</div><div><div class="b-name">Ragno Gigante</div><div class="b-info">HP 24 · Danno 5 · Veloce</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  nn nn
+ nnnnnn
+  grrg
+  nnnn
+   nn
+  n  n</pre></div><div><div class="b-name">Ratto</div><div class="b-info">HP 7 · Danno 2 · Lento e timido</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>P      P
+PP    PP
+PPPPPPPP
+ rPPPr
+  PPPP
+  P  P</pre></div><div><div class="b-name">Pipistrello</div><div class="b-info">HP 8 · Danno 2 · Volteggia rapido</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  GGGG
+ GGGGGG
+ GrrGG
+ GGGGGG
+  GGGG
+  G  G
+ GG  GG
+  d  d</pre></div><div><div class="b-name">Goblin</div><div class="b-info">HP 14 · Danno 3 · Sporadico</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  GGGG
+ GGGGGG
+GnGGGnGG
+GGGGGGGG
+ GrrGG
+  GGGG
+   gg</pre></div><div><div class="b-name">Melma</div><div class="b-info">HP 9 · Danno 2 · Lenta, si divide</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  bbbb
+ bbbbbb
+bbWbbWbb
+bbbbbbbb
+ bbrrbb
+  bbbb
+   bb</pre></div><div><div class="b-name">Gelatina</div><div class="b-info">HP 22 · Danno 3 · La melma grande</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  wwww
+ wKwwKw
+  wwww
+   ww
+  wwww
+ w w  w
+w  w  w</pre></div><div><div class="b-name">Scheletro</div><div class="b-info">HP 20 · Danno 4 · Il ritorno dei caduti</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  GGGG
+ GGGGGG
+GrGG rG
+ GGGGGG
+  GrrG
+ GGGGGG
+ GG  GG
+ NN  NN</pre></div><div><div class="b-name">Orco</div><div class="b-info">HP 32 · Danno 6 · Massiccio e lento</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  GGGG
+ GGrrGG
+ GGGGGG
+  GGGG
+  g  g
+ gggggg
+ g    g
+  g  g</pre></div><div><div class="b-name">Zombie</div><div class="b-info">HP 26 · Danno 5 · Lento, inarrestabile</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>K  KK  K
+K KK  KK
+  drrd
+ ddddddd
+  dddd
+ d d  d d
+d  d  d  d</pre></div><div><div class="b-name">Ragno Gigante</div><div class="b-info">HP 24 · Danno 5 · Veloce</div></div></div>
     </div>
     <div>
-      <div class="beast"><div style="color:#bbb;font-size:16px;">::</div><div><div class="b-name">Spettro</div><div class="b-info">HP 28 · Danno 6 · Passa attraverso tutto</div></div></div>
-      <div class="beast"><div style="color:#00cc55;font-size:16px;">::</div><div><div class="b-name">Serpente</div><div class="b-info">HP 10 · Danno 2 · Striscia rapido</div></div></div>
-      <div class="beast"><div style="color:#bbb;font-size:16px;">::</div><div><div class="b-name">Arpia</div><div class="b-info">HP 9 · Danno 2 · Sfiora e fugge</div></div></div>
-      <div class="beast"><div style="color:#664400;font-size:16px;">::</div><div><div class="b-name">Cavaliere Caduto</div><div class="b-info">HP 26 · Danno 5 · Armatura antica</div></div></div>
-      <div class="beast"><div style="color:#cc44cc;font-size:16px;">::</div><div><div class="b-name">Cultista</div><div class="b-info">HP 18 · Danno 4 · Mistico, pericoloso</div></div></div>
-      <div class="beast"><div style="color:#00cc55;font-size:16px;">::</div><div><div class="b-name">Mantide Abissale</div><div class="b-info">HP 22 · Danno 4 · Balzi rapidi</div></div></div>
-      <div class="beast"><div style="color:#dd8855;font-size:16px;">::</div><div><div class="b-name">Sciamano Goblin</div><div class="b-info">HP 20 · Danno 4 · Lancia maledizioni</div></div></div>
-      <div class="beast"><div style="color:#664400;font-size:16px;">::</div><div><div class="b-name">Golem di Roccia</div><div class="b-info">HP 40 · Danno 7 · Pestone devastante</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  wwww
+ wwwwww
+wwKwwKww
+wwwwwwww
+ww UU ww
+ wwwwww
+w w  w w</pre></div><div><div class="b-name">Spettro</div><div class="b-info">HP 28 · Danno 6 · Passa attraverso tutto</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  GGG
+ GGrrG
+  GGGG
+   GGG
+    GG
+     G</pre></div><div><div class="b-name">Serpente</div><div class="b-info">HP 10 · Danno 2 · Striscia rapido</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  ww
+ wwwww
+wKwwKww
+ wwwwww
+  YYYY
+   YY
+  O  O</pre></div><div><div class="b-name">Arpia</div><div class="b-info">HP 9 · Danno 2 · Sfiora e fugge</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  dddd
+ dddddd
+ drr rd
+ ddddd
+  ddd
+ dddd
+ dd dd
+ NN NN</pre></div><div><div class="b-name">Cavaliere Caduto</div><div class="b-info">HP 26 · Danno 5 · Armatura antica</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  PPPP
+ PPPPPP
+ PPKKPP
+ PPPPPP
+  PPPP
+  K  K
+ PP  PP
+  d  d</pre></div><div><div class="b-name">Cultista</div><div class="b-info">HP 18 · Danno 4 · Mistico, pericoloso</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>   GG
+  GGGG
+ GGrrGG
+  GGGG
+ GGGGGG
+GG    GG
+ G    G
+  G  G</pre></div><div><div class="b-name">Mantide Abissale</div><div class="b-info">HP 22 · Danno 4 · Balzi rapidi</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  OOOO
+ OOOOOO
+ OnrrnO
+ OOOOOO
+  OOOO
+ O    O
+  OOOO
+  N  N</pre></div><div><div class="b-name">Sciamano Goblin</div><div class="b-info">HP 20 · Danno 4 · Lancia maledizioni</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  NNNN
+ NNNNNN
+NNNNNNNN
+NNKNNKNN
+NNNNNNNN
+ NNNNNN
+NNNNNNNN
+NN    NN</pre></div><div><div class="b-name">Golem di Roccia</div><div class="b-info">HP 40 · Danno 7 · Pestone devastante</div></div></div>
+      <div class="beast"><div class="c64-icon"><pre>  rrrr
+ rrrrrr
+rrrrrrrr
+ WrrWWr
+  WWWW
+   ww
+   ww</pre></div><div><div class="b-name">Fungo</div><div class="b-info">HP 18 · Danno 3 · Spore velenose</div></div></div>
     </div>
   </div>
 </div>
@@ -404,12 +588,72 @@
   Se vinci, il <b>forziere leggendario</b> della tana si apre.</p>
   <table>
     <tr><th>Piano</th><th>Boss</th><th>HP</th><th>Firme della tana</th></tr>
-    <tr><td>5</td><td style="color:#880000;">Drago Minore</td><td>120</td><td>L'unico che vola: soffio di fuoco a cono, palle di fuoco, picchiata dal cielo con telegrafo</td></tr>
-    <tr><td>10</td><td style="color:#664400;">Golem di Pietra</td><td>150</td><td>Non vola: pestone con onda d'urto radiale e clava di roccia lanciata</td></tr>
-    <tr><td>15</td><td style="color:#cc44cc;">Lich Signore dei Nonmorti</td><td>135</td><td>Evoca servitori scheletrici, proiettili di energia arcana</td></tr>
-    <tr><td>20</td><td style="color:#00cc55;">Regina delle Melme</td><td>130</td><td>Sputa melma acida, evoca melme, rigenera</td></tr>
-    <tr><td>25</td><td style="color:#333;">Re Ragno</td><td>140</td><td>Tela velenosa, morso che avvelena</td></tr>
-    <tr><td>30</td><td style="color:#aaff66;">Re dei Ratti</td><td>120</td><td>Evoca orde di ratti, carica, ondata di ratti dal soffio</td></tr>
+    <tr><td>5</td><td><div class="c64-icon c64-icon-boss"><pre>    RRRRRR
+   RRRRRRRR
+  RRRRYRRRR
+ RRRRrrRRRR
+RRRRRRRRRRRR
+RRRROORRRRR
+ RRRRRRRRR
+  RRRRRRR
+ RRR  RRRR
+RRR    RRRR
+RR      RR
+R        R</pre></div>Drago Minore</td><td>120</td><td>L'unico che vola: soffio di fuoco a cono, palle di fuoco, picchiata dal cielo con telegrafo</td></tr>
+    <tr><td>10</td><td><div class="c64-icon c64-icon-boss"><pre>   NNNNNN
+  NNNNNNNN
+ NNNNNNNNNN
+ NNKNNNKNNN
+ NNNNNNNNNN
+NNNNNNNNNNNN
+ NNNNNNNNNN
+  NNNNNNNN
+ NNNN NNNN
+NNNN   NNNN
+NNN     NNN
+NN       NN</pre></div>Golem di Pietra</td><td>150</td><td>Non vola: pestone con onda d'urto radiale e clava di roccia lanciata</td></tr>
+    <tr><td>15</td><td><div class="c64-icon c64-icon-boss"><pre>    PPPP
+   PPPPPP
+  PPPPPPPP
+  PKwKwKPP
+  PPPPPPPP
+  P PUUP PP
+   PPPPPP
+  PPPPPPPP
+ PP PP PP PP
+PP  PP  PP
+ PP PP PP
+  P    P</pre></div>Lich Signore dei Nonmorti</td><td>135</td><td>Evoca servitori scheletrici, proiettili di energia arcana</td></tr>
+    <tr><td>20</td><td><div class="c64-icon c64-icon-boss"><pre>    GGGG
+  GGGGGGGG
+ GGGGGGGGGG
+GGnGGGGGnGGG
+GGGGGGGGGGGG
+GGGGrrGGGGGG
+ GGGGGGGGGG
+  GGGGGGGG
+ GGG  GGGGG
+GG      GGG
+ G        G</pre></div>Regina delle Melme</td><td>130</td><td>Sputa melma acida, evoca melme, rigenera</td></tr>
+    <tr><td>25</td><td><div class="c64-icon c64-icon-boss"><pre>K
+KK  KKKK  KK
+KKKKrrrrKKKK
+ KKKKKKKKKK
+  KKKKKKKK
+ KK KK KK KK
+KK  KK  KK
+K   KK   K
+    KK
+   KKKK
+  KK  KK</pre></div>Re Ragno</td><td>140</td><td>Tela velenosa, morso che avvelena</td></tr>
+    <tr><td>30</td><td><div class="c64-icon c64-icon-boss"><pre> nn nn nn
+nnnnnnnnnnn
+ nrrnnrrnnn
+ nnnnnnnnn
+  nnnnnnn
+ nnn nnn nn
+nn   n   nn
+ n        n</pre></div>Re dei Ratti</td><td>120</td><td>Evoca orde di ratti, carica, ondata di ratti dal soffio</td></tr>
   </table>
   <p>Oltre il piano 30 la ruota gira di nuovo: il piano 35 ospita un altro Drago Minore, il 40 un
   altro Golem, e cosi via — sempre piu affamati.</p>
@@ -463,11 +707,35 @@
   Si equipaggiano da soli camminandoci sopra.</p>
   <table>
     <tr><th>Slot</th><th>Oggetto</th><th>Cosa migliora</th></tr>
-    <tr><td style="color:#bbb;">Elmo</td><td>Caschetto</td><td rowspan="5">Statistiche casuali tra: salute extra, % danno, % velocita, % danno subito in meno</td></tr>
-    <tr><td style="color:#eeee77;">Collana</td><td>Monile</td></tr>
-    <tr><td style="color:#664400;">Armatura</td><td>Corazza</td></tr>
-    <tr><td style="color:#eeee77;">Anello</td><td>Forellino</td></tr>
-    <tr><td style="color:#664400;">Gambali</td><td>Uoseri</td></tr>
+    <tr><td><div class="c64-icon"><pre>  dddd
+ dddddd
+dddddddd
+ dKddKd
+  dddd
+   dd</pre></div>Elmo</td><td>Caschetto</td><td rowspan="5">Statistiche casuali tra: salute extra, % danno, % velocita, % danno subito in meno</td></tr>
+    <tr><td><div class="c64-icon"><pre>  OOOO
+ O    O
+O  YY  O
+O  YY  O
+ O    O
+  OOOO</pre></div>Collana</td><td>Monile</td></tr>
+    <tr><td><div class="c64-icon"><pre> dddddd
+dddddddd
+ddKddKdd
+dddddddd
+ dddddd
+ dd  dd</pre></div>Armatura</td><td>Corazza</td></tr>
+    <tr><td><div class="c64-icon"><pre>  OOOO
+ O    O
+O  WW  O
+ O    O
+  OOOO</pre></div>Anello</td><td>Forellino</td></tr>
+    <tr><td><div class="c64-icon"><pre> dd  dd
+ dddd d
+ dddd d
+ dddddd
+ dd  dd
+ dd  dd</pre></div>Gambali</td><td>Uoseri</td></tr>
   </table>
   <p>Quattro <b>rarita</b>, piu rara = piu statistiche e piu forti:</p>
   <table>
@@ -487,10 +755,32 @@
   <h2>Potenziamenti</h2>
   <p class="drop">Benedizioni temporanee che si raccolgono da terra o si comprano dal mercante.
   Durano pochi secondi: il momento in cui le usi conta quanto il momento in cui le trovi.</p>
-  <div class="beast"><div style="color:#880000;font-size:16px;">::</div><div><div class="b-name">Furia</div><div class="b-info">+40% danno per 12 secondi. Da attivare prima dell'assalto, non dopo.</div></div></div>
-  <div class="beast"><div style="color:#0088ff;font-size:16px;">::</div><div><div class="b-name">Scudo</div><div class="b-info">-50% danno subito per 10 secondi. La salvezza nelle tane dei boss.</div></div></div>
-  <div class="beast"><div style="color:#eeee77;font-size:16px;">::</div><div><div class="b-name">Fretta</div><div class="b-info">+40% velocita per 12 secondi. Per chiudere le distanze o fuggire.</div></div></div>
-  <div class="beast"><div style="color:#aaffee;font-size:16px;">::</div><div><div class="b-name">Concentrazione</div><div class="b-info">-50% tempo di recupero dell'attacco per 10 secondi. La raffica di danno.</div></div></div>
+  <div class="beast"><div class="c64-icon"><pre>  rr
+ rRRr
+RRRRRR
+RRWWRR
+RRRRRR
+ rRRr
+  rr</pre></div><div><div class="b-name">Furia</div><div class="b-info">+40% danno per 12 secondi. Da attivare prima dell'assalto, non dopo.</div></div></div>
+  <div class="beast"><div class="c64-icon"><pre> bbbbbb
+bWWWWWWb
+bWbbbbWb
+bWbbbbWb
+ bWbbWb
+  bWWb
+   bb</pre></div><div><div class="b-name">Scudo</div><div class="b-info">-50% danno subito per 10 secondi. La salvezza nelle tane dei boss.</div></div></div>
+  <div class="beast"><div class="c64-icon"><pre>    YY
+   YY
+  YY
+ YYRRR
+YY  RR
+    R
+   RRR</pre></div><div><div class="b-name">Fretta</div><div class="b-info">+40% velocita per 12 secondi. Per chiudere le distanze o fuggire.</div></div></div>
+  <div class="beast"><div class="c64-icon"><pre>  bb
+ bWWb
+bWbbWb
+ bWWb
+  bb</pre></div><div><div class="b-name">Concentrazione</div><div class="b-info">-50% tempo di recupero dell'attacco per 10 secondi. La raffica di danno.</div></div></div>
 </div>
 
 <!-- ================= XI ================= -->
