@@ -5999,8 +5999,59 @@ function drawWallBlock(layout, tx, ty, sx, sy, tile, alpha, visible, mask){
   } else {
     r = Math.round(96*shade*dim); g = Math.round(76*shade*dim); b = Math.round(52*shade*dim);
   }
-  // texture della pietra: wall_stone per tutti i muri (fallback sul colore pieno)
-  // quando IS_C64 è attivo, si saltano le PNG e si usano blocchi piatti colorati (stile C64)
+  if (viewMode === 'isometric'){
+    const wallH = tile * 0.7;
+    const wallTex = IS_C64 ? null : SPRITE_TILES['wall_stone'];
+    ctx.globalAlpha = alpha;
+    // right face (darker)
+    ctx.fillStyle = `rgb(${Math.round(r*0.65)},${Math.round(g*0.65)},${Math.round(b*0.65)})`;
+    ctx.beginPath();
+    ctx.moveTo(sx+tile*0.5, sy+tile*0.25);
+    ctx.lineTo(sx, sy+tile*0.5);
+    ctx.lineTo(sx, sy+tile*0.5-wallH);
+    ctx.lineTo(sx+tile*0.5, sy+tile*0.25-wallH);
+    ctx.closePath();
+    ctx.fill();
+    // left face (medium)
+    ctx.fillStyle = `rgb(${Math.round(r*0.8)},${Math.round(g*0.8)},${Math.round(b*0.8)})`;
+    ctx.beginPath();
+    ctx.moveTo(sx-tile*0.5, sy+tile*0.25);
+    ctx.lineTo(sx, sy+tile*0.5);
+    ctx.lineTo(sx, sy+tile*0.5-wallH);
+    ctx.lineTo(sx-tile*0.5, sy+tile*0.25-wallH);
+    ctx.closePath();
+    ctx.fill();
+    // top face (brightest)
+    if (wallTex){
+      ctx.save();
+      isoDiamond(ctx, sx, sy-wallH, tile, tile*0.5);
+      ctx.clip();
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(wallTex, sx-tile*0.5-0.6, sy-wallH-0.6, tile+1.2, tile*0.5+1.2);
+      ctx.imageSmoothingEnabled = false;
+      ctx.restore();
+    } else {
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      isoDiamond(ctx, sx, sy-wallH, tile, tile*0.5);
+      ctx.fill();
+    }
+    // outline
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+    ctx.lineWidth = 1;
+    isoDiamond(ctx, sx, sy-wallH, tile, tile*0.5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(sx-tile*0.5, sy+tile*0.25); ctx.lineTo(sx, sy+tile*0.5);
+    ctx.moveTo(sx, sy+tile*0.5-wallH); ctx.lineTo(sx, sy+tile*0.5);
+    ctx.moveTo(sx+tile*0.5, sy+tile*0.25); ctx.lineTo(sx, sy+tile*0.5);
+    ctx.moveTo(sx, sy+tile*0.5-wallH); ctx.lineTo(sx+tile*0.5, sy+tile*0.25-wallH);
+    ctx.moveTo(sx, sy+tile*0.5-wallH); ctx.lineTo(sx-tile*0.5, sy+tile*0.25-wallH);
+    ctx.moveTo(sx+tile*0.5, sy+tile*0.25-wallH); ctx.lineTo(sx-tile*0.5, sy+tile*0.25-wallH);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    return;
+  }
+  // --- top-down / thirdperson path ---
   const wallTex = IS_C64 ? null : SPRITE_TILES['wall_stone'];
     ctx.globalAlpha = alpha;
     if (wallTex){
@@ -6074,6 +6125,42 @@ const FOG_BANKS = Array.from({length:5}, (_,i)=>({
   rScale: 0.7+(hashStr('fogr'+i)%100)/140,
 }));
 let lastCamX = 0, lastCamY = 0;
+
+/* helper isometrico: disegna un diamante (pavimento) */
+function isoDiamond(ctx, cx, cy, w, h){
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx + w*0.5, cy + h*0.5);
+  ctx.lineTo(cx, cy + h);
+  ctx.lineTo(cx - w*0.5, cy + h*0.5);
+  ctx.closePath();
+}
+/* helper isometrico: blocco 3D (muro) con facce top/left/right */
+function isoBlock(ctx, sx, sy, w, h, wallH, cTop, cLeft, cRight){
+  // top face
+  ctx.fillStyle = cTop;
+  isoDiamond(ctx, sx, sy - wallH, w, h);
+  ctx.fill();
+  // left face
+  ctx.fillStyle = cLeft;
+  ctx.beginPath();
+  ctx.moveTo(sx - w*0.5, sy + h*0.5);
+  ctx.lineTo(sx, sy + h);
+  ctx.lineTo(sx, sy + h - wallH);
+  ctx.lineTo(sx - w*0.5, sy + h*0.5 - wallH);
+  ctx.closePath();
+  ctx.fill();
+  // right face
+  ctx.fillStyle = cRight;
+  ctx.beginPath();
+  ctx.moveTo(sx + w*0.5, sy + h*0.5);
+  ctx.lineTo(sx, sy + h);
+  ctx.lineTo(sx, sy + h - wallH);
+  ctx.lineTo(sx + w*0.5, sy + h*0.5 - wallH);
+  ctx.closePath();
+  ctx.fill();
+}
+
 function render(dt){
   torchClock += dt;
   animClock += dt;
@@ -6242,6 +6329,28 @@ function render(dt){
         // fallback sulle vecchie tonalità piatte se il PNG non è caricato
         const floorTex = SPRITE_TILES['floor_stone'];
         ctx.globalAlpha = alpha;
+        if (viewMode === 'isometric'){
+          ctx.save();
+          isoDiamond(ctx, sx, sy, tile, tile*0.5);
+          ctx.clip();
+          if (floorTex){
+            ctx.imageSmoothingEnabled = true;
+            ctx.drawImage(floorTex, sx-tile*0.5-0.6, sy-0.6, tile+1.2, tile*0.5+1.2);
+            ctx.imageSmoothingEnabled = false;
+          } else {
+            ctx.fillStyle = texHash%2===0 ? '#120e09' : '#140f0b';
+            ctx.fill();
+          }
+          if (inSanctuary){
+            ctx.fillStyle = 'rgba(21,36,44,'+(alpha*0.9)+')';
+            ctx.fill();
+          }
+          ctx.restore();
+          ctx.strokeStyle = 'rgba(0,0,0,0.32)';
+          ctx.lineWidth = 1;
+          isoDiamond(ctx, sx, sy, tile, tile*0.5);
+          ctx.stroke();
+        } else {
         if (floorTex){
           const prevSmooth = ctx.imageSmoothingEnabled;
           ctx.imageSmoothingEnabled = true;
@@ -6255,13 +6364,13 @@ function render(dt){
           ctx.fillStyle = 'rgba(21,36,44,'+(alpha*0.9)+')';
           ctx.fillRect(sx-0.6, sy-0.6, tile+1.2, tile+1.2);
         }
-        // giunti scuri fra le lastre (righe in basso e a destra)
         ctx.strokeStyle = 'rgba(0,0,0,0.32)';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(sx, sy+tile); ctx.lineTo(sx+tile, sy+tile);
         ctx.moveTo(sx+tile, sy); ctx.lineTo(sx+tile, sy+tile);
         ctx.stroke();
+        }
         // pietrisco e schegge occasionali
         if (texHash>84){
           const px = sx + ((texHash*7)%100)/100*(tile-4)+2, py = sy + ((texHash*13)%100)/100*(tile-4)+2;
@@ -7178,11 +7287,16 @@ function worldToScreen(wx, wy, tile, camX, camY){
     return _w2s;
   }
   if (viewMode === 'thirdperson'){
-    // 2.5D: Y compresso + offset camera alta — sensazione "dietro le spalle"
-    const baseX = (wx - camX) * tile;
-    const baseY = (wy - camY) * tile;
-    _w2s.x = baseX;
-    _w2s.y = baseY * 0.55 + cssH * 0.12;
+    // terza persona: camera dietro e sopra il giocatore, prospettiva con vanishing point
+    const dx = (wx - me.x), dy = (wy - me.y);
+    const baseX = dx * tile;
+    const baseY = dy * tile;
+    // prospettiva: cose lontane più piccole e più in alto
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const persp = 1 + dist * 0.06;
+    const playerScreenY = cssH * 0.68;
+    _w2s.x = cssW * 0.5 + baseX / persp;
+    _w2s.y = playerScreenY + baseY * 0.52 / persp;
     return _w2s;
   }
   // topdown (default)
@@ -7204,9 +7318,12 @@ function screenToWorld(px, py){
     return { x: wx, y: wy };
   }
   if (viewMode === 'thirdperson'){
-    const worldY = (py - cssH * 0.12) / (t * 0.55) + lastCamY;
-    const worldX = px / t + lastCamX;
-    return { x: worldX, y: worldY };
+    const playerScreenY = cssH * 0.68;
+    const dy = (py - playerScreenY) / (t * 0.52);
+    const dx = (px - cssW * 0.5) / t;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const persp = 1 + dist * 0.06;
+    return { x: me.x + dx * persp, y: me.y + dy * persp };
   }
   return { x: px / t + lastCamX, y: py / t + lastCamY };
 }
@@ -7713,7 +7830,23 @@ function renderFirstPerson(dt){
     proj.push(s);
   }
   proj.sort((a,b)=>b.tfy-a.tfy);
-  /* --- entità come VOLUMI 3D (parallelepipedi texturizzati con la PNG) --- */
+  /* --- entità come BILLBOARD SPRITES (stile Doom, non scatole 3D) --- */
+  const FP_SPRITE_CV = window._fpSprCV || (window._fpSprCV = {});
+  function fpSprCV(key){
+    if (FP_SPRITE_CV[key]) return FP_SPRITE_CV[key];
+    const spr = fpSprite(key);
+    if (!spr) return null;
+    const cv = document.createElement('canvas'); cv.width = spr.w; cv.height = spr.h;
+    const cx = cv.getContext('2d');
+    const id = cx.createImageData(spr.w, spr.h); const d = id.data;
+    for (let i=0; i<spr.px.length; i++){
+      const c = spr.px[i];
+      d[i*4]=c&255; d[i*4+1]=(c>>>8)&255; d[i*4+2]=(c>>>16)&255; d[i*4+3]=(c>>>24)&255;
+    }
+    cx.putImageData(id, 0, 0);
+    FP_SPRITE_CV[key] = cv;
+    return cv;
+  }
   for (const s of proj){
     let lift = 0, isBoss = false;
     if (s.mon){
@@ -7729,46 +7862,26 @@ function renderFirstPerson(dt){
         }
       }
     }
-    const spr = fpSprite(s.kind);
-    if (!spr) continue;
-    /* dimensioni del modello 3D: ogni entità è un solido texturizzato con la
-       PNG su TUTTE le facce (fianchi/retro più scuri e specchiati). Il modello
-       è orientato nel mondo e NON ruota con la visuale. */
-    let hw, hd, hh;
-    if (s.small){ hw=0.16; hd=0.16; hh=0.30; }
-    else if (isBoss){ hw=0.9; hd=0.8; hh=2.1; }
-    else if (s.kind==='chest_open' || s.kind==='chest_closed'){ hw=0.34; hd=0.34; hh=0.55; }
-    else if (s.kind==='stairs'){ hw=0.42; hd=0.42; hh=0.22; }
-    else { hw=0.30; hd=0.26; hh=0.95; }
-    /* orientamento dall'heading REALE di movimento: il mostro fissa l'angolo al
-       primo frame e lo aggiorna solo quando si muove davvero, seguendo la
-       direzione di marcia (quando è fermo resta così, e puoi girargli intorno).
-       Il mercante è orientato FISSO nel mondo (non segue più il giocatore);
-       i peer in multi seguono il proprio facing di spostamento. */
-    let ang = 0;
-    if (s.mon){
-      const mx = s.mon.rx, my = s.mon.ry;
-      if (s.mon._fpAng === undefined){
-        s.mon._fpAng = (s.mon.facing ? Math.atan2(s.mon.facing.y||0, s.mon.facing.x||1) : 0);
-        s.mon._fpPX = mx; s.mon._fpPY = my;
-      }
-      const dx = mx - s.mon._fpPX, dy = my - s.mon._fpPY;
-      if (dx*dx + dy*dy > 0.0009){
-        const want = Math.atan2(dy, dx);
-        const diff = ((want - s.mon._fpAng) % (Math.PI*2) + Math.PI*3) % (Math.PI*2) - Math.PI;
-        s.mon._fpAng += Math.max(-dt*7, Math.min(dt*7, diff));
-      }
-      s.mon._fpPX = mx; s.mon._fpPY = my;
-      ang = s.mon._fpAng;
-    } else if (s.peer && s.peer.facing){
-      ang = Math.atan2(s.peer.facing.y||0, s.peer.facing.x||1);
-    } else if (s.kind==='merchant'){
-      ang = Math.PI/2;
-    }
-    const sh = clamp(2.8/(1+s.tfy*0.5), s.small ? 0.8 : 0.35, 1.35)*((1-depthDark)*flick);
-    fpBlitBox({cx:s.x, cy:s.y, hw, hd, hh, z0:lift, ang, tex:spr,
-               W, H, fz:fpZ, fpPx, shade:sh, dirX, dirY, horizonY});
+    const cv = fpSprCV(s.kind);
+    if (!cv) continue;
+    const rx = s.x - me.x, ry = s.y - me.y;
+    const tfy = rx * dirX + ry * dirY;
+    if (tfy < 0.15) continue;
+    const tfx = (rx * dirY - ry * dirX) / FP_PLANE;
+    const sx = W/2 * (1 + tfx / (FP_PLANE * tfy));
+    const feetY = horizonY + (0.5 * H) / tfy;
+    const liftPx = lift > 0 ? lift * (0.5 * H) / tfy * 0.35 : 0;
+    const entityH = s.small ? 0.35 : isBoss ? 2.2 : 1.0;
+    const sprH = entityH * (0.5 * H) / tfy;
+    const sprW = sprH * cv.width / cv.height;
+    const col = Math.round(sx);
+    if (col >= 0 && col < W && tfy >= fpZ[col]) continue;
+    const sh = clamp(2.8/(1+tfy*0.5), s.small?0.8:0.35, 1.35) * ((1-depthDark)*flick);
+    fpCtx.globalAlpha = clamp(sh, 0, 1);
+    fpCtx.imageSmoothingEnabled = false;
+    fpCtx.drawImage(cv, sx - sprW/2, feetY - sprH - liftPx, sprW, sprH);
   }
+  fpCtx.globalAlpha = 1;
 
   /* --- torce come MODELLI 3D: braccio-basamento montato sulla parete che
      sporge verso la stanza, con la PNG della fiamma sul fronte --- */
