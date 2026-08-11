@@ -6193,15 +6193,21 @@ function render(dt){
   const layout = world.layout;
   const viewCols = cssW/tile, viewRows = cssH/tile;
   let camX = me.x - viewCols/2, camY = me.y - viewRows/2;
+  if (viewMode === 'thirdperson'){
+    camY = me.y - viewRows * 0.28;
+  }
   lastCamX = camX; lastCamY = camY;
   // isometric view needs wider tile range (diamond covers more tiles)
+  // thirdperson needs taller range (Y-compressed view shows more rows)
   const isoExpand = viewMode === 'isometric' ? 3 : 1;
+  const tpExpand = viewMode === 'thirdperson' ? 2 : 1;
   const x0 = Math.floor(camX)-isoExpand, x1 = Math.ceil(camX+viewCols)+isoExpand;
-  const y0 = Math.floor(camY)-isoExpand, y1 = Math.ceil(camY+viewRows)+isoExpand;
+  const y0 = Math.floor(camY)-isoExpand-tpExpand, y1 = Math.ceil(camY+viewRows)+isoExpand+tpExpand;
   const flick = 0.9 + 0.1*Math.sin(torchClock*3.1) + 0.04*Math.sin(torchClock*7.7);
   // alone di luce calda dalla torcia del giocatore: gradiente radiale tremolante
   const glowR = Math.min(cssW, cssH)*0.6;
-  const glow = ctx.createRadialGradient(cssW/2, cssH/2, 0, cssW/2, cssH/2, glowR);
+  const glowCY = viewMode === 'thirdperson' ? cssH * 0.72 : cssH/2;
+  const glow = ctx.createRadialGradient(cssW/2, glowCY, 0, cssW/2, glowCY, glowR);
   if (IS_C64){
     glow.addColorStop(0, 'rgba(108,94,181,'+(0.14*flick)+')');
     glow.addColorStop(0.45, 'rgba(123,113,213,'+(0.07*flick)+')');
@@ -7287,16 +7293,9 @@ function worldToScreen(wx, wy, tile, camX, camY){
     return _w2s;
   }
   if (viewMode === 'thirdperson'){
-    // terza persona: camera dietro e sopra il giocatore, prospettiva con vanishing point
     const dx = (wx - me.x), dy = (wy - me.y);
-    const baseX = dx * tile;
-    const baseY = dy * tile;
-    // prospettiva: cose lontane più piccole e più in alto
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const persp = 1 + dist * 0.06;
-    const playerScreenY = cssH * 0.68;
-    _w2s.x = cssW * 0.5 + baseX / persp;
-    _w2s.y = playerScreenY + baseY * 0.52 / persp;
+    _w2s.x = cssW * 0.5 + dx * tile;
+    _w2s.y = cssH * 0.72 + dy * tile * 0.52;
     return _w2s;
   }
   // topdown (default)
@@ -7318,12 +7317,9 @@ function screenToWorld(px, py){
     return { x: wx, y: wy };
   }
   if (viewMode === 'thirdperson'){
-    const playerScreenY = cssH * 0.68;
-    const dy = (py - playerScreenY) / (t * 0.52);
     const dx = (px - cssW * 0.5) / t;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const persp = 1 + dist * 0.06;
-    return { x: me.x + dx * persp, y: me.y + dy * persp };
+    const dy = (py - cssH * 0.72) / (t * 0.52);
+    return { x: me.x + dx, y: me.y + dy };
   }
   return { x: px / t + lastCamX, y: py / t + lastCamY };
 }
@@ -7868,7 +7864,7 @@ function renderFirstPerson(dt){
     const tfy = rx * dirX + ry * dirY;
     if (tfy < 0.15) continue;
     const tfx = (rx * dirY - ry * dirX) / FP_PLANE;
-    const sx = W/2 * (1 + tfx / (FP_PLANE * tfy));
+    const sx = W/2 * (1 + tfx / tfy);
     const feetY = horizonY + (0.5 * H) / tfy;
     const liftPx = lift > 0 ? lift * (0.5 * H) / tfy * 0.35 : 0;
     const entityH = s.small ? 0.35 : isBoss ? 2.2 : 1.0;
