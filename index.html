@@ -8733,19 +8733,6 @@ canvas.addEventListener('mousemove', (e)=>{
    15. Tooltip al passaggio del mouse su mostri, oggetti, forzieri, scale
    --------------------------------------------------------------------- */
 function capFirst(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
-function screenToWorld(px, py){
-  const t = TILE*zoomLevel;
-  if (viewMode === 'isometric'){
-    const sx = px, sy = py;
-    const wx = (sy/(t*0.25) + sx/(t*0.5)) / 2;
-    const wy = (sy/(t*0.25) - sx/(t*0.5)) / 2;
-    return { x: wx, y: wy };
-  }
-  if (viewMode === 'thirdperson'){
-    return { x: px/t + lastCamX, y: (py + t*1.2)/(t*0.55) + lastCamY };
-  }
-  return { x: px/t + lastCamX, y: py/t + lastCamY };
-}
 function buildTooltipHtml(obj, type){
   if (type==='monster'){
     const t = MONSTER_TYPES[obj.type];
