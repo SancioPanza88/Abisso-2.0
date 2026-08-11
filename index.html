@@ -525,6 +525,36 @@ body.c64 #sprite-loading .sub{
 }
 .char-select-bottom{ display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:4px; }
 .char-note{ color:var(--ink); font-size:11px; text-align:center; }
+
+#news-panel{
+  display:none; width:min(360px,92vw); margin:12px auto 0;
+  background:linear-gradient(180deg,rgba(55,44,31,.92),rgba(22,17,9,.95));
+  border:1px solid var(--amber-deep); border-radius:8px;
+  padding:14px 16px; text-align:left;
+  box-shadow:0 0 18px rgba(232,161,61,.12), inset 0 1px 0 rgba(232,161,61,.08);
+}
+#news-panel.show{ display:block; }
+#news-panel h3{
+  margin:0 0 8px; font-family:var(--font-display); font-size:14px;
+  color:var(--amber); letter-spacing:.06em; text-align:center;
+}
+#news-panel ul{ margin:0; padding:0 0 0 16px; list-style:none; }
+#news-panel li{
+  position:relative; padding:4px 0 4px 12px;
+  color:var(--parchment); font-size:12px; line-height:1.45;
+}
+#news-panel li::before{
+  content:''; position:absolute; left:0; top:9px;
+  width:5px; height:5px; border-radius:50%; background:var(--amber);
+}
+#news-panel li span{ color:var(--ink); font-size:10.5px; }
+#news-panel .news-dismiss{
+  display:block; margin:10px auto 0;
+  background:var(--stone); border:1px solid var(--amber-deep); color:var(--amber);
+  border-radius:5px; padding:5px 18px; font-family:var(--font-ui); font-size:11px;
+  cursor:pointer; transition:border-color .15s ease;
+}
+#news-panel .news-dismiss:hover{ border-color:var(--amber); }
 #char-continue{
   position:relative; overflow:hidden;
   background:linear-gradient(180deg,#5a4228 0%,#36210f 55%,#241407 100%);
@@ -1164,6 +1194,15 @@ body.c64 #sprite-loading .sub{
     <div class="login-sub" id="char-select-sub">Scegli il tuo eroe — tutti i personaggi, nessuno potrebbe mancare.</div>
     <div id="login-classes"></div>
     <div class="char-select-bottom">
+      <div id="news-panel">
+        <h3>Ultime Novità</h3>
+        <ul>
+          <li><b>Visuale Isometrica</b> — Premi V per passare dalla visuale dall'alto a quella isometrica con pavimenti a diamante e muri in 3D.</li>
+          <li><b>Modalità Commodore 64</b> — Entra con codice stanza "64" per un'esperienza retro con sprite pixel art, musichette 8-bit e palette C64.</li>
+          <li><b>Miglioramenti grafici</b> — Particelle migliorate, auree, flash critici, fumo, scintille armi e nuovi effetti sugli status.</li>
+        </ul>
+        <button class="news-dismiss" id="news-dismiss-btn">Ho capito!</button>
+      </div>
       <div class="char-note">Clicca un eroe, poi Continua. Potrai cambiare classe anche in gioco.</div>
       <button id="char-continue" type="button" disabled>Continua</button>
     </div>
@@ -4566,7 +4605,7 @@ function performAttack(){
   // In prima persona l'auto-mira NON ruota la telecamera: si colpisce dove si guarda
   const autoRange = c.ranged ? c.range : Math.max(c.range+0.7, 2.1);
   const nearest = findNearestMonster(autoRange);
-  if (nearest && !fpMode){
+  if (nearest){
     const ndx = nearest.rx-me.x, ndy = nearest.ry-me.y;
     const ndd = Math.hypot(ndx,ndy)||1;
     me.facing = {x:ndx/ndd, y:ndy/ndd};
@@ -4698,7 +4737,7 @@ function abilityShadowStep(c){
     const d = Math.sqrt(bestD)||1;
     const spotX = target.rx - (dx/d)*0.85, spotY = target.ry - (dy/d)*0.85;
     if (canOccupy(world.layout, spotX, spotY, 0.24)){ me.x = spotX; me.y = spotY; }
-    if (!fpMode) me.facing = { x: dx/d, y: dy/d };
+    me.facing = { x: dx/d, y: dy/d };
     const amount = Math.round((CLASSES.ladro.dmg[0]+CLASSES.ladro.dmg[1])/2 * 1.9);
     requestMonsterDamage(target.id, amount);
     hitBurst(target.rx, target.ry, '#ffe08a');
@@ -5050,7 +5089,6 @@ function setZoom(level){
    In prima persona lo zoom non serve: la rotellina viene ignorata */
 canvas.addEventListener('wheel', (e)=>{
   e.preventDefault();
-  if (fpMode) return;
   setZoom(zoomLevel + (e.deltaY<0 ? ZOOM_STEP : -ZOOM_STEP));
 }, {passive:false});
 
@@ -6051,7 +6089,7 @@ function drawWallBlock(layout, tx, ty, sx, sy, tile, alpha, visible, mask){
     ctx.globalAlpha = 1;
     return;
   }
-  // --- top-down / thirdperson path ---
+  // --- top-down path ---
   const wallTex = IS_C64 ? null : SPRITE_TILES['wall_stone'];
     ctx.globalAlpha = alpha;
     if (wallTex){
@@ -6189,25 +6227,18 @@ function render(dt){
   ctx.fillRect(0,0,cssW,cssH);
 
   if (!world.layout){ return; }
-  if (fpMode){ renderFirstPerson(dt); return; }
   const layout = world.layout;
   const viewCols = cssW/tile, viewRows = cssH/tile;
   let camX = me.x - viewCols/2, camY = me.y - viewRows/2;
-  if (viewMode === 'thirdperson'){
-    camY = me.y - viewRows * 0.28;
-  }
   lastCamX = camX; lastCamY = camY;
   // isometric view needs wider tile range (diamond covers more tiles)
-  // thirdperson needs taller range (Y-compressed view shows more rows)
   const isoExpand = viewMode === 'isometric' ? 3 : 1;
-  const tpExpand = viewMode === 'thirdperson' ? 2 : 1;
   const x0 = Math.floor(camX)-isoExpand, x1 = Math.ceil(camX+viewCols)+isoExpand;
-  const y0 = Math.floor(camY)-isoExpand-tpExpand, y1 = Math.ceil(camY+viewRows)+isoExpand+tpExpand;
+  const y0 = Math.floor(camY)-isoExpand, y1 = Math.ceil(camY+viewRows)+isoExpand;
   const flick = 0.9 + 0.1*Math.sin(torchClock*3.1) + 0.04*Math.sin(torchClock*7.7);
   // alone di luce calda dalla torcia del giocatore: gradiente radiale tremolante
   const glowR = Math.min(cssW, cssH)*0.6;
-  const glowCY = viewMode === 'thirdperson' ? cssH * 0.72 : cssH/2;
-  const glow = ctx.createRadialGradient(cssW/2, glowCY, 0, cssW/2, glowCY, glowR);
+  const glow = ctx.createRadialGradient(cssW/2, cssH/2, 0, cssW/2, cssH/2, glowR);
   if (IS_C64){
     glow.addColorStop(0, 'rgba(108,94,181,'+(0.14*flick)+')');
     glow.addColorStop(0.45, 'rgba(123,113,213,'+(0.07*flick)+')');
@@ -7191,8 +7222,8 @@ const FP_MOUSE_PITCH = 0.0016;      // sensibilità oscillazione verticale
 const FP_TEX = 64;
 const FP_WEAP_KEY = { guerriero:'fp_spada', ladro:'fp_pugnale', mago:'fp_bastone', ranger:'fp_arco', prof:'fp_spada' };
 let fpMode = false;
-const VIEW_MODES = ['topdown','isometric','thirdperson','firstperson'];
-const VIEW_LABELS = { topdown:'Dall\'alto', isometric:'Isometrica', thirdperson:'Terza persona', firstperson:'Prima persona' };
+const VIEW_MODES = ['topdown','isometric'];
+const VIEW_LABELS = { topdown:'Dall\'alto', isometric:'Isometrica' };
 let viewMode = 'topdown';
 let fpAngle = 0, fpPitch = 0;
 let fpTurnL = false, fpTurnR = false;
@@ -7270,14 +7301,9 @@ function cycleViewMode(){
   const idx = VIEW_MODES.indexOf(viewMode);
   const next = VIEW_MODES[(idx + 1) % VIEW_MODES.length];
   viewMode = next;
-  fpMode = (next === 'firstperson');
-  if (fpMode){
-    try { canvas.requestPointerLock(); } catch(e){}
-    showToast('Prima persona — muovi il mouse per guardarti');
-  } else {
-    if (document.pointerLockElement === canvas) document.exitPointerLock();
-    showToast('Visuale: ' + VIEW_LABELS[next]);
-  }
+  fpMode = false;
+  if (document.pointerLockElement === canvas) document.exitPointerLock();
+  showToast('Visuale: ' + VIEW_LABELS[next]);
 }
 
 /* worldToScreen: converte coordinate mondo (tile) in pixel schermo.
@@ -7285,20 +7311,12 @@ function cycleViewMode(){
 const _w2s = {x:0, y:0};
 function worldToScreen(wx, wy, tile, camX, camY){
   if (viewMode === 'isometric'){
-    // proiezione isometrica 2:1 — centra sul giocatore
     const pIsoX = (me.x - me.y) * tile * 0.5;
     const pIsoY = (me.x + me.y) * tile * 0.25;
     _w2s.x = (wx - wy) * tile * 0.5 - pIsoX + cssW * 0.5;
     _w2s.y = (wx + wy) * tile * 0.25 - pIsoY + cssH * 0.5;
     return _w2s;
   }
-  if (viewMode === 'thirdperson'){
-    const dx = (wx - me.x), dy = (wy - me.y);
-    _w2s.x = cssW * 0.5 + dx * tile;
-    _w2s.y = cssH * 0.72 + dy * tile * 0.52;
-    return _w2s;
-  }
-  // topdown (default)
   _w2s.x = (wx - camX) * tile;
   _w2s.y = (wy - camY) * tile;
   return _w2s;
@@ -7316,16 +7334,10 @@ function screenToWorld(px, py){
     const wy = (relY / (t * 0.25) - relX / (t * 0.5)) * 0.5;
     return { x: wx, y: wy };
   }
-  if (viewMode === 'thirdperson'){
-    const dx = (px - cssW * 0.5) / t;
-    const dy = (py - cssH * 0.72) / (t * 0.52);
-    return { x: me.x + dx, y: me.y + dy };
-  }
   return { x: px / t + lastCamX, y: py / t + lastCamY };
 }
 document.addEventListener('pointerlockchange', ()=>{
   fpMouseLock = document.pointerLockElement === canvas;
-  if (fpMode && !fpMouseLock) showToast('Clicca sul gioco per catturare il mouse');
 });
 document.addEventListener('mousemove', (e)=>{
   if (!fpMode || !fpMouseLock) return;
@@ -8175,22 +8187,10 @@ function updateLocalPlayer(dt){
 
   if (me.isSpectator){
     let dx=0, dy=0;
-    if (fpMode){
-      if (fpTurnL) fpAngle -= 3.2*dt;
-      if (fpTurnR) fpAngle += 3.2*dt;
-      const ca = Math.cos(fpAngle), sa = Math.sin(fpAngle);
-      if (keys.up){ dx += ca; dy += sa; }
-      if (keys.down){ dx -= ca; dy -= sa; }
-      if (keys.left){ dx += sa; dy -= ca; }
-      if (keys.right){ dx -= sa; dy += ca; }
-      me.facing = {x:ca, y:sa};
-      if (dx||dy) fpLookBob += dt*8;
-    } else {
-      if (keys.up) dy-=1;
-      if (keys.down) dy+=1;
-      if (keys.left) dx-=1;
-      if (keys.right) dx+=1;
-    }
+    if (keys.up) dy-=1;
+    if (keys.down) dy+=1;
+    if (keys.left) dx-=1;
+    if (keys.right) dx+=1;
     if (dx||dy){
       const len = Math.hypot(dx,dy);
       me.x += (dx/len)*6*dt;
@@ -8212,22 +8212,10 @@ function updateLocalPlayer(dt){
 
   me.speed = CLASSES[me.cls].speed * (me.buffs.haste>0 ? 1.4 : 1) * (1 + computeEquipBonus().speedPct/100) * DBG.speedMult;
   let dx=0, dy=0;
-  if (fpMode){
-    if (fpTurnL) fpAngle -= 3.2*dt;
-    if (fpTurnR) fpAngle += 3.2*dt;
-    const ca = Math.cos(fpAngle), sa = Math.sin(fpAngle);
-    if (keys.up){ dx += ca; dy += sa; }
-    if (keys.down){ dx -= ca; dy -= sa; }
-    if (keys.left){ dx += sa; dy -= ca; }
-    if (keys.right){ dx -= sa; dy += ca; }
-    me.facing = {x:ca, y:sa};
-    if (dx||dy) fpLookBob += dt*8;
-  } else {
-    if (keys.up) dy-=1;
-    if (keys.down) dy+=1;
-    if (keys.left) dx-=1;
-    if (keys.right) dx+=1;
-  }
+  if (keys.up) dy-=1;
+  if (keys.down) dy+=1;
+  if (keys.left) dx-=1;
+  if (keys.right) dx+=1;
   if (dx||dy){
     const len = Math.hypot(dx,dy);
     dx/=len; dy/=len;
@@ -8719,9 +8707,9 @@ window.addEventListener('keydown', (e)=>{
     case 'KeyW': case 'ArrowUp': keys.up=true; e.preventDefault(); break;
     case 'KeyS': case 'ArrowDown': keys.down=true; e.preventDefault(); break;
     case 'KeyA': keys.left=true; e.preventDefault(); break;
-    case 'ArrowLeft': if (fpMode) fpTurnL=true; else keys.left=true; e.preventDefault(); break;
+    case 'ArrowLeft': keys.left=true; e.preventDefault(); break;
     case 'KeyD': keys.right=true; e.preventDefault(); break;
-    case 'ArrowRight': if (fpMode) fpTurnR=true; else keys.right=true; e.preventDefault(); break;
+    case 'ArrowRight': keys.right=true; e.preventDefault(); break;
     case 'Space': keys.attack=true; e.preventDefault(); break;
     case 'KeyE': keys.interact=true; tryInteract(); break;
     case 'KeyQ': drinkPotion(); break;
@@ -8737,17 +8725,14 @@ window.addEventListener('keyup', (e)=>{
     case 'KeyW': case 'ArrowUp': keys.up=false; break;
     case 'KeyS': case 'ArrowDown': keys.down=false; break;
     case 'KeyA': keys.left=false; break;
-    case 'ArrowLeft': keys.left=false; fpTurnL=false; break;
+    case 'ArrowLeft': keys.left=false; break;
     case 'KeyD': keys.right=false; break;
-    case 'ArrowRight': keys.right=false; fpTurnR=false; break;
+    case 'ArrowRight': keys.right=false; break;
     case 'Space': keys.attack=false; break;
     case 'KeyE': keys.interact=false; break;
   }
 });
 canvas.addEventListener('mousedown', ()=>{
-  if (fpMode && !fpMouseLock){
-    try { canvas.requestPointerLock(); } catch(e){}
-  }
   if (!chatOpen()) keys.attack=true;
 });
 window.addEventListener('mouseup', ()=>{ keys.attack=false; });
@@ -9231,6 +9216,19 @@ document.getElementById('login-room').value = ROOM_CODE;
 document.getElementById('login-maxplayers').max = HARD_MAX_PLAYERS;
 document.getElementById('login-maxplayers').value = HARD_MAX_PLAYERS;
 populateLoginClasses();
+
+/* --- pannello novità: mostra solo se la versione è nuova --- */
+const NEWS_VERSION = '2.1';
+const newsPanel = document.getElementById('news-panel');
+const newsDismissBtn = document.getElementById('news-dismiss-btn');
+try {
+  const seen = localStorage.getItem('abisso.newsVersion');
+  if (seen !== NEWS_VERSION) newsPanel.classList.add('show');
+} catch(e){ newsPanel.classList.add('show'); }
+newsDismissBtn.addEventListener('click', ()=>{
+  newsPanel.classList.remove('show');
+  try { localStorage.setItem('abisso.newsVersion', NEWS_VERSION); } catch(e){}
+});
 
 document.getElementById('login-random-room').addEventListener('click', ()=>{
   document.getElementById('login-room').value = 'stanza-'+Math.random().toString(36).slice(2,7);
