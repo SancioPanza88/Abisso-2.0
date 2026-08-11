@@ -2942,6 +2942,13 @@ function drawMinimap(){
   m.beginPath();
   m.arc(offX+me.x*scale, offY+me.y*scale, 2.2+0.5*Math.sin(torchClock*5), 0, Math.PI*2);
   m.fill();
+  // view mode indicator
+  if (viewMode !== 'topdown'){
+    m.font = '600 9px '+FONT_STACK;
+    m.textAlign = 'right'; m.textBaseline = 'top';
+    m.fillStyle = 'rgba(255,255,255,0.55)';
+    m.fillText(VIEW_LABELS[viewMode], MW-4, 4);
+  }
 }
 document.addEventListener('DOMContentLoaded', ()=>{
   const mw = document.getElementById('minimap-wrap');
@@ -5188,6 +5195,9 @@ function prepareTileTextures(){
     cx.drawImage(img, sX, sY, sW, sH, 0, 0, 64, 64);
     SPRITE_TILES[key] = cvs;
   }
+  // first-person texture packs (Uint32 pixel arrays)
+  if (SPRITE_TILES['wall_stone']) fpWallPx = fpTilePx(SPRITE_TILES['wall_stone']);
+  if (SPRITE_TILES['floor_stone']) fpFloorPx = fpTilePx(SPRITE_TILES['floor_stone']);
 }
 const flashCanvas = document.createElement('canvas');
 flashCanvas.width = 64; flashCanvas.height = 64;
@@ -5806,7 +5816,7 @@ function renderSpellFlashes(tile, camX, camY){
   ctx.globalCompositeOperation = 'lighter';
   for (const f of spellFlashes){
     const t = 1 - f.life/f.maxLife;
-    const sx=(f.x-camX)*tile, sy=(f.y-camY)*tile;
+    const _fs = worldToScreen(f.x, f.y, tile, camX, camY); const sx=_fs.x, sy=_fs.y;
     const R = tile*f.r*(0.6+t*0.5);
     const a = Math.max(0, 1-t*1.3);
     const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, R);
@@ -5839,7 +5849,7 @@ function renderParticles(tile, camX, camY){
   ctx.globalCompositeOperation = 'lighter';
   for (const p of particles){
     if (!p.add) continue;
-    const sx=(p.x-camX)*tile, sy=(p.y-camY)*tile;
+    const _pas = worldToScreen(p.x, p.y, tile, camX, camY); const sx=_pas.x, sy=_pas.y;
     const k = p.life/p.maxLife;
     const t = 1-k;
     ctx.globalAlpha = clamp(k,0,1)*p.alpha;
@@ -5852,7 +5862,7 @@ function renderParticles(tile, camX, camY){
   ctx.globalCompositeOperation = 'source-over';
   for (const p of particles){
     if (p.add) continue;
-    const sx=(p.x-camX)*tile, sy=(p.y-camY)*tile;
+    const _ps4 = worldToScreen(p.x, p.y, tile, camX, camY); const sx=_ps4.x, sy=_ps4.y;
     const k = p.life/p.maxLife;
     const t = 1-k;
     ctx.globalAlpha = clamp(k,0,1)*p.alpha*0.9;
@@ -5880,7 +5890,7 @@ function renderParticles(tile, camX, camY){
   ctx.globalCompositeOperation = 'lighter';
   for (const s of slashes){
     const t = 1 - s.life/s.maxLife;
-    const sx=(s.x-camX)*tile, sy=(s.y-camY)*tile;
+    const _ss = worldToScreen(s.x, s.y, tile, camX, camY); const sx=_ss.x, sy=_ss.y;
     const r = tile*(0.25+t*s.len);
     ctx.globalAlpha = clamp(1-t,0,1);
     ctx.strokeStyle = s.color;
@@ -6097,6 +6107,10 @@ function render(dt){
   const viewCols = cssW/tile, viewRows = cssH/tile;
   let camX = me.x - viewCols/2, camY = me.y - viewRows/2;
   lastCamX = camX; lastCamY = camY;
+  // isometric view needs wider tile range (diamond covers more tiles)
+  const isoExpand = viewMode === 'isometric' ? 3 : 1;
+  const x0 = Math.floor(camX)-isoExpand, x1 = Math.ceil(camX+viewCols)+isoExpand;
+  const y0 = Math.floor(camY)-isoExpand, y1 = Math.ceil(camY+viewRows)+isoExpand;
   const flick = 0.9 + 0.1*Math.sin(torchClock*3.1) + 0.04*Math.sin(torchClock*7.7);
   // alone di luce calda dalla torcia del giocatore: gradiente radiale tremolante
   const glowR = Math.min(cssW, cssH)*0.6;
@@ -6140,9 +6154,6 @@ function render(dt){
     }
   }
 
-  const x0 = Math.floor(camX)-1, x1 = Math.ceil(camX+viewCols)+1;
-  const y0 = Math.floor(camY)-1, y1 = Math.ceil(camY+viewRows)+1;
-
   for (let ty=y0; ty<=y1; ty++){
     if (ty<0||ty>=layout.h) continue;
     for (let tx=x0; tx<=x1; tx++){
@@ -6151,7 +6162,7 @@ function render(dt){
       const visible = me.isSpectator || world.visibleSet.has(key);
       const visited = me.isSpectator || world.visited[ty*layout.w+tx];
       if (!visible && !visited) continue;
-      const sx = (tx-camX)*tile, sy = (ty-camY)*tile;
+      const _ts = worldToScreen(tx, ty, tile, camX, camY); const sx=_ts.x, sy=_ts.y;
       const alpha = visible ? flick : 0.32;
       const tval = layout.grid[ty][tx];
       if (tval === T_WALL){
@@ -6308,7 +6319,7 @@ function render(dt){
     for (const g of bossGate.gates){
       const gkey = g.x+','+g.y;
       if (!me.isSpectator && !world.visibleSet.has(gkey)) continue;
-      const gx=(g.x-camX)*tile, gy=(g.y-camY)*tile;
+      const _gs = worldToScreen(g.x, g.y, tile, camX, camY); const gx=_gs.x, gy=_gs.y;
       const pul = 0.30+0.14*Math.sin(torchClock*7+(g.x*7+g.y*11));
       const grd = ctx.createLinearGradient(gx, gy, gx, gy+tile);
       grd.addColorStop(0, 'rgba(255,96,44,'+(pul*1.5)+')');
@@ -6328,7 +6339,7 @@ function render(dt){
   for (const tc of layout.torches){
     const tkey = tc.x+','+tc.y;
     if (!me.isSpectator && !world.visibleSet.has(tkey)) continue;
-    const sx=(tc.x-camX)*tile + tile/2, sy=(tc.y-camY)*tile + tile/2;
+    const _ts2 = worldToScreen(tc.x, tc.y, tile, camX, camY); const sx=_ts2.x + tile/2, sy=_ts2.y + tile/2;
     const ph = ((tc.x*7+tc.y*13) % 20)/20;
     const fl = 0.75 + 0.25*Math.sin(torchClock*9+ph*6.28) + 0.08*Math.sin(torchClock*23+ph*13);
     const R = tile*3.4;
@@ -6379,7 +6390,7 @@ function render(dt){
   // ground items
   for (const it of world.items){
     if (!me.isSpectator && !world.visibleSet.has(it.x+','+it.y)) continue;
-    const sx=(it.x+0.5-camX)*tile, sy=(it.y+0.5-camY)*tile;
+    const _is = worldToScreen(it.x+0.5, it.y+0.5, tile, camX, camY); const sx=_is.x, sy=_is.y;
     if (it.kind==='power'){
       const p = POWERUP_TYPES[it.buff];
       if (p.sprite) drawStaticSprite(p.sprite, sx, sy, Math.round(tile*0.68), flick, p.glyph, p.color);
@@ -6408,12 +6419,13 @@ function render(dt){
     }
   }
 
-  // monsters
+  // monsters — depth sort for isometric/thirdperson
+  const sortedMonsters = viewMode==='topdown' ? world.monsters : [...world.monsters].sort((a,b)=>(a.ry||a.y)-(b.ry||b.y));
   ctx.globalCompositeOperation = 'lighter';
-  for (const m of world.monsters){
+  for (const m of sortedMonsters){
     const key = Math.floor(m.rx)+','+Math.floor(m.ry);
     if (!me.isSpectator && !world.visibleSet.has(key)) continue;
-    const sx=(m.rx-camX)*tile, sy=(m.ry-camY)*tile;
+    const _ms = worldToScreen(m.rx, m.ry, tile, camX, camY); const sx=_ms.x, sy=_ms.y;
     const t = MONSTER_TYPES[m.type];
     const monsterColor = IS_C64 ? C64_COLORS[Math.floor(hashStr(String(m.id))%C64_COLORS.length)] : t.color;
     // luce puntuale colorata dietro ogni creatura: usa il colore del tipo mostro,
@@ -6454,7 +6466,7 @@ function render(dt){
       const bbm = m._bm;
       const mv = bbm && bbm.move;
       if (mv==='breath' || mv==='fireball' || mv==='stomp' || mv==='summon' || mv==='charge' || m._windFx==='dash'){
-        const gx = (m.rx+m.facing.x*0.75-camX)*tile, gy = (m.ry+m.facing.y*0.75-camY)*tile;
+        const _gfs = worldToScreen(m.rx+m.facing.x*0.75, m.ry+m.facing.y*0.75, tile, camX, camY); const gx=_gfs.x, gy=_gfs.y;
         const gr = tile*(0.3+0.13*Math.sin(torchClock*30));
         const gg = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr);
         const fireC = t.boss ? (BOSS_VARIANTS[m.type]||{}).fbColor||'#ffb03d' : wc;
@@ -6472,7 +6484,7 @@ function render(dt){
   for (const m of world.monsters){
     const key = Math.floor(m.rx)+','+Math.floor(m.ry);
     if (!me.isSpectator && !world.visibleSet.has(key)) continue;
-    const sx=(m.rx-camX)*tile, sy=(m.ry-camY)*tile;
+    const _ms2 = worldToScreen(m.rx, m.ry, tile, camX, camY); const sx=_ms2.x, sy=_ms2.y;
     const t = MONSTER_TYPES[m.type];
     const monsterColor = IS_C64 ? C64_COLORS[Math.floor(hashStr(String(m.id))%C64_COLORS.length)] : t.color;
     // tracciamento visivo (solo rendering): flash sul danno, squash sull'attacco
@@ -6558,6 +6570,16 @@ function render(dt){
       moving, boss:!!t.boss, attackT:m.attackAnimT||0, attackDur:m.type==='o'?0.5:0.3, lunge:m.type==='o'?0.34:0.18, flavor:mSpr, phase:hashStr(String(m.id))%100, flashColor:'#ff5040',
       noShadow, lungePx, bobPx, scaleX:sxM, scaleY:syM, rot,
     });
+    // isometric/thirdperson shadow under entity
+    if (viewMode!=='topdown' && !noShadow){
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(0,0,0,0.28)';
+      ctx.beginPath();
+      const shR = tile * (t.boss ? 0.45 : 0.3);
+      const shOff = viewMode==='isometric' ? tile*0.15 : tile*0.08;
+      ctx.ellipse(sx, sy + shOff, shR, shR*0.4, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
     if (m.hp < m.maxHp) drawHpBar(sx, sy-tile*0.62-(lift>0?tile*0.18:0), tile*0.9, m.hp/m.maxHp, '#c1443a');
     if (m.affix && MONSTER_AFFIXES[m.affix]){
       const af = MONSTER_AFFIXES[m.affix];
@@ -6572,7 +6594,7 @@ function render(dt){
     // preavviso picchiata: doppio anello + disco ardente sul bersaglio annunciato
     if (t.boss && bbm && bbm.move==='dive' && bbm.tx!=null){
       const tPulse = 0.6+0.4*Math.sin(torchClock*9);
-      const wx=(bbm.tx-camX)*tile, wy=(bbm.ty-camY)*tile;
+      const _bws = worldToScreen(bbm.tx, bbm.ty, tile, camX, camY); const wx=_bws.x, wy=_bws.y;
       const R0 = tile*BOSS.diveR;
       ctx.globalCompositeOperation = 'lighter';
       ctx.strokeStyle = 'rgba(255,70,50,'+(0.6*tPulse)+')';
@@ -6604,11 +6626,19 @@ function render(dt){
     if (p.dead || p.spectator) continue;
     const key = Math.floor(p.rx??p.x)+','+Math.floor(p.ry??p.y);
     if (!me.isSpectator && !world.visibleSet.has(key)) continue;
-    const sx=((p.rx??p.x)-camX)*tile, sy=((p.ry??p.y)-camY)*tile;
+    const _ps = worldToScreen(p.rx??p.x, p.ry??p.y, tile, camX, camY); const sx=_ps.x, sy=_ps.y;
     const pIcon = (CLASSES[p.cls] && CLASSES[p.cls].icon) || '@';
     const pSpriteKey = CLASSES[p.cls] ? p.cls : null;
     const pScale = (CLASSES[p.cls] && CLASSES[p.cls].scale) || 1;
     const pFlavor = p.cls;
+    // isometric/thirdperson shadow
+    if (viewMode!=='topdown'){
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(0,0,0,0.28)';
+      ctx.beginPath();
+      ctx.ellipse(sx, sy + tile*0.08, tile*0.3, tile*0.12, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
     // tracciamento visivo remoto (solo rendering)
     if (p._hp==null) p._hp = p.hp;
     if (p.hp!=null && p.hp < p._hp) p.hitFlash = 0.12;
@@ -6638,8 +6668,8 @@ function render(dt){
   // frecce ai bordi schermo verso i compagni fuori dalla visuale
   for (const [pid,p] of remotePlayers){
     if (p.dead || p.spectator) continue;
-    const wx=(p.rx??p.x)*tile, wy=(p.ry??p.y)*tile;
-    const dx = wx - camX*tile - cssW/2, dy = wy - camY*tile - cssH/2;
+    const _pps = worldToScreen(p.rx??p.x, p.ry??p.y, tile, camX, camY);
+    const dx = _pps.x - cssW/2, dy = _pps.y - cssH/2;
     if (Math.abs(dx) < cssW/2 - 4 && Math.abs(dy) < cssH/2 - 4) continue;
     const ang = Math.atan2(dy, dx);
     const margin = 30;
@@ -6668,7 +6698,7 @@ function render(dt){
     const bcx = br.center.x, bcy = br.center.y;
 
     // ---- faro di luce: colonna pulsante che si vede attraverso i muri e la nebbia ----
-    const bwX = (bcx-camX)*tile, bwY = (bcy-camY)*tile;
+    const _bws2 = worldToScreen(bcx, bcy, tile, camX, camY); const bwX=_bws2.x, bwY=_bws2.y;
     const bpulse = 0.5+0.5*Math.sin(torchClock*3.2);
     ctx.globalCompositeOperation = 'lighter';
     const beamW = tile*0.9;
@@ -6710,8 +6740,8 @@ function render(dt){
     }
 
     // ---- freccia dorata al bordo dello schermo: punta verso la tana ----
-    const bossWX = bcx*tile, bossWY = bcy*tile;
-    const bdx = bossWX - camX*tile - cssW/2, bdy = bossWY - camY*tile - cssH/2;
+    const _bws3 = worldToScreen(bcx, bcy, tile, camX, camY);
+    const bdx = _bws3.x - cssW/2, bdy = _bws3.y - cssH/2;
     if (Math.abs(bdx) > cssW/2-8 || Math.abs(bdy) > cssH/2-8){
       const bang = Math.atan2(bdy, bdx);
       const bmargin = 40;
@@ -6737,7 +6767,7 @@ function render(dt){
   }
   ctx.globalCompositeOperation = 'lighter';
   for (const pr of projectiles){
-    const sx=(pr.x-camX)*tile, sy=(pr.y-camY)*tile;
+    const _ps2 = worldToScreen(pr.x, pr.y, tile, camX, camY); const sx=_ps2.x, sy=_ps2.y;
     if (!pr._trail) pr._trail = [];
     pr._trail.push({x:pr.x, y:pr.y});
     if (pr._trail.length>6) pr._trail.shift();
@@ -6749,8 +6779,10 @@ function render(dt){
       ctx.lineWidth = Math.max(1, tile*0.16*k);
       ctx.lineCap = 'round';
       ctx.beginPath();
-      ctx.moveTo((a.x-camX)*tile, (a.y-camY)*tile);
-      ctx.lineTo((b.x-camX)*tile, (b.y-camY)*tile);
+      const _ta = worldToScreen(a.x, a.y, tile, camX, camY);
+      const _tb = worldToScreen(b.x, b.y, tile, camX, camY);
+      ctx.moveTo(_ta.x, _ta.y);
+      ctx.lineTo(_tb.x, _tb.y);
       ctx.stroke();
     }
     ctx.globalAlpha = pr.boss?0.55:0.35;
@@ -6766,7 +6798,7 @@ function render(dt){
   ctx.globalCompositeOperation = 'source-over';
   for (const pr of projectiles){
     if (pr.boss) continue;
-    const sx=(pr.x-camX)*tile, sy=(pr.y-camY)*tile;
+    const _ps3 = worldToScreen(pr.x, pr.y, tile, camX, camY); const sx=_ps3.x, sy=_ps3.y;
     if (pr.glyph === '➹' || pr.glyph === '→' || pr.glyph === '->'){
       const ang = Math.atan2(pr.vy, pr.vx);
       ctx.save();
@@ -6798,7 +6830,7 @@ function render(dt){
 
   // floating texts
   for (const ft of floatTexts){
-    const sx=(ft.x-camX)*tile, sy=(ft.y-camY)*tile;
+    const _fts = worldToScreen(ft.x, ft.y, tile, camX, camY); const sx=_fts.x, sy=_fts.y;
     ctx.globalAlpha = clamp(ft.life,0,1);
     drawLabel(ft.text, sx, sy, ft.color, ft.spark?16:12);
     ctx.globalAlpha = 1;
@@ -6808,7 +6840,7 @@ function render(dt){
   ctx.globalCompositeOperation = 'lighter';
   for (const sw of shockwaves){
     const t = 1 - sw.life/sw.maxLife;
-    const sx=(sw.x-camX)*tile, sy=(sw.y-camY)*tile;
+    const _sws = worldToScreen(sw.x, sw.y, tile, camX, camY); const sx=_sws.x, sy=_sws.y;
     const r = sw.r ? tile*sw.r*t : tile*(0.4 + t*2.3);
     ctx.globalAlpha = Math.max(0, 1-t);
     ctx.strokeStyle = sw.color;
@@ -6842,7 +6874,7 @@ function render(dt){
   for (const c of bossCones){
     const t = 1 - c.life/c.maxLife;
     const r = c.len*tile*Math.min(1, (t+0.15)*1.1);
-    const sx=(c.x-camX)*tile, sy=(c.y-camY)*tile;
+    const _cs = worldToScreen(c.x, c.y, tile, camX, camY); const sx=_cs.x, sy=_cs.y;
     const a0 = c.ang - 0.55 - t*0.28, a1 = c.ang + 0.55 + t*0.28;
     const grad = ctx.createLinearGradient(sx, sy, sx+Math.cos(c.ang)*r, sy+Math.sin(c.ang)*r);
     grad.addColorStop(0, 'rgba(255,130,40,'+(0.85*(1-t))+')');
@@ -6859,10 +6891,18 @@ function render(dt){
 
   // local player (always on top)
   if (me.isSpectator){
-    const sx=(me.x-camX)*tile, sy=(me.y-camY)*tile;
+    const _lp = worldToScreen(me.x, me.y, tile, camX, camY); const sx=_lp.x, sy=_lp.y;
     drawStaticSprite('icon_eye', sx, sy, Math.round(tile*0.6), 0.7, '👁️', '#8fd1ff');
   } else {
-    const sx=(me.x-camX)*tile, sy=(me.y-camY)*tile;
+    const _lp = worldToScreen(me.x, me.y, tile, camX, camY); const sx=_lp.x, sy=_lp.y;
+    // isometric/thirdperson shadow
+    if (viewMode!=='topdown'){
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(0,0,0,0.28)';
+      ctx.beginPath();
+      ctx.ellipse(sx, sy + tile*0.08, tile*0.32, tile*0.13, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
     // tracciamento visivo locale (solo rendering): flash sul danno
     if (me._hp==null) me._hp = me.hp;
     if (me.hp < me._hp) me.hitFlash = 0.12;
@@ -7036,6 +7076,9 @@ const FP_MOUSE_PITCH = 0.0016;      // sensibilità oscillazione verticale
 const FP_TEX = 64;
 const FP_WEAP_KEY = { guerriero:'fp_spada', ladro:'fp_pugnale', mago:'fp_bastone', ranger:'fp_arco', prof:'fp_spada' };
 let fpMode = false;
+const VIEW_MODES = ['topdown','isometric','thirdperson','firstperson'];
+const VIEW_LABELS = { topdown:'Dall\'alto', isometric:'Isometrica', thirdperson:'Terza persona', firstperson:'Prima persona' };
+let viewMode = 'topdown';
 let fpAngle = 0, fpPitch = 0;
 let fpTurnL = false, fpTurnR = false;
 let fpMouseLock = false;
@@ -7108,11 +7151,64 @@ function fpResizeBuffers(){
   fpPx = new Uint32Array(fpImgData.data.buffer);
   fpZ = new Float32Array(fpW);
 }
-function toggleFP(){
-  /* prima persona DISATTIVATA in attesa di revisione: la vista resta quella
-     classica dall'alto. Il codice FP resta intatto per lavori futuri. */
-  fpMode = false;
-  return;
+function cycleViewMode(){
+  const idx = VIEW_MODES.indexOf(viewMode);
+  const next = VIEW_MODES[(idx + 1) % VIEW_MODES.length];
+  viewMode = next;
+  fpMode = (next === 'firstperson');
+  if (fpMode){
+    try { canvas.requestPointerLock(); } catch(e){}
+    showToast('Prima persona — muovi il mouse per guardarti');
+  } else {
+    if (document.pointerLockElement === canvas) document.exitPointerLock();
+    showToast('Visuale: ' + VIEW_LABELS[next]);
+  }
+}
+
+/* worldToScreen: converte coordinate mondo (tile) in pixel schermo.
+   Risultato scritto in _w2s per evitare garbage-collection (chiamato migliaia di volte/frame). */
+const _w2s = {x:0, y:0};
+function worldToScreen(wx, wy, tile, camX, camY){
+  if (viewMode === 'isometric'){
+    // proiezione isometrica 2:1 — centra sul giocatore
+    const pIsoX = (me.x - me.y) * tile * 0.5;
+    const pIsoY = (me.x + me.y) * tile * 0.25;
+    _w2s.x = (wx - wy) * tile * 0.5 - pIsoX + cssW * 0.5;
+    _w2s.y = (wx + wy) * tile * 0.25 - pIsoY + cssH * 0.5;
+    return _w2s;
+  }
+  if (viewMode === 'thirdperson'){
+    // 2.5D: Y compresso + offset camera alta — sensazione "dietro le spalle"
+    const baseX = (wx - camX) * tile;
+    const baseY = (wy - camY) * tile;
+    _w2s.x = baseX;
+    _w2s.y = baseY * 0.55 + cssH * 0.12;
+    return _w2s;
+  }
+  // topdown (default)
+  _w2s.x = (wx - camX) * tile;
+  _w2s.y = (wy - camY) * tile;
+  return _w2s;
+}
+
+/* screenToWorld: inverse — pixel schermo → coordinate mondo. */
+function screenToWorld(px, py){
+  const t = TILE * zoomLevel;
+  if (viewMode === 'isometric'){
+    const pIsoX = (me.x - me.y) * t * 0.5;
+    const pIsoY = (me.x + me.y) * t * 0.25;
+    const relX = px - cssW * 0.5 + pIsoX;
+    const relY = py - cssH * 0.5 + pIsoY;
+    const wx = (relX / (t * 0.5) + relY / (t * 0.25)) * 0.5;
+    const wy = (relY / (t * 0.25) - relX / (t * 0.5)) * 0.5;
+    return { x: wx, y: wy };
+  }
+  if (viewMode === 'thirdperson'){
+    const worldY = (py - cssH * 0.12) / (t * 0.55) + lastCamY;
+    const worldX = px / t + lastCamX;
+    return { x: worldX, y: worldY };
+  }
+  return { x: px / t + lastCamX, y: py / t + lastCamY };
 }
 document.addEventListener('pointerlockchange', ()=>{
   fpMouseLock = document.pointerLockElement === canvas;
@@ -7123,7 +7219,6 @@ document.addEventListener('mousemove', (e)=>{
   fpAngle += e.movementX * FP_MOUSE_SENS;
   fpPitch = clamp(fpPitch - e.movementY * FP_MOUSE_PITCH, -0.6, 0.6);
 });
-/* proiezione di un punto mondo in coordinate CSS (etichette e testi) */
 function fpProjCss(wx, wy){
   const rx = wx-me.x, ry = wy-me.y;
   const tfy = rx*Math.cos(fpAngle) + ry*Math.sin(fpAngle);
@@ -8524,7 +8619,7 @@ window.addEventListener('keydown', (e)=>{
     case 'KeyR': drinkManaPotion(); break;
     case 'KeyF': useClassAbility(); break;
     case 'KeyM': toggleMinimap(); e.preventDefault(); break;
-    case 'KeyV': toggleFP(); e.preventDefault(); break;
+    case 'KeyV': cycleViewMode(); e.preventDefault(); break;
     case 'Enter': openChat(); e.preventDefault(); break;
   }
 });
@@ -8639,7 +8734,16 @@ canvas.addEventListener('mousemove', (e)=>{
    --------------------------------------------------------------------- */
 function capFirst(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
 function screenToWorld(px, py){
-  const t = TILE*zoomLevel; // stesso fattore di render(dt), così il tooltip segue lo zoom
+  const t = TILE*zoomLevel;
+  if (viewMode === 'isometric'){
+    const sx = px, sy = py;
+    const wx = (sy/(t*0.25) + sx/(t*0.5)) / 2;
+    const wy = (sy/(t*0.25) - sx/(t*0.5)) / 2;
+    return { x: wx, y: wy };
+  }
+  if (viewMode === 'thirdperson'){
+    return { x: px/t + lastCamX, y: (py + t*1.2)/(t*0.55) + lastCamY };
+  }
   return { x: px/t + lastCamX, y: py/t + lastCamY };
 }
 function buildTooltipHtml(obj, type){
